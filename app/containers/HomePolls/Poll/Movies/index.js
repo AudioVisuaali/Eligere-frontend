@@ -2,7 +2,7 @@ import React from 'react';
 import { generatePathHomePollMovieCreateModify } from 'utils/paths';
 import history from 'utils/history';
 
-import MovieLink from './MovieLink';
+import MovieLink from './styles/MovieLink';
 
 const Movies = props => {
   const { poll } = props;
@@ -13,17 +13,19 @@ const Movies = props => {
     history.push(url);
   };
 
-  const movieLink = movie => {
+  return poll.movies.map(movie => {
     const url = generatePathHomePollMovieCreateModify(poll, movie);
 
     return (
-      <MovieLink onClick={e => goToMoviePage(movie, e)} href={url}>
+      <MovieLink
+        key={movie.identifier}
+        onClick={e => goToMoviePage(movie, e)}
+        href={url}
+      >
         {movie.title}
       </MovieLink>
     );
-  };
-
-  return poll.movies.map(movieLink);
+  });
 };
 
 export default Movies;

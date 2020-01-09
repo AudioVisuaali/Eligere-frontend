@@ -21,6 +21,7 @@ const TrailerInput = props => {
   const [isHovering, setIsHovering] = useState(false);
   // eslint-disable-next-line react/prop-types
   const { pos, onDelete, ...rest } = props;
+
   return (
     <UrlContaner>
       <Position focused={isFocus || isHovering}>
@@ -75,7 +76,7 @@ const TrailersContainer = props => {
         <TrailerInput
           // eslint-disable-next-line react/no-array-index-key
           key={i}
-          value={trailer}
+          value={trailer.url}
           pos={i + 1}
           onChange={e => handleTrailerChange(i, e)}
           onDelete={e => handleTrailerDelete(i, e)}

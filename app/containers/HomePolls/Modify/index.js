@@ -56,6 +56,7 @@ const POLL_GET = gql`
           platform
           url
           slug
+          thumbnailURL
         }
         ratings {
           imdb

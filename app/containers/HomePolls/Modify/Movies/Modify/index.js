@@ -115,14 +115,7 @@ const Modify = props => {
         query: MOVIE_GET,
         variables: { identifier: movieIdentifier },
       })
-      .then(res => {
-        const { trailers, genres, ...rest } = res.data.movie;
-        setMovie({
-          ...rest,
-          trailers: trailers.map(t => t.url),
-          genres: genres.map(g => g.id),
-        });
-      })
+      .then(res => setMovie(res.data.movie))
       .catch(console.log)
       .finally(() => setLoaded(true));
   }, []);
