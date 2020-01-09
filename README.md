@@ -1,2 +1,1 @@
-# Eligere-frontend
-Movie poller
+Vote movies
