@@ -13,6 +13,7 @@ import Button from 'components/Button';
 import TextArea from 'components/TextArea';
 import TextField from 'components/TextField';
 import BlockTitle from 'components/BlockTitle';
+import UnsavedChanges from 'components/UnsavedChanges';
 import history from 'utils/history';
 import { generatePathHomePollMovieCreate } from 'utils/paths';
 import { dateToStringDashed } from 'utils/time';
@@ -63,8 +64,8 @@ const Poll = props => {
       userRequired,
       allowComments,
       allowMovieSuggestions,
-      opensAt,
-      closesAt,
+      opensAt: opensAt || null,
+      closesAt: closesAt || null,
       community,
       totalVotes,
     };
@@ -96,6 +97,8 @@ const Poll = props => {
 
     return false;
   };
+
+  const isChanges = () => false;
 
   const buttonMessage = poll ? messages.buttonUpdate : messages.buttonCreate;
 
@@ -188,6 +191,9 @@ const Poll = props => {
       </Form>
       {poll && (
         <>
+          {isChanges() && (
+            <UnsavedChanges onReset={() => {}} onSave={() => {}} />
+          )}
           <Section>
             <BlockTitle title={intl.formatMessage(messages.formPollMovies)} />
           </Section>

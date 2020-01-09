@@ -135,10 +135,6 @@ const Modify = props => {
     return null;
   }
 
-  const ModifyMovieWithProp = () => <MovieModify poll={poll} />;
-
-  const CreateMovieWithProp = () => <MovieCreate poll={poll} />;
-
   return (
     <>
       <Poll
@@ -149,16 +145,8 @@ const Modify = props => {
       />
       <Switch>
         <Route exact path={pathHomePoll} />
-        <Route
-          path={pathHomePollMovieCreate}
-          component={CreateMovieWithProp}
-          exact
-        />
-        <Route
-          path={pathHomePollMovieModify}
-          component={ModifyMovieWithProp}
-          exact
-        />
+        <Route path={pathHomePollMovieCreate} component={MovieCreate} exact />
+        <Route path={pathHomePollMovieModify} component={MovieModify} exact />
         <Redirect to={pathNotFound} />
       </Switch>
     </>

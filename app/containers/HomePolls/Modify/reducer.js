@@ -26,8 +26,14 @@ const homePollProviderReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
       case POLL_SET:
-      case POLL_UPDATE:
         draft.poll = action.poll;
+        break;
+
+      case POLL_UPDATE:
+        draft.poll = {
+          movies: state.poll.movies,
+          ...action.poll,
+        };
         break;
 
       case MOVIE_ADD:

@@ -117,7 +117,6 @@ const Modify = props => {
       })
       .then(res => {
         const { trailers, genres, ...rest } = res.data.movie;
-        props.movieModify(res.data.movie);
         setMovie({
           ...rest,
           trailers: trailers.map(t => t.url),
@@ -138,10 +137,16 @@ const Modify = props => {
       trailers: movie.trailers.filter(t => t),
     };
 
-    apolloClient.mutate({
-      mutation: MOVIE_MODIFY,
-      variables: newMovie,
-    });
+    apolloClient
+      .mutate({
+        mutation: MOVIE_MODIFY,
+        variables: newMovie,
+      })
+      .then(res => {
+        props.movieModify(res.data.updateMovie);
+        goToPoll();
+      })
+      .catch();
   };
 
   const goToPoll = () => {
