@@ -3,11 +3,16 @@ import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { injectIntl } from 'react-intl';
 import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { compose } from 'redux';
 
 import apolloClient from 'apolloClient';
+import { makeSelectHomePoll } from 'containers/HomePolls/Modify/selectors';
 import Modal from 'components/Modal';
 import Movie from 'containers/Movie';
 import history from 'utils/history';
+import { movieModify } from 'containers/HomePolls/Modify/actions';
 import { generatePathHomePoll } from 'utils/paths';
 import messages from '../../../messages';
 
@@ -112,6 +117,7 @@ const Modify = props => {
       })
       .then(res => {
         const { trailers, genres, ...rest } = res.data.movie;
+        props.movieModify(res.data.movie);
         setMovie({
           ...rest,
           trailers: trailers.map(t => t.url),
@@ -170,6 +176,24 @@ Modify.propTypes = {
     }).isRequired,
   }).isRequired,
   poll: PropTypes.object.isRequired,
+  movieModify: PropTypes.func.isRequired,
 };
 
-export default injectIntl(withRouter(Modify));
+const mapStateToProps = createStructuredSelector({
+  poll: makeSelectHomePoll(),
+});
+
+const mapDispatchToProps = dispatch => ({
+  movieModify: movie => dispatch(movieModify(movie)),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  injectIntl,
+  withConnect,
+  withRouter,
+)(Modify);

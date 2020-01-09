@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { injectIntl } from 'react-intl';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
+import { makeSelectHomePoll } from 'containers/HomePolls/Modify/selectors';
 import apolloClient from 'apolloClient';
 import Movie from 'containers/Movie';
 import Modal from 'components/Modal';
 import history from 'utils/history';
+import { movieAdd } from 'containers/HomePolls/Modify/actions';
 import { generatePathHomePoll } from 'utils/paths';
 
 import messages from '../../../messages';
@@ -82,10 +87,15 @@ const Create = props => {
       ...movie.ratings,
     };
 
-    apolloClient.mutate({
-      mutation: MOVIE_CREATE,
-      variables: newMovie,
-    });
+    apolloClient
+      .mutate({
+        mutation: MOVIE_CREATE,
+        variables: newMovie,
+      })
+      .then(res => {
+        props.movieAdd(res.data.createMovie);
+        goToPoll();
+      });
   };
 
   const goToPoll = () => {
@@ -106,6 +116,23 @@ const Create = props => {
 Create.propTypes = {
   poll: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
+  movieAdd: PropTypes.func.isRequired,
 };
 
-export default injectIntl(Create);
+const mapStateToProps = createStructuredSelector({
+  poll: makeSelectHomePoll(),
+});
+
+const mapDispatchToProps = dispatch => ({
+  movieAdd: movie => dispatch(movieAdd(movie)),
+});
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
+
+export default compose(
+  injectIntl,
+  withConnect,
+)(Create);

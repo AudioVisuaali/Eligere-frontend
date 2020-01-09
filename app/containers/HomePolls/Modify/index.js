@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { createStructuredSelector } from 'reselect';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -13,7 +14,6 @@ import { gql } from 'apollo-boost';
 import { withRouter } from 'react-router';
 
 import apolloClient from 'apolloClient';
-import { modifyPoll } from 'containers/App/actions';
 import history from 'utils/history';
 import {
   pathNotFound,
@@ -22,7 +22,11 @@ import {
   pathHomePollMovieCreate,
   pathHomePoll,
 } from 'utils/paths';
+import injectReducer from 'utils/injectReducer';
 
+import { setPoll, pollUpdate } from './actions';
+import reducer, { key } from './reducer';
+import { makeSelectHomePoll } from './selectors';
 import MovieModify from './Movies/Modify';
 import MovieCreate from './Movies/Create';
 import Poll from '../Poll';
@@ -95,7 +99,7 @@ const POLL_MODIFY = gql`
 `;
 
 const Modify = props => {
-  const [poll, setPoll] = useState(null);
+  const { poll } = props;
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -103,7 +107,7 @@ const Modify = props => {
     apolloClient
       .query({ query: POLL_GET, variables: { identifier } })
       .then(res => {
-        setPoll(res.data.poll);
+        props.setPoll(res.data.poll);
       })
       .catch();
   }, []);
@@ -117,8 +121,7 @@ const Modify = props => {
         variables: { ...modifiedPoll, identifier },
       })
       .then(res => {
-        props.modifyPoll(res.data.updatePoll);
-        history.push(pathHomePolls);
+        props.pollUpdate(res.data.updatePoll);
       })
       .catch()
       .finally(() => setLoading(false));
@@ -163,21 +166,32 @@ const Modify = props => {
 };
 
 Modify.propTypes = {
-  modifyPoll: PropTypes.func.isRequired,
+  pollUpdate: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  poll: PropTypes.object,
+  setPoll: PropTypes.func.isRequired,
 };
 
+const mapStateToProps = createStructuredSelector({
+  poll: makeSelectHomePoll(),
+});
+
 const mapDispatchToProps = dispatch => ({
-  modifyPoll: evt => dispatch(modifyPoll(evt)),
+  setPoll: poll => dispatch(setPoll(poll)),
+  pollUpdate: evt => dispatch(pollUpdate(evt)),
 });
 
 const withConnect = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 );
 
-export default compose(withConnect)(withRouter(Modify));
+export default compose(
+  injectReducer({ reducer, key }),
+  withConnect,
+  withRouter,
+)(Modify);

@@ -24,7 +24,7 @@ import Actions from './styles/Actions';
 import Section from './styles/Section';
 import Checkboxes from './styles/Checkboxes';
 import Movies from './Movies';
-import CreateMovie from './CreateMovie';
+import CreateMovie from './styles/CreateMovie';
 
 const textAreaSize = {
   minHeight: 90,
