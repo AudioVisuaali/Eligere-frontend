@@ -12,6 +12,7 @@ import apolloClient from 'apolloClient';
 import { makeSelectHomePoll } from 'containers/HomePolls/Modify/selectors';
 import Modal from 'components/Modal';
 import Movie from 'containers/Movie';
+import Trailers from 'containers/Trailers';
 import history from 'utils/history';
 import { movieModify } from 'containers/HomePolls/Modify/actions';
 import {
@@ -21,10 +22,9 @@ import {
   pathHomePollMovieTrailerModify,
   pathNotFound,
 } from 'utils/paths';
-import Trailers from './Trailers';
 import TrailerCreate from './Trailer/Create';
 import TrailerModify from './Trailer/Modify';
-import messages from '../../../messages';
+import messages from './messages';
 
 const MOVIE_GET = gql`
   query($identifier: String!) {

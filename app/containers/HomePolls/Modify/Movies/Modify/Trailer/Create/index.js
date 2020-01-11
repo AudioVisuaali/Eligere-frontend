@@ -13,7 +13,7 @@ const TrailerCreate = props => {
   };
 
   return (
-    <Modal onClose={handleClose} onAccept>
+    <Modal maxWidth={600} onClose={handleClose} onAccept>
       dsa
     </Modal>
   );

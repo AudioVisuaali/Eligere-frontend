@@ -1,12 +1,12 @@
 /*
- * HomePolls Messages
+ * Poll Messages
  *
  * This contains all the text for the HomePolls container.
  */
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.HomePolls.Poll';
+export const scope = 'app.containers.Poll';
 
 export default defineMessages({
   pollCreate: {
@@ -48,33 +48,25 @@ export default defineMessages({
     id: `${scope}.pollClosesAt`,
     defaultMessage: 'Voting closes at',
   },
-  totalVotes: {
-    id: `${scope}.totalVotes`,
-    defaultMessage: 'Total votes',
-  },
   community: {
     id: `${scope}.community`,
     defaultMessage: 'Community',
   },
+  totalVotes: {
+    id: `${scope}.totalVotes`,
+    defaultMessage: 'Total votes',
+  },
 
-  formPollMovies: {
-    id: `${scope}.formPollMovies`,
-    defaultMessage: 'Movies',
-  },
-  formPollMovieCreate: {
-    id: `${scope}.formPollMovieCreate`,
-    defaultMessage: 'Add Movie',
-  },
-  buttonCreate: {
-    id: `${scope}.buttonCreate`,
-    defaultMessage: 'Create',
-  },
-  buttonUpdate: {
-    id: `${scope}.buttonUpdate`,
-    defaultMessage: 'Update',
-  },
   cancel: {
     id: `${scope}.cancel`,
     defaultMessage: 'Cancel',
+  },
+  createPoll: {
+    id: `${scope}.createPoll`,
+    defaultMessage: 'Create Poll',
+  },
+  saveChanges: {
+    id: `${scope}.cancel`,
+    defaultMessage: 'Save changes',
   },
 });

@@ -18,7 +18,7 @@ import { pathHomePollCreate, generatePathHomePoll } from 'utils/paths';
 import history from 'utils/history';
 
 import messages from './messages';
-import Action from '../styles/Action';
+import Action from './styles/Action';
 
 function CreatePoll() {
   const handleCreateNew = () => {
@@ -73,9 +73,6 @@ const mapStateToProps = createStructuredSelector({
   polls: makeSelectPolls(),
 });
 
-const withConnect = connect(
-  mapStateToProps,
-  null,
-);
+const withConnect = connect(mapStateToProps);
 
 export default compose(withConnect)(Polls);

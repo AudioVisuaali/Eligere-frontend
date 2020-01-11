@@ -6,11 +6,11 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.HomePolls.Poll.Movie';
+export const scope = 'app.containers.HomePolls.Poll';
 
 export default defineMessages({
-  trailersTitle: {
-    id: `${scope}.trailersTitle`,
-    defaultMessage: 'Trailers',
+  modifyMovie: {
+    id: `${scope}.modifyMovie`,
+    defaultMessage: 'Modify Movie',
   },
 });

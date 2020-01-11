@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -20,16 +21,21 @@ import {
   pathHomePolls,
   pathHomePollMovieModify,
   pathHomePollMovieCreate,
+  generatePathHomePollMovieCreate,
   pathHomePoll,
 } from 'utils/paths';
 import injectReducer from 'utils/injectReducer';
+import Poll from 'containers/Poll';
+import Movies from 'containers/Movies';
+import BlockTitle from 'components/BlockTitle';
 
+import messages from './messages';
 import { setPoll, pollUpdate } from './actions';
 import reducer, { key } from './reducer';
 import { makeSelectHomePoll } from './selectors';
 import MovieModify from './Movies/Modify';
 import MovieCreate from './Movies/Create';
-import Poll from '../Poll';
+import CreateMovie from './styles/CreateMovie';
 
 const POLL_GET = gql`
   query($identifier: String!) {
@@ -100,7 +106,7 @@ const POLL_MODIFY = gql`
 `;
 
 const Modify = props => {
-  const { poll } = props;
+  const { poll, intl } = props;
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -132,6 +138,10 @@ const Modify = props => {
     history.push(pathHomePolls);
   };
 
+  const goToCreateMovie = () => {
+    history.push(generatePathHomePollMovieCreate(poll));
+  };
+
   if (!poll) {
     return null;
   }
@@ -144,6 +154,20 @@ const Modify = props => {
         onCancel={handleCancel}
         loading={loading}
       />
+
+      {poll && (
+        <>
+          <BlockTitle title={intl.formatMessage(messages.formPollMovies)} />
+          <Movies poll={poll} />
+          <CreateMovie
+            onClick={goToCreateMovie}
+            href={generatePathHomePollMovieCreate(poll)}
+          >
+            <FormattedMessage {...messages.formPollMovieCreate} />
+          </CreateMovie>
+        </>
+      )}
+
       <Switch>
         <Route exact path={pathHomePoll} />
         <Route path={pathHomePollMovieCreate} component={MovieCreate} exact />
@@ -163,6 +187,7 @@ Modify.propTypes = {
   }).isRequired,
   poll: PropTypes.object,
   setPoll: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -183,4 +208,5 @@ export default compose(
   injectReducer({ reducer, key }),
   withConnect,
   withRouter,
+  injectIntl,
 )(Modify);

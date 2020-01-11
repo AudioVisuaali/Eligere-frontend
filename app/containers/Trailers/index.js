@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 import Label from 'components/Label';
 import TrailerCard from 'components/TrailerCard';
+import { generatePathHomePollMovieTrailerCreate, getMocks } from 'utils/paths';
+import history from 'utils/history';
 
 import messages from './messages';
 
@@ -16,7 +19,10 @@ const TrailersContainer = props => {
 
   const allowAddTrailers = trailers.length <= TRAILER_MAX;
 
-  const addTrailer = () => {};
+  const addTrailer = () => {
+    const { poll, movie } = getMocks(props.match);
+    history.push(generatePathHomePollMovieTrailerCreate(poll, movie));
+  };
 
   return (
     <div>
@@ -28,7 +34,7 @@ const TrailersContainer = props => {
       ))}
       {allowAddTrailers && (
         <AddTrailer type="button" onClick={addTrailer}>
-          Add Trailer
+          <FormattedMessage {...messages.createTrailer} />
         </AddTrailer>
       )}
     </div>
@@ -38,6 +44,7 @@ const TrailersContainer = props => {
 TrailersContainer.propTypes = {
   trailers: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired,
 };
 
-export default TrailersContainer;
+export default withRouter(TrailersContainer);

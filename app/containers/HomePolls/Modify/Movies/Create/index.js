@@ -14,7 +14,7 @@ import history from 'utils/history';
 import { movieAdd } from 'containers/HomePolls/Modify/actions';
 import { generatePathHomePoll } from 'utils/paths';
 
-import messages from '../../../messages';
+import messages from './messages';
 
 const MOVIE_CREATE = gql`
   mutation(

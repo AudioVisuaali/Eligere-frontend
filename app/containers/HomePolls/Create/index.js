@@ -11,11 +11,10 @@ import { compose } from 'redux';
 import { gql } from 'apollo-boost';
 
 import apolloClient from 'apolloClient';
+import { addPoll } from 'containers/App/actions';
+import Poll from 'containers/Poll';
 import history from 'utils/history';
 import { pathHomePolls, generatePathHomePoll } from 'utils/paths';
-import { addPoll } from 'containers/App/actions';
-
-import Poll from '../Poll';
 
 const POLL_CREATE = gql`
   mutation(

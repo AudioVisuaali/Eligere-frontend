@@ -6,7 +6,7 @@ const color = p =>
 
 const Title = styled(A)`
   display: block;
-  font-size: 14px;
+  font-size: 12px;
   color: ${color};
 `;
 

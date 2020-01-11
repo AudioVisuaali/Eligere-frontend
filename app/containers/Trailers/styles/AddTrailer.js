@@ -3,6 +3,7 @@ import Button from 'components/Button';
 
 const AddTrailer = styled(Button)`
   display: block;
+  padding: 12px 0;
   width: 100%;
   border: 2px dashed rgba(255, 255, 255, 0.4);
   background-color: transparent;

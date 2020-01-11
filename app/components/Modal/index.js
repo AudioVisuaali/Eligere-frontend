@@ -21,7 +21,15 @@ import Content from './styles/Content';
 import Title from './styles/Title';
 import Background from './styles/Background';
 
-function Modal({ children, onClose, onAccept, closeText, acceptText, title }) {
+function Modal({
+  children,
+  onClose,
+  onAccept,
+  closeText,
+  acceptText,
+  title,
+  maxWidth,
+}) {
   const [closing, setClosing] = useState(false);
 
   const handleClose = () => {
@@ -32,7 +40,7 @@ function Modal({ children, onClose, onAccept, closeText, acceptText, title }) {
   return (
     <Wrapper fadingOut={closing}>
       <Background onClick={handleClose} />
-      <ModalWrapper>
+      <ModalWrapper maxWidth={maxWidth}>
         <CloseCross onClick={handleClose}>
           <CrossSVG />
         </CloseCross>
@@ -60,6 +68,7 @@ Modal.propTypes = {
   closeText: PropTypes.string,
   acceptText: PropTypes.string,
   title: PropTypes.string.isRequired,
+  maxWidth: PropTypes.number,
 };
 
 export default Modal;
