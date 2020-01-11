@@ -12,6 +12,8 @@ import Thumbnail from './styles/Thumbnail';
 import Title from './styles/Title';
 import Description from './styles/Description';
 import Info from './styles/Info';
+import MetaField from './styles/MetaField';
+import RateField from './styles/RateField';
 
 import Container from './styles/Container';
 import Meta from './styles/Meta';
@@ -102,7 +104,7 @@ const Movie = props => {
       </Row>
 
       <Meta>
-        <div>
+        <RateField>
           <TextField
             type="number"
             min="0"
@@ -111,8 +113,8 @@ const Movie = props => {
             value={rottenTomatoes}
             onChange={e => setRottenTomatoes(parseValue(e))}
           />
-        </div>
-        <div>
+        </RateField>
+        <RateField>
           <TextField
             type="number"
             min="0"
@@ -121,8 +123,8 @@ const Movie = props => {
             value={metacritic}
             onChange={e => setMetacritic(parseValue(e))}
           />
-        </div>
-        <div>
+        </RateField>
+        <RateField>
           <TextField
             type="number"
             min="0"
@@ -131,8 +133,8 @@ const Movie = props => {
             value={googleUsers}
             onChange={e => setGoogleUsers(parseValue(e))}
           />
-        </div>
-        <div>
+        </RateField>
+        <RateField>
           <TextField
             type="number"
             min="0"
@@ -141,8 +143,8 @@ const Movie = props => {
             value={imdb}
             onChange={e => setImdb(parseValue(e))}
           />
-        </div>
-        <div>
+        </RateField>
+        <MetaField>
           <TextField
             type="number"
             min="0"
@@ -150,15 +152,15 @@ const Movie = props => {
             value={duration}
             onChange={e => setDuration(parseValue(e))}
           />
-        </div>
-        <div>
+        </MetaField>
+        <MetaField>
           <TextField
             type="date"
             title={intl.formatMessage(messages.releaseDate)}
             value={released}
             onChange={e => setReleased(e.target.value)}
           />
-        </div>
+        </MetaField>
       </Meta>
 
       <GenresSelector genres={genres} onChange={setGenres} />
