@@ -12,6 +12,10 @@ export const pathHomePollMovieCreate =
   '/home/polls/:identifier/:slugTitle/movie/create';
 export const pathHomePollMovieModify =
   '/home/polls/:identifier/:slugTitle/movie/:movieIdentifier/:movieSlugTitle';
+export const pathHomePollMovieTrailerCreate =
+  '/home/polls/:identifier/:slugTitle/movie/:movieIdentifier/:movieSlugTitle/trailer/create';
+export const pathHomePollMovieTrailerModify =
+  '/home/polls/:identifier/:slugTitle/movie/:movieIdentifier/:movieSlugTitle/trailer/:trailerIdentifier/:trailerSlugTitle';
 export const pathHomeCommunities = '/home/communities';
 export const pathHomeCommunityCreate = '/home/communities/create';
 export const pathHomeCommunity = '/home/communities/:identifier/:slugTitle';
@@ -29,6 +33,34 @@ function slugify(string) {
     .replace(/ /g, '-')
     .replace(/[-]+/g, '-')
     .replace(/[^\w-]+/g, '');
+}
+
+export function getMocks(match) {
+  const {
+    identifier,
+    slugTitle,
+    movieIdentifier,
+    movieSlugTitle,
+    trailerIdentifier,
+    trailerSlugTitle,
+  } = match.params;
+
+  const poll = identifier && {
+    identifier,
+    title: slugTitle,
+  };
+
+  const movie = identifier && {
+    identifier: movieIdentifier,
+    title: movieSlugTitle,
+  };
+
+  const trailer = trailerIdentifier && {
+    identifier: trailerIdentifier,
+    title: trailerSlugTitle,
+  };
+
+  return { poll, movie, trailer };
 }
 
 export function generatePathPoll(poll) {
@@ -61,12 +93,42 @@ export function generatePathHomePollMovieCreate(poll) {
   return generatePath(pathHomePollMovieCreate, { identifier, slugTitle });
 }
 
-export function generatePathHomePollMovieCreateModify(poll, movie) {
+export function generatePathHomePollMovieModify(poll, movie) {
   const { identifier, title } = poll;
   const { identifier: movieIdentifier, title: movieTitle } = movie;
   const slugTitle = slugify(title);
   const movieSlugTitle = slugify(movieTitle);
   return generatePath(pathHomePollMovieModify, {
+    identifier,
+    slugTitle,
+    movieIdentifier,
+    movieSlugTitle,
+  });
+}
+
+export function generatePathHomePollMovieTrailerModify(poll, movie, trailer) {
+  const { identifier, title } = poll;
+  const { identifier: movieIdentifier, title: movieTitle } = movie;
+  const { identifier: trailerIdentifier, title: trailerTitle } = trailer;
+  const slugTitle = slugify(title);
+  const movieSlugTitle = slugify(movieTitle);
+  const trailerSlugTitle = slugify(trailerTitle);
+  return generatePath(pathHomePollMovieTrailerModify, {
+    identifier,
+    slugTitle,
+    movieIdentifier,
+    movieSlugTitle,
+    trailerIdentifier,
+    trailerSlugTitle,
+  });
+}
+
+export function generatePathHomePollMovieTrailerCreate(poll, movie) {
+  const { identifier, title } = poll;
+  const { identifier: movieIdentifier, title: movieTitle } = movie;
+  const slugTitle = slugify(title);
+  const movieSlugTitle = slugify(movieTitle);
+  return generatePath(pathHomePollMovieTrailerCreate, {
     identifier,
     slugTitle,
     movieIdentifier,

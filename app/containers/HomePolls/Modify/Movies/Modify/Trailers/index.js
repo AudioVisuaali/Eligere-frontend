@@ -3,43 +3,35 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 import Label from 'components/Label';
-import TrashSVG from 'svgs/Trash';
+import TrailerCard from 'components/TrailerCard';
 
-import Trailers from './styles/Trailers';
-import UrlContaner from './styles/UrlContaner';
-
-import UrlAction from './styles/UrlAction';
-import UrlActionContainer from './styles/UrlActionContainer';
-import AddTrailer from './styles/AddTrailer';
 import messages from './messages';
 
-const TRAILER_MAX = 9;
+import AddTrailer from './styles/AddTrailer';
 
-const TrailerInput = () => (
-  <UrlContaner>
-    <UrlActionContainer>
-      <UrlAction type="button">
-        <TrashSVG />
-      </UrlAction>
-    </UrlActionContainer>
-  </UrlContaner>
-);
+const TRAILER_MAX = 9;
 
 const TrailersContainer = props => {
   const { trailers } = props;
 
   const allowAddTrailers = trailers.length <= TRAILER_MAX;
 
+  const addTrailer = () => {};
+
   return (
-    <Trailers>
+    <div>
       <Label>
         <FormattedMessage {...messages.trailersTitle} />
       </Label>
       {trailers.map(trailer => (
-        <TrailerInput trailer={trailer} key={trailer.identifier} />
+        <TrailerCard trailer={trailer} />
       ))}
-      {allowAddTrailers && <AddTrailer type="button">Add Field</AddTrailer>}
-    </Trailers>
+      {allowAddTrailers && (
+        <AddTrailer type="button" onClick={addTrailer}>
+          Add Trailer
+        </AddTrailer>
+      )}
+    </div>
   );
 };
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { injectIntl } from 'react-intl';
@@ -13,7 +14,16 @@ import Modal from 'components/Modal';
 import Movie from 'containers/Movie';
 import history from 'utils/history';
 import { movieModify } from 'containers/HomePolls/Modify/actions';
-import { generatePathHomePoll } from 'utils/paths';
+import {
+  generatePathHomePoll,
+  pathHomePollMovieModify,
+  pathHomePollMovieTrailerCreate,
+  pathHomePollMovieTrailerModify,
+  pathNotFound,
+} from 'utils/paths';
+import Trailers from './Trailers';
+import TrailerCreate from './Trailer/Create';
+import TrailerModify from './Trailer/Modify';
 import messages from '../../../messages';
 
 const MOVIE_GET = gql`
@@ -34,6 +44,8 @@ const MOVIE_GET = gql`
         platform
         url
         slug
+        thumbnailURL
+        title
       }
       ratings {
         imdb
@@ -155,13 +167,30 @@ const Modify = props => {
   }
 
   return (
-    <Modal
-      title={props.intl.formatMessage(messages.modifyMovie)}
-      onClose={goToPoll}
-      onAccept={handleSave}
-    >
-      <Movie movie={movie} onChange={setMovie} />
-    </Modal>
+    <>
+      <Modal
+        title={props.intl.formatMessage(messages.modifyMovie)}
+        onClose={goToPoll}
+        onAccept={handleSave}
+      >
+        <Movie movie={movie} onChange={console.log} />
+        <Trailers trailers={movie.trailers} />
+      </Modal>
+      <Switch>
+        <Route exact path={pathHomePollMovieModify} />
+        <Route
+          path={pathHomePollMovieTrailerCreate}
+          component={TrailerCreate}
+          exact
+        />
+        <Route
+          path={pathHomePollMovieTrailerModify}
+          component={TrailerModify}
+          exact
+        />
+        <Redirect to={pathNotFound} />
+      </Switch>
+    </>
   );
 };
 

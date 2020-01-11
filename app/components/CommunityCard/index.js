@@ -9,7 +9,6 @@ import Title from './styles/Title';
 import Description from './styles/Description';
 import Thumbnail from './styles/Thumbnail';
 import Content from './styles/Content';
-import ShadowOverlay from './styles/ShadowOverlay';
 import Actions from './styles/Actions';
 import Action from './styles/Action';
 

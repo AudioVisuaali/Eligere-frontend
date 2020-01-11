@@ -16,7 +16,6 @@ import Info from './styles/Info';
 import Container from './styles/Container';
 import Meta from './styles/Meta';
 import GenresSelector from './GenresSelector';
-import Trailers from './Trailers';
 
 const parseValue = e => parseInt(e.target.value, 10);
 
@@ -49,7 +48,6 @@ const Movie = props => {
   );
 
   const [genres, setGenres] = useState(movie ? movie.genres : []);
-  const [trailers, setTrailers] = useState(movie ? movie.trailers : ['']);
 
   const generateMovie = () => ({
     title,
@@ -63,7 +61,6 @@ const Movie = props => {
     duration,
     released,
     genres,
-    trailers,
   });
 
   useEffect(() => {
@@ -80,7 +77,6 @@ const Movie = props => {
     duration,
     released,
     genres,
-    trailers,
   ]);
 
   return (
@@ -166,7 +162,6 @@ const Movie = props => {
       </Meta>
 
       <GenresSelector genres={genres} onChange={setGenres} />
-      <Trailers trailers={trailers} onChange={setTrailers} />
     </Container>
   );
 };

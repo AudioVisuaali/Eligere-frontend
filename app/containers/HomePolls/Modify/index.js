@@ -147,7 +147,7 @@ const Modify = props => {
       <Switch>
         <Route exact path={pathHomePoll} />
         <Route path={pathHomePollMovieCreate} component={MovieCreate} exact />
-        <Route path={pathHomePollMovieModify} component={MovieModify} exact />
+        <Route path={pathHomePollMovieModify} component={MovieModify} />
         <Redirect to={pathNotFound} />
       </Switch>
     </>
