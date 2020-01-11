@@ -32,7 +32,7 @@ export default defineMessages({
   },
   allowFeedBack: {
     id: `${scope}.allowFeedBack`,
-    defaultMessage: 'Allow feenback',
+    defaultMessage: 'Allow feedback',
   },
   allowMovieSuggestions: {
     id: `${scope}.allowMovieSuggestions`,

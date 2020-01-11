@@ -38,12 +38,18 @@ const Poll = props => {
   const { poll, loading, onSave, onCreate, onCancel, intl } = props;
   const [title, setTitle] = useState(poll ? poll.title : '');
   const [description, setDescription] = useState(poll ? poll.description : '');
-  const [userRequired, setUserRequired] = useState(false);
-  const [allowComments, setAllowComments] = useState(false);
-  const [allowMovieSuggestions, setAllowMovieSuggestions] = useState(false);
+  const [userRequired, setUserRequired] = useState(
+    poll ? poll.userRequired : false,
+  );
+  const [allowComments, setAllowComments] = useState(
+    poll ? poll.allowComments : false,
+  );
+  const [allowMovieSuggestions, setAllowMovieSuggestions] = useState(
+    poll ? poll.allowMovieSuggestions : false,
+  );
   const [opensAt, setOpensAt] = useState(poll ? getDay(poll.opensAt) : '');
   const [closesAt, setClosesAt] = useState(poll ? getDay(poll.closesAt) : '');
-  const [community, setCommunity] = useState('');
+  const [community, setCommunity] = useState(poll ? poll.community : '');
   const [totalVotes, setTotalVotes] = useState(1);
 
   const createPoll = () => ({
@@ -67,7 +73,20 @@ const Poll = props => {
     onCreate(createPoll());
   };
 
-  const pollMatch = () => true;
+  const pollMatch = () => {
+    if (poll.title !== title) return true;
+    if (poll.description !== description) return true;
+    if (poll.userRequired !== userRequired) return true;
+    // TODO
+    // if (originalPoll.opensAt !== opensAt) return true;
+    // if (originalPoll.closesAt !== closesAt) return true;
+    if (poll.community !== community) return true;
+    if (poll.allowComments !== allowComments) return true;
+    if (poll.totalVotes !== totalVotes) return true;
+    if (poll.allowMovieSuggestions !== allowMovieSuggestions) return true;
+
+    return false;
+  };
 
   const allowSubmit = () => {
     if (!title) {
@@ -188,6 +207,11 @@ Poll.propTypes = {
     movies: PropTypes.array.isRequired,
     opensAt: PropTypes.string,
     closesAt: PropTypes.string,
+    community: PropTypes.string,
+    totalVotes: PropTypes.number.isRequired,
+    userRequired: PropTypes.bool,
+    allowComments: PropTypes.bool,
+    allowMovieSuggestions: PropTypes.bool,
   }),
   onSave: PropTypes.func,
   onCreate: PropTypes.func,

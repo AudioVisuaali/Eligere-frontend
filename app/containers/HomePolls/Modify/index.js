@@ -46,6 +46,9 @@ const POLL_GET = gql`
       userRequired
       opensAt
       closesAt
+      totalVotes
+      allowComments
+      allowMovieSuggestions
       movies {
         identifier
         title
@@ -87,6 +90,10 @@ const POLL_MODIFY = gql`
     $description: String!
     $opensAt: String
     $closesAt: String
+    $totalVotes: Int!
+    $userRequired: Boolean!
+    $allowComments: Boolean!
+    $allowMovieSuggestions: Boolean!
   ) {
     updatePoll(
       identifier: $identifier
@@ -94,6 +101,10 @@ const POLL_MODIFY = gql`
       description: $description
       opensAt: $opensAt
       closesAt: $closesAt
+      totalVotes: $totalVotes
+      userRequired: $userRequired
+      allowComments: $allowComments
+      allowMovieSuggestions: $allowMovieSuggestions
     ) {
       identifier
       title
@@ -101,6 +112,10 @@ const POLL_MODIFY = gql`
       userRequired
       opensAt
       closesAt
+      totalVotes
+      userRequired
+      allowComments
+      allowMovieSuggestions
     }
   }
 `;
@@ -150,7 +165,7 @@ const Modify = props => {
     <>
       <Poll
         poll={poll}
-        onUpdate={handleUpdate}
+        onSave={handleUpdate}
         onCancel={handleCancel}
         loading={loading}
       />
