@@ -12,6 +12,9 @@ import {
   MOVIE_ADD,
   MOVIE_MODIFY,
   MOVIE_REMOVE,
+  TRAILER_ADD,
+  TRAILER_MODIFY,
+  TRAILER_REMOVE,
 } from './constants';
 
 export const initialState = {
@@ -51,6 +54,43 @@ const homePollProviderReducer = (state = initialState, action) =>
           movie => movie.identifier !== action.movie.idenfier,
         );
         break;
+
+      case TRAILER_ADD: {
+        const movieIndex = state.poll.movies.findIndex(
+          movie => movie.identifier === action.movie.identifier,
+        );
+        draft.poll.movies[movieIndex].trailers = [
+          ...state.poll.movies[movieIndex].trailers,
+          action.trailers,
+        ];
+        break;
+      }
+
+      case TRAILER_MODIFY: {
+        draft.poll.movies = state.poll.movies.map(movie => ({
+          ...movie,
+          trailers: movie.trailers.map(trailer =>
+            trailer.identifier === action.trailer.identifier
+              ? action.trailer
+              : trailer,
+          ),
+        }));
+        break;
+      }
+
+      case TRAILER_REMOVE: {
+        const movieIndex = state.poll.movies.findIndex(
+          movie => movie.identifier === action.movie.identifier,
+        );
+        const newTrailers = state.poll.movies[movieIndex].trailers.map(
+          trailer =>
+            trailer.identifier === action.trailer.identifier
+              ? action.trailer
+              : trailer,
+        );
+        state.poll.movies[movieIndex].trailers = newTrailers;
+        break;
+      }
     }
   });
 

@@ -10,6 +10,9 @@ import {
   MOVIE_ADD,
   MOVIE_MODIFY,
   MOVIE_REMOVE,
+  TRAILER_ADD,
+  TRAILER_MODIFY,
+  TRAILER_REMOVE,
 } from './constants';
 
 export function setPoll(poll) {
@@ -44,5 +47,26 @@ export function movieRemove(movie) {
   return {
     type: MOVIE_REMOVE,
     movie,
+  };
+}
+
+export function trailerAdd(trailer) {
+  return {
+    type: TRAILER_ADD,
+    trailer,
+  };
+}
+
+export function trailerModify(trailer) {
+  return {
+    type: TRAILER_MODIFY,
+    trailer,
+  };
+}
+
+export function trailerRemove(trailer) {
+  return {
+    type: TRAILER_REMOVE,
+    trailer,
   };
 }

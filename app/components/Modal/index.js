@@ -27,6 +27,7 @@ function Modal({
   onAccept,
   closeText,
   acceptText,
+  disableAccept,
   title,
   maxWidth,
 }) {
@@ -52,7 +53,7 @@ function Modal({
           <Button onClick={handleClose}>
             {closeText || <FormattedMessage {...messages.cancel} />}
           </Button>
-          <Button onClick={onAccept}>
+          <Button disabled={disableAccept} onClick={onAccept}>
             {acceptText || <FormattedMessage {...messages.save} />}
           </Button>
         </Actions>
@@ -69,6 +70,7 @@ Modal.propTypes = {
   acceptText: PropTypes.string,
   title: PropTypes.string.isRequired,
   maxWidth: PropTypes.number,
+  disableAccept: PropTypes.number,
 };
 
 export default Modal;

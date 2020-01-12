@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import Label from 'components/Label';
 import TrailerCard from 'components/TrailerCard';
 import { generatePathHomePollMovieTrailerCreate, getMocks } from 'utils/paths';
+import PlusSVG from 'svgs/Plus';
 import history from 'utils/history';
 
 import messages from './messages';
@@ -34,6 +35,7 @@ const TrailersContainer = props => {
       ))}
       {allowAddTrailers && (
         <AddTrailer type="button" onClick={addTrailer}>
+          <PlusSVG />
           <FormattedMessage {...messages.createTrailer} />
         </AddTrailer>
       )}
