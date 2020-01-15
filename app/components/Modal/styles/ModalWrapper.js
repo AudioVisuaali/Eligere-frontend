@@ -8,7 +8,7 @@ const ModalWrapper = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   width: 100%;
   max-width: ${p => p.maxWidth || 950}px;
-  padding: 20px;
+  padding: 25px;
   z-index: 6666;
 `;
 

@@ -2,12 +2,8 @@ import styled from 'styled-components';
 
 const Actions = styled.div`
   display: flex;
-  justify-content: flex-end;
-  padding: 0 10px 10px;
-
-  & button {
-    margin-left: 8px;
-  }
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export default Actions;

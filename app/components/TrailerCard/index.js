@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
@@ -13,15 +13,12 @@ import Content from './styles/Content';
 
 const TrailerCard = props => {
   const { trailer } = props;
-  const [url, setUrl] = useState('');
-
-  useEffect(() => {
+  const generateURL = () => {
     const { poll, movie } = getMocks(props.match);
+    return generatePathHomePollMovieTrailerModify(poll, movie, trailer);
+  };
 
-    const genUrl = generatePathHomePollMovieTrailerModify(poll, movie, trailer);
-    setUrl(genUrl);
-  }, []);
-
+  const [url] = useState(generateURL());
   const handleRedirect = e => {
     e.preventDefault();
     history.push(url);

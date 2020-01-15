@@ -5,7 +5,6 @@ const Genres = styled.div`
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 15px;
 `;
 
 export default Genres;

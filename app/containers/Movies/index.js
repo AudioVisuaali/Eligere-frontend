@@ -1,5 +1,5 @@
 import React from 'react';
-import { generatePathHomePollMovieModify } from 'utils/paths';
+import { generatePathHomeMovie } from 'utils/paths';
 import history from 'utils/history';
 
 import MovieLink from './styles/MovieLink';
@@ -7,19 +7,18 @@ import MovieLink from './styles/MovieLink';
 const Movies = props => {
   const { poll } = props;
 
-  const goToMoviePage = (movie, e) => {
+  const goToPage = (url, e) => {
     e.preventDefault();
-    const url = generatePathHomePollMovieModify(poll, movie);
     history.push(url);
   };
 
   return poll.movies.map(movie => {
-    const url = generatePathHomePollMovieModify(poll, movie);
+    const url = generatePathHomeMovie(movie);
 
     return (
       <MovieLink
         key={movie.identifier}
-        onClick={e => goToMoviePage(movie, e)}
+        onClick={e => goToPage(url, e)}
         href={url}
       >
         {movie.title}

@@ -45,20 +45,22 @@ export function HomePage(props) {
     return null;
   }
 
+  if (!userLoaded) {
+    return null;
+  }
+
   return (
     <>
       <NavBar />
-      {userLoaded && (
-        <Switch>
-          <Redirect exact path={pathHome} to={pathHomePolls} />
+      <Switch>
+        <Redirect exact path={pathHome} to={pathHomePolls} />
 
-          <Route path={pathHomePolls} component={HomePolls} />
-          <Route path={pathHomeCommunities} component={HomeCommunities} />
-          <Route path={pathHomeProfile} component={HomeProfile} />
+        <Route path={pathHomePolls} component={HomePolls} />
+        <Route path={pathHomeCommunities} component={HomeCommunities} />
+        <Route path={pathHomeProfile} component={HomeProfile} />
 
-          <Redirect to={pathNotFound} />
-        </Switch>
-      )}
+        <Redirect to={pathNotFound} />
+      </Switch>
     </>
   );
 }

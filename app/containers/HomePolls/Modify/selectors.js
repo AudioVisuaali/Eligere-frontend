@@ -20,7 +20,24 @@ const makeSelectHomePoll = () =>
 const makeSelectHomePollMovies = () =>
   createSelector(
     selectHomePoll,
-    homePollState => homePollState.movies,
+    homePollState => homePollState.poll.movies,
   );
 
-export { selectHomePoll, makeSelectHomePoll, makeSelectHomePollMovies };
+const makeSelectHomePollMovie = (identifier = null) =>
+  createSelector(
+    selectHomePoll,
+    // eslint-disable-next-line no-sequences
+    (a, b) => (a, b),
+    (pollState, ownProps) =>
+      pollState.poll.movies.find(m => {
+        const { movieIdentifier } = ownProps.match.params;
+        return m.identifier === (identifier || movieIdentifier);
+      }),
+  );
+
+export {
+  selectHomePoll,
+  makeSelectHomePoll,
+  makeSelectHomePollMovies,
+  makeSelectHomePollMovie,
+};

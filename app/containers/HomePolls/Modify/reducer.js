@@ -19,7 +19,6 @@ import {
 
 export const initialState = {
   poll: null,
-  movies: null,
 };
 
 export const key = 'homePoll';
@@ -33,21 +32,21 @@ const homePollProviderReducer = (state = initialState, action) =>
         break;
 
       case POLL_UPDATE:
-        draft.poll = {
-          movies: state.poll.movies,
-          ...action.poll,
-        };
+        draft.poll = action.poll;
         break;
 
       case MOVIE_ADD:
         draft.poll.movies = [...state.poll.movies, action.movie];
         break;
 
-      case MOVIE_MODIFY:
+      case MOVIE_MODIFY: {
         draft.poll.movies = state.poll.movies.map(movie =>
-          movie.identifier === action.movie.idenfier ? action.movie : movie,
+          movie.identifier === action.movie.identifier
+            ? { ...movie, ...action.movie }
+            : movie,
         );
         break;
+      }
 
       case MOVIE_REMOVE:
         draft.poll.movies = state.poll.movies.filter(

@@ -25,8 +25,4 @@ export default defineMessages({
     id: `${scope}.formPollMovies`,
     defaultMessage: 'Movies',
   },
-  formPollMovieCreate: {
-    id: `${scope}.formPollMovieCreate`,
-    defaultMessage: 'Add Movie',
-  },
 });

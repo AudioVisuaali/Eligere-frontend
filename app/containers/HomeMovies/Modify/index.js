@@ -1,32 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { injectIntl } from 'react-intl';
 import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
 import apolloClient from 'apolloClient';
-import {
-  makeSelectHomePoll,
-  makeSelectHomePollMovie,
-} from 'containers/HomePolls/Modify/selectors';
-import Modal from 'components/Modal';
+import BlockTitle from 'components/BlockTitle';
 import Movie from 'containers/Movie';
-import Trailers from 'containers/Trailers';
 import history from 'utils/history';
-import { movieModify } from 'containers/HomePolls/Modify/actions';
-import {
-  generatePathHomePoll,
-  pathHomePollMovieModify,
-  pathHomePollMovieTrailerCreate,
-  pathHomePollMovieTrailerModify,
-  pathNotFound,
-} from 'utils/paths';
-import TrailerCreate from './Trailer/Create';
-import TrailerModify from './Trailer/Modify';
+import { generatePathHomePoll } from 'utils/paths';
+import Trailers from './Trailers';
 import messages from './messages';
 
 const MOVIE_GET = gql`
@@ -121,17 +105,19 @@ const MOVIE_MODIFY = gql`
 `;
 
 const Modify = props => {
-  const { movie } = props;
+  const [movie, setMovie] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const { movieIdentifier } = props.match.params;
+    console.log(props.match.params);
+    const { identifier } = props.match.params;
+
     apolloClient
       .query({
         query: MOVIE_GET,
-        variables: { identifier: movieIdentifier },
+        variables: { identifier },
       })
-      .then(res => props.movieModify(res.data.movie))
+      .then(res => setMovie(res.data.movie))
       .catch(console.log)
       .finally(() => setLoaded(true));
   }, []);
@@ -170,34 +156,12 @@ const Modify = props => {
     return 'movie does not exist';
   }
 
-  if (!movie.trailers) {
-    return null;
-  }
-
   return (
     <>
-      <Modal
-        title={props.intl.formatMessage(messages.modifyMovie)}
-        onClose={goToPoll}
-        onAccept={handleSave}
-      >
-        <Movie movie={movie} onChange={console.log} />
-        <Trailers trailers={movie.trailers} />
-      </Modal>
-      <Switch>
-        <Route exact path={pathHomePollMovieModify} />
-        <Route
-          path={pathHomePollMovieTrailerCreate}
-          component={TrailerCreate}
-          exact
-        />
-        <Route
-          path={pathHomePollMovieTrailerModify}
-          component={TrailerModify}
-          exact
-        />
-        <Redirect to={pathNotFound} />
-      </Switch>
+      <BlockTitle title={props.intl.formatMessage(messages.modifyMovie)} />
+      <Movie movie={movie} onChange={console.log} />
+
+      <Trailers movie={movie} />
     </>
   );
 };
@@ -212,25 +176,9 @@ Modify.propTypes = {
   }).isRequired,
   poll: PropTypes.object.isRequired,
   movieModify: PropTypes.func.isRequired,
-  movie: PropTypes.object,
 };
-
-const mapStateToProps = createStructuredSelector({
-  poll: makeSelectHomePoll(),
-  movie: makeSelectHomePollMovie(),
-});
-
-const mapDispatchToProps = dispatch => ({
-  movieModify: movie => dispatch(movieModify(movie)),
-});
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
 
 export default compose(
   withRouter,
-  withConnect,
   injectIntl,
 )(Modify);

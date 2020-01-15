@@ -7,8 +7,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { gql } from 'apollo-boost';
@@ -17,25 +17,25 @@ import { withRouter } from 'react-router';
 import apolloClient from 'apolloClient';
 import history from 'utils/history';
 import {
-  pathNotFound,
-  pathHomePolls,
-  pathHomePollMovieModify,
   pathHomePollMovieCreate,
   generatePathHomePollMovieCreate,
   pathHomePoll,
+  pathHomePolls,
+  pathNotFound,
 } from 'utils/paths';
 import injectReducer from 'utils/injectReducer';
 import Poll from 'containers/Poll';
-import Movies from 'containers/Movies';
 import BlockTitle from 'components/BlockTitle';
+import PlusSVG from 'svgs/Plus';
 
 import messages from './messages';
 import { setPoll, pollUpdate } from './actions';
 import reducer, { key } from './reducer';
 import { makeSelectHomePoll } from './selectors';
-import MovieModify from './Movies/Modify';
-import MovieCreate from './Movies/Create';
-import CreateMovie from './styles/CreateMovie';
+import MoviesContainer from './styles/MoviesContainer';
+import MovieCreation from './styles/MovieCreation';
+import CreateMovie from './CreateMovie';
+import Movie from './Movie';
 
 const POLL_GET = gql`
   query($identifier: String!) {
@@ -53,27 +53,6 @@ const POLL_GET = gql`
         identifier
         title
         thumbnail
-        description
-        released
-        duration
-        genres {
-          id
-          value
-        }
-        trailers {
-          identifier
-          platform
-          url
-          slug
-          thumbnailURL
-        }
-        ratings {
-          imdb
-          rottenTomatoes
-          metacritic
-          googleUsers
-        }
-        createdAt
       }
       community {
         identifier
@@ -173,20 +152,27 @@ const Modify = props => {
       {poll && (
         <>
           <BlockTitle title={intl.formatMessage(messages.formPollMovies)} />
-          <Movies poll={poll} />
-          <CreateMovie
-            onClick={goToCreateMovie}
-            href={generatePathHomePollMovieCreate(poll)}
-          >
-            <FormattedMessage {...messages.formPollMovieCreate} />
-          </CreateMovie>
+          <MoviesContainer>
+            <div>
+              <MovieCreation
+                onClick={goToCreateMovie}
+                href={generatePathHomePollMovieCreate(poll)}
+              >
+                <PlusSVG />
+              </MovieCreation>
+            </div>
+            {poll.movies.map(movie => (
+              <div>
+                <Movie key={movie.identifier} movie={movie} />
+              </div>
+            ))}
+          </MoviesContainer>
         </>
       )}
 
       <Switch>
-        <Route exact path={pathHomePoll} />
-        <Route path={pathHomePollMovieCreate} component={MovieCreate} exact />
-        <Route path={pathHomePollMovieModify} component={MovieModify} />
+        <Route path={pathHomePoll} exact />
+        <Route path={pathHomePollMovieCreate} component={CreateMovie} />
         <Redirect to={pathNotFound} />
       </Switch>
     </>
