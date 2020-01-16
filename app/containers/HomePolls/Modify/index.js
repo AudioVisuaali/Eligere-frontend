@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
@@ -26,6 +26,7 @@ import {
 import injectReducer from 'utils/injectReducer';
 import Poll from 'containers/Poll';
 import BlockTitle from 'components/BlockTitle';
+import UnsavedChanges from 'components/UnsavedChanges';
 import PlusSVG from 'svgs/Plus';
 
 import messages from './messages';
@@ -36,6 +37,7 @@ import MoviesContainer from './styles/MoviesContainer';
 import MovieCreation from './styles/MovieCreation';
 import CreateMovie from './CreateMovie';
 import Movie from './Movie';
+import Section from './styles/Section';
 
 const POLL_GET = gql`
   query($identifier: String!) {
@@ -101,6 +103,7 @@ const POLL_MODIFY = gql`
 
 const Modify = props => {
   const { poll, intl } = props;
+  const [modifiedPoll, setModifiedPoll] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -109,11 +112,12 @@ const Modify = props => {
       .query({ query: POLL_GET, variables: { identifier } })
       .then(res => {
         props.setPoll(res.data.poll);
+        setModifiedPoll(res.data.poll);
       })
       .catch();
   }, []);
 
-  const handleUpdate = modifiedPoll => {
+  const handleUpdate = () => {
     const { identifier } = props.match.params;
     setLoading(true);
     apolloClient
@@ -128,12 +132,28 @@ const Modify = props => {
       .finally(() => setLoading(false));
   };
 
-  const handleCancel = () => {
-    history.push(pathHomePolls);
-  };
-
   const goToCreateMovie = () => {
     history.push(generatePathHomePollMovieCreate(poll));
+  };
+
+  const resetPoll = () => {
+    setModifiedPoll(poll);
+  };
+
+  const isMatch = () => {
+    if (poll.title !== modifiedPoll.title) return true;
+    if (poll.description !== modifiedPoll.description) return true;
+    if (poll.userRequired !== modifiedPoll.userRequired) return true;
+    // TODO
+    // if (poll.opensAt !== modifiedPoll.opensAt) return true;
+    // if (poll.closesAt !== modifiedPoll.closesAt) return true;
+    if (poll.community !== modifiedPoll.community) return true;
+    if (poll.allowComments !== modifiedPoll.allowComments) return true;
+    if (poll.totalVotes !== modifiedPoll.totalVotes) return true;
+    if (poll.allowMovieSuggestions !== modifiedPoll.allowMovieSuggestions)
+      return true;
+
+    return false;
   };
 
   if (!poll) {
@@ -142,33 +162,35 @@ const Modify = props => {
 
   return (
     <>
-      <Poll
-        poll={poll}
-        onSave={handleUpdate}
-        onCancel={handleCancel}
-        loading={loading}
-      />
+      <Section>
+        <Poll poll={modifiedPoll} onPoll={setModifiedPoll} />
+      </Section>
 
-      {poll && (
-        <>
-          <BlockTitle title={intl.formatMessage(messages.formPollMovies)} />
-          <MoviesContainer>
-            <div>
-              <MovieCreation
-                onClick={goToCreateMovie}
-                href={generatePathHomePollMovieCreate(poll)}
-              >
-                <PlusSVG />
-              </MovieCreation>
-            </div>
-            {poll.movies.map(movie => (
+      <Section>
+        {modifiedPoll && (
+          <>
+            <BlockTitle title={intl.formatMessage(messages.formPollMovies)} />
+            <MoviesContainer>
               <div>
-                <Movie key={movie.identifier} movie={movie} />
+                <MovieCreation
+                  onClick={goToCreateMovie}
+                  href={generatePathHomePollMovieCreate(poll)}
+                >
+                  <PlusSVG />
+                </MovieCreation>
               </div>
-            ))}
-          </MoviesContainer>
-        </>
-      )}
+              {poll.movies.map(movie => (
+                <div>
+                  <Movie key={movie.identifier} movie={movie} />
+                </div>
+              ))}
+            </MoviesContainer>
+            {!isMatch() && (
+              <UnsavedChanges onReset={resetPoll} onSave={handleUpdate} />
+            )}
+          </>
+        )}
+      </Section>
 
       <Switch>
         <Route path={pathHomePoll} exact />

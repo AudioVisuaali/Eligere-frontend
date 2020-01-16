@@ -12,6 +12,7 @@ import history from 'utils/history';
 import { generatePathHomePoll } from 'utils/paths';
 import Trailers from './Trailers';
 import messages from './messages';
+import Section from './styles/Section';
 
 const MOVIE_GET = gql`
   query($identifier: String!) {
@@ -158,10 +159,13 @@ const Modify = props => {
 
   return (
     <>
-      <BlockTitle title={props.intl.formatMessage(messages.modifyMovie)} />
-      <Movie movie={movie} onChange={console.log} />
-
-      <Trailers movie={movie} />
+      <Section>
+        <BlockTitle title={props.intl.formatMessage(messages.modifyMovie)} />
+        <Movie movie={movie} onChange={console.log} />
+      </Section>
+      <Section>
+        <Trailers movie={movie} />
+      </Section>
     </>
   );
 };

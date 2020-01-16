@@ -1,5 +1,5 @@
 import React from 'react';
-import { generatePathHomeMovie } from 'utils/paths';
+import { generatePathHomePollMovie } from 'utils/paths';
 import history from 'utils/history';
 
 import MovieLink from './styles/MovieLink';
@@ -13,7 +13,7 @@ const Movies = props => {
   };
 
   return poll.movies.map(movie => {
-    const url = generatePathHomeMovie(movie);
+    const url = generatePathHomePollMovie(movie);
 
     return (
       <MovieLink

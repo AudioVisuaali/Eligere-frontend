@@ -4,7 +4,7 @@
  *
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
@@ -35,7 +35,7 @@ const getDay = date => {
 };
 
 const Poll = props => {
-  const { poll, loading, onSave, onCreate, onCancel, intl } = props;
+  const { poll, loading, onPoll, intl } = props;
   const [title, setTitle] = useState(poll ? poll.title : '');
   const [description, setDescription] = useState(poll ? poll.description : '');
   const [userRequired, setUserRequired] = useState(
@@ -64,14 +64,19 @@ const Poll = props => {
     totalVotes,
   });
 
-  const actionButtonSubmit = () => {
-    if (poll) {
-      onSave(createPoll());
-      return;
-    }
-
-    onCreate(createPoll());
-  };
+  useEffect(() => {
+    onPoll(createPoll(), allowSubmit());
+  }, [
+    title,
+    description,
+    userRequired,
+    allowComments,
+    allowMovieSuggestions,
+    opensAt,
+    closesAt,
+    community,
+    totalVotes,
+  ]);
 
   const pollMatch = () => {
     if (poll.title !== title) return true;
@@ -109,8 +114,6 @@ const Poll = props => {
   };
 
   const pollTitleMessage = poll ? messages.pollModify : messages.pollCreate;
-
-  const actionButtonMessage = poll ? messages.saveChanges : messages.createPoll;
 
   return (
     <Container>
@@ -181,21 +184,6 @@ const Poll = props => {
           />
         </Meta>
       </Section>
-
-      <Section>
-        <Actions>
-          <Button type="button" onClick={onCancel}>
-            <FormattedMessage {...messages.cancel} />
-          </Button>
-          <Button
-            disabled={!allowSubmit()}
-            type="submit"
-            onClick={actionButtonSubmit}
-          >
-            <FormattedMessage {...actionButtonMessage} />
-          </Button>
-        </Actions>
-      </Section>
     </Container>
   );
 };
@@ -213,9 +201,7 @@ Poll.propTypes = {
     allowComments: PropTypes.bool,
     allowMovieSuggestions: PropTypes.bool,
   }),
-  onSave: PropTypes.func,
-  onCreate: PropTypes.func,
-  onCancel: PropTypes.func,
+  onPoll: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   intl: PropTypes.object,
 };

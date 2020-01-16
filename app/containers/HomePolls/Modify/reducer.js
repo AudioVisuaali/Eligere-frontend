@@ -32,7 +32,7 @@ const homePollProviderReducer = (state = initialState, action) =>
         break;
 
       case POLL_UPDATE:
-        draft.poll = action.poll;
+        draft.poll = { ...state.poll, ...action.poll };
         break;
 
       case MOVIE_ADD:
