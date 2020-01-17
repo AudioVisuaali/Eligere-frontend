@@ -8,6 +8,7 @@ const Container = styled.div`
 
   & > * {
     padding-right: 15px;
+    padding-bottom: 15px;
 
     &:last-child {
       padding-right: 0;
@@ -15,12 +16,8 @@ const Container = styled.div`
   }
 
   @media screen and (${device.laptop}) {
-    & > * {
-      padding-bottom: 10px;
-
-      &:nth-child(4) {
-        padding-right: 0;
-      }
+    & > * :nth-child(4) {
+      padding-right: 0;
     }
   }
 `;
