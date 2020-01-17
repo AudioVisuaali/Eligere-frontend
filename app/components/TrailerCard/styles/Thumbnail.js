@@ -5,6 +5,8 @@ const Thumbnail = styled.img`
   width: 90px;
   position: relative;
   object-fit: cover;
+
+  background-color: #222;
 `;
 
 export default Thumbnail;

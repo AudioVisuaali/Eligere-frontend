@@ -7,18 +7,14 @@ import { gql } from 'apollo-boost';
 import { FormattedMessage } from 'react-intl';
 
 import apolloClient from 'apolloClient';
+import BlockTitle from 'components/BlockTitle';
 import { handleUsernameChangeAction } from 'containers/App/actions';
 import { makeSelectUser } from 'containers/App/selectors';
-import Box from 'components/Box';
-import Label from 'components/Label';
 import Button from 'components/Button';
 import TextField from 'components/TextField';
 
 import messages from './messages';
-import Header from './styles/Header';
-import Head from './styles/Head';
 import Section from './styles/Section';
-import Title from './styles/Title';
 import Actions from './styles/Actions';
 
 const USER_DISPLAY_NAME_CHANGE = gql`
@@ -54,16 +50,7 @@ const DisplayName = props => {
 
   return (
     <form onSubmit={updateDisplayName}>
-      <Section>
-        <Header>
-          <Head>
-            <Box width="10px" />
-            <Title>
-              <FormattedMessage {...messages.profileTitle} />
-            </Title>
-          </Head>
-        </Header>
-      </Section>
+      <BlockTitle title={<FormattedMessage {...messages.profileTitle} />} />
 
       <Section>
         <TextField
@@ -99,9 +86,6 @@ const mapDispatchToProps = dispatch => ({
   handleDisplayNameChange: evt => dispatch(handleUsernameChangeAction(evt)),
 });
 
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 export default compose(withConnect)(DisplayName);

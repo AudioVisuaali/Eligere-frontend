@@ -7,16 +7,12 @@ import { FormattedMessage } from 'react-intl';
 
 import apolloClient from 'apolloClient';
 import { handleUsernameChangeAction } from 'containers/App/actions';
-import Box from 'components/Box';
-import Label from 'components/Label';
 import Button from 'components/Button';
 import TextField from 'components/TextField';
+import BlockTitle from 'components/BlockTitle';
 
 import messages from './messages';
-import Header from './styles/Header';
-import Head from './styles/Head';
 import Section from './styles/Section';
-import Title from './styles/Title';
 import Actions from './styles/Actions';
 import HalfWidth from './styles/HalfWidth';
 
@@ -62,16 +58,7 @@ const DisplayName = () => {
 
   return (
     <form onSubmit={updatePassword}>
-      <Section>
-        <Header>
-          <Head>
-            <Box width="10px" />
-            <Title>
-              <FormattedMessage {...messages.profilePassword} />
-            </Title>
-          </Head>
-        </Header>
-      </Section>
+      <BlockTitle title={<FormattedMessage {...messages.profilePassword} />} />
 
       <TextField
         type="text"
@@ -139,9 +126,6 @@ const mapDispatchToProps = dispatch => ({
   handleDisplayNameChange: evt => dispatch(handleUsernameChangeAction(evt)),
 });
 
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
+const withConnect = connect(null, mapDispatchToProps);
 
 export default compose(withConnect)(DisplayName);

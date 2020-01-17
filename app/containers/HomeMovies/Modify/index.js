@@ -114,7 +114,10 @@ const MOVIE_MODIFY = gql`
 `;
 
 const Modify = props => {
+  const [movieChange, setMovieChange] = useState(null);
   const { movie } = props;
+
+  useEffect(() => setMovieChange(movie), [movie]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -133,7 +136,7 @@ const Modify = props => {
   }, []);
 
   const handleMovieChange = movie => {
-    console.log(movie);
+    setMovieChange(movie);
   };
 
   const handleReset = () => {
@@ -162,6 +165,10 @@ const Modify = props => {
       .catch();
   };
 
+  const isUnsavedChanges = () => {
+    return false;
+  };
+
   const goToPoll = () => {
     history.push(generatePathHomePoll(props.poll));
   };
@@ -173,14 +180,16 @@ const Modify = props => {
   if (!movie) {
     return 'movie does not exist';
   }
-
+  console.log(movieChange);
   return (
     <>
       <Section>
         <BlockTitle title={props.intl.formatMessage(messages.modifyMovie)} />
-        <Movie movie={movie} onChange={handleMovieChange} />
+        <Movie movie={movieChange} onChange={handleMovieChange} />
       </Section>
-      <UnsavedChanges onSave={handleSave} onReset={handleReset} />
+      {isUnsavedChanges() && (
+        <UnsavedChanges onSave={handleSave} onReset={handleReset} />
+      )}
 
       <Section>
         <Trailers movie={movie} />

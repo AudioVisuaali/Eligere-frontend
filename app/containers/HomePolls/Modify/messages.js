@@ -6,7 +6,7 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.HomePolls.Poll';
+export const scope = 'app.containers.HomePolls.Modify';
 
 export default defineMessages({
   pollModify: {
