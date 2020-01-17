@@ -165,9 +165,7 @@ const Modify = props => {
       .catch();
   };
 
-  const isUnsavedChanges = () => {
-    return false;
-  };
+  const isUnsavedChanges = () => false;
 
   const goToPoll = () => {
     history.push(generatePathHomePoll(props.poll));
@@ -180,7 +178,7 @@ const Modify = props => {
   if (!movie) {
     return 'movie does not exist';
   }
-  console.log(movieChange);
+
   return (
     <>
       <Section>
