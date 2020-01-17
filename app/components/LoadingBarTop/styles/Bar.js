@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
+const Bar = styled.div`
   position: fixed;
+  z-index: 11;
+  top: 0;
   right: 0;
   left: 0;
-  bottom: 30px;
-  z-index: 10;
 `;
 
-export default Container;
+export default Bar;

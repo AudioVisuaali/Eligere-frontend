@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { withRouter } from 'react-router';
 import { compose } from 'redux';
 
+import injectReducer from 'utils/injectReducer';
 import apolloClient from 'apolloClient';
 import BlockTitle from 'components/BlockTitle';
+import UnsavedChanges from 'components/UnsavedChanges';
 import Movie from 'containers/Movie';
 import history from 'utils/history';
 import { generatePathHomePoll } from 'utils/paths';
+
+import { makeSelectHomeMovie } from './selectors';
+import { movieSet, movieUpdate } from './actions';
+import reducer, { key } from './reducer';
 import Trailers from './Trailers';
 import messages from './messages';
 import Section from './styles/Section';
@@ -106,11 +114,10 @@ const MOVIE_MODIFY = gql`
 `;
 
 const Modify = props => {
-  const [movie, setMovie] = useState(null);
+  const { movie } = props;
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    console.log(props.match.params);
     const { identifier } = props.match.params;
 
     apolloClient
@@ -118,17 +125,27 @@ const Modify = props => {
         query: MOVIE_GET,
         variables: { identifier },
       })
-      .then(res => setMovie(res.data.movie))
+      .then(res => {
+        props.movieSet(res.data.movie);
+      })
       .catch(console.log)
       .finally(() => setLoaded(true));
   }, []);
 
+  const handleMovieChange = movie => {
+    console.log(movie);
+  };
+
+  const handleReset = () => {
+    console.log(123);
+  };
+
   const handleSave = () => {
-    const { movieIdentifier } = props.match.params;
+    const { identifier } = props.match.params;
     const newMovie = {
       ...movie,
       ...movie.ratings,
-      identifier: movieIdentifier, // props.poll.identifier,
+      identifier,
       thumbnail: '',
       trailers: movie.trailers.filter(t => t),
     };
@@ -138,8 +155,8 @@ const Modify = props => {
         mutation: MOVIE_MODIFY,
         variables: newMovie,
       })
-      .then(res => {
-        props.movieModify(res.data.updateMovie);
+      .then(() => {
+        // props.movieModify(res.data.updateMovie);
         goToPoll();
       })
       .catch();
@@ -161,8 +178,10 @@ const Modify = props => {
     <>
       <Section>
         <BlockTitle title={props.intl.formatMessage(messages.modifyMovie)} />
-        <Movie movie={movie} onChange={console.log} />
+        <Movie movie={movie} onChange={handleMovieChange} />
       </Section>
+      <UnsavedChanges onSave={handleSave} onReset={handleReset} />
+
       <Section>
         <Trailers movie={movie} />
       </Section>
@@ -174,15 +193,28 @@ Modify.propTypes = {
   intl: PropTypes.object.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      movieIdentifier: PropTypes.string.isRequired,
       identifier: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  poll: PropTypes.object.isRequired,
-  movieModify: PropTypes.func.isRequired,
+  poll: PropTypes.object,
+  movie: PropTypes.object,
+  movieSet: PropTypes.func.isRequired,
 };
 
+const mapStateToProps = createStructuredSelector({
+  movie: makeSelectHomeMovie(),
+});
+
+const mapDispatchToProps = dispatch => ({
+  movieSet: poll => dispatch(movieSet(poll)),
+  movieUpdate: evt => dispatch(movieUpdate(evt)),
+});
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
 export default compose(
+  injectReducer({ reducer, key }),
   withRouter,
   injectIntl,
+  withConnect,
 )(Modify);

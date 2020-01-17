@@ -20,7 +20,6 @@ import {
   pathHomePollMovieCreate,
   generatePathHomePollMovieCreate,
   pathHomePoll,
-  pathHomePolls,
   pathNotFound,
 } from 'utils/paths';
 import injectReducer from 'utils/injectReducer';
@@ -222,10 +221,7 @@ const mapDispatchToProps = dispatch => ({
   pollUpdate: evt => dispatch(pollUpdate(evt)),
 });
 
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 export default compose(
   injectReducer({ reducer, key }),

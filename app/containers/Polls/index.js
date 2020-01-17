@@ -20,11 +20,11 @@ import history from 'utils/history';
 import messages from './messages';
 import Action from './styles/Action';
 
-function CreatePoll() {
-  const handleCreateNew = () => {
-    history.push(pathHomePollCreate);
-  };
+const handleCreateNew = () => {
+  history.push(pathHomePollCreate);
+};
 
+function createPollButton() {
   return (
     <Action onClick={handleCreateNew}>
       <PlusSVG />
@@ -52,7 +52,7 @@ function Polls(props) {
     <>
       <BlockTitle
         title={<FormattedMessage {...messages.pollsTitle} />}
-        action={<CreatePoll />}
+        action={createPollButton()}
       />
       {polls.map(poll => (
         <PollCard

@@ -68,7 +68,7 @@ Modal.propTypes = {
   acceptText: PropTypes.string,
   title: PropTypes.string.isRequired,
   maxWidth: PropTypes.number,
-  disableAccept: PropTypes.number,
+  disableAccept: PropTypes.bool,
 };
 
 export default Modal;

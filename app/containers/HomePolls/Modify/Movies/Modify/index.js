@@ -224,13 +224,6 @@ const mapDispatchToProps = dispatch => ({
   movieModify: movie => dispatch(movieModify(movie)),
 });
 
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  withRouter,
-  withConnect,
-  injectIntl,
-)(Modify);
+export default compose(withRouter, withConnect, injectIntl)(Modify);

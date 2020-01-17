@@ -7,7 +7,7 @@ const Notify = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4), 4px 4px 16px rgba(0, 0, 0, 0.2);
 
   border-radius: 6px;
   padding: 10px;

@@ -19,6 +19,7 @@ import NavBar from 'containers/NavBar';
 import HomeProfile from 'containers/HomeProfile';
 import HomePolls from 'containers/HomePolls';
 import HomeCommunities from 'containers/HomeCommunities';
+import LoadingBarTop from 'components/LoadingBarTop';
 import {
   pathLogin,
   pathHome,
@@ -52,6 +53,8 @@ export function HomePage(props) {
   return (
     <>
       <NavBar />
+
+      <LoadingBarTop />
       <Switch>
         <Redirect exact path={pathHome} to={pathHomePolls} />
 
@@ -75,9 +78,6 @@ const mapStateToProps = createStructuredSelector({
   user: makeSelectUser(),
 });
 
-const withConnect = connect(
-  mapStateToProps,
-  null,
-);
+const withConnect = connect(mapStateToProps, null);
 
 export default compose(withConnect)(HomePage);

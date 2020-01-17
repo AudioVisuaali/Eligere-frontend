@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 
+import { getVideoSlug } from 'utils/video';
 import TextField from 'components/TextField';
 import YoutubePlayer from 'components/YoutubePlayer';
 import RatioContainer from 'components/RatioContainer';
 
 import Container from './styles/Container';
 import messages from './messages';
-
-const MATCH_URL = /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})|youtube\.com\/playlist\?list=/;
 
 const playerStyle = {
   width: '100%',
@@ -19,27 +18,15 @@ const playerStyle = {
 
 const ratioContainerStyle = { marginBottom: 20 };
 
-function getVideoSlug(url) {
-  if (!url) return '';
-
-  const canPlay = MATCH_URL.test(url);
-  if (!canPlay) {
-    return '';
-  }
-
-  return url.match(MATCH_URL)[1];
-}
-
 const Trailer = props => {
   const { trailer, onChange, intl } = props;
-  const [url, setUrl] = useState(trailer ? trailer.url : '');
-
-  const videoSlug = getVideoSlug(url);
+  const videoSlug = getVideoSlug(trailer.url);
 
   const handleChange = e => {
-    const { value } = e.target;
-    setUrl(value);
-    onChange(value);
+    onChange({
+      ...trailer,
+      url: e.target.value,
+    });
   };
 
   return (
@@ -48,7 +35,7 @@ const Trailer = props => {
         <YoutubePlayer style={playerStyle} videoId={videoSlug} />
       </RatioContainer>
       <TextField
-        value={url}
+        value={trailer.url}
         onChange={handleChange}
         title={intl.formatMessage(messages.videoAddress)}
       />
