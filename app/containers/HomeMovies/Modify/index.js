@@ -165,7 +165,19 @@ const Modify = props => {
       .catch();
   };
 
-  const isUnsavedChanges = () => false;
+  const isUnsavedChanges = () => {
+    if (movie.title !== movieChange.title) return true;
+    if (movie.duration !== movieChange.duration) return true;
+    if (movie.description !== movieChange.description) return true;
+
+    const { ratings } = movieChange;
+    if (movie.ratings.imdb !== ratings.imdb) return true;
+    if (movie.ratings.rottenTomatoes !== ratings.rottenTomatoes) return true;
+    if (movie.ratings.metacritic !== ratings.metacritic) return true;
+    if (movie.ratings.googleUsers !== ratings.googleUsers) return true;
+
+    return false;
+  };
 
   const goToPoll = () => {
     history.push(generatePathHomePoll(props.poll));
@@ -217,7 +229,10 @@ const mapDispatchToProps = dispatch => ({
   movieUpdate: evt => dispatch(movieUpdate(evt)),
 });
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default compose(
   injectReducer({ reducer, key }),
