@@ -6,6 +6,7 @@ const Meta = styled.div`
   margin-bottom: 15px;
 
   & > * {
+    width: 25%;
     margin-right: 15px;
 
     &:last-child {

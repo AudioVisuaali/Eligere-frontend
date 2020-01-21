@@ -6,13 +6,18 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
-import Button from 'components/Button';
 import Checkbox from 'components/Checkbox';
 import TextArea from 'components/TextArea';
 import TextField from 'components/TextField';
 import BlockTitle from 'components/BlockTitle';
+import Select from 'components/Select';
+import Option from 'components/Option';
+import { makeSelectCommunities } from 'containers/App/selectors';
 import { dateToStringDashed } from 'utils/time';
 
 import messages from './messages';
@@ -20,7 +25,6 @@ import Meta from './styles/Meta';
 import Container from './styles/Container';
 import Section from './styles/Section';
 import Checkboxes from './styles/Checkboxes';
-import Actions from './styles/Actions';
 
 const textAreaSize = {
   minHeight: 90,
@@ -35,7 +39,7 @@ const getDay = date => {
 };
 
 const Poll = props => {
-  const { poll, loading, onPoll, intl } = props;
+  const { communities, poll, loading, onPoll, intl } = props;
   const [title, setTitle] = useState(poll ? poll.title : '');
   const [description, setDescription] = useState(poll ? poll.description : '');
   const [userRequired, setUserRequired] = useState(
@@ -172,11 +176,17 @@ const Poll = props => {
             value={closesAt}
             onChange={e => setClosesAt(e.target.value)}
           />
-          <TextField
+          <Select
             title={intl.formatMessage(messages.community)}
             value={community}
-            onChange={e => setCommunity(e.target.value)}
-          />
+            onChange={setCommunity}
+          >
+            <Option value="" />
+            {communities &&
+              communities.map(comm => (
+                <Option value={comm.identifier}>{comm.title}</Option>
+              ))}
+          </Select>
           <TextField
             title={intl.formatMessage(messages.totalVotes)}
             value={totalVotes}
@@ -201,9 +211,24 @@ Poll.propTypes = {
     allowComments: PropTypes.bool,
     allowMovieSuggestions: PropTypes.bool,
   }),
+  communities: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      identifier: PropTypes.string.isRequired,
+    }),
+  ),
   onPoll: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   intl: PropTypes.object,
 };
 
-export default injectIntl(Poll);
+const mapStateToProps = createStructuredSelector({
+  communities: makeSelectCommunities(),
+});
+
+const withConnect = connect(mapStateToProps);
+
+export default compose(
+  withConnect,
+  injectIntl,
+)(Poll);

@@ -229,10 +229,7 @@ const mapDispatchToProps = dispatch => ({
   movieUpdate: evt => dispatch(movieUpdate(evt)),
 });
 
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 export default compose(
   injectReducer({ reducer, key }),
