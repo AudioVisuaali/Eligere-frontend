@@ -5,7 +5,6 @@ import Button from './styles/Button';
 import Container from './styles/Container';
 import Thumbnail from './styles/Thumbnail';
 import Title from './styles/Title';
-import Content from './styles/Content';
 
 const TrailerCard = props => {
   const { trailer, onClick } = props;
@@ -16,9 +15,7 @@ const TrailerCard = props => {
       <Button onClick={handleOnClick}>
         <Thumbnail src={trailer.thumbnailURL} />
       </Button>
-      <Content>
-        <Title onClick={handleOnClick}>{trailer.title}</Title>
-      </Content>
+      <Title onClick={handleOnClick}>{trailer.title}</Title>
     </Container>
   );
 };
