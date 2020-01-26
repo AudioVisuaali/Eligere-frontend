@@ -54,13 +54,13 @@ const Movie = props => {
         {metacritic && (
           <Rating>
             <MetaCriticSVG />
-            {rottenTomatoes}%
+            {metacritic}%
           </Rating>
         )}
         {rottenTomatoes && (
           <Rating>
             <RottenTomatoesSVG />
-            {metacritic}%
+            {rottenTomatoes}%
           </Rating>
         )}
         {googleUsers && (

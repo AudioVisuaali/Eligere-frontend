@@ -34,9 +34,40 @@ const MOVIE_SEARCH = gql`
   }
 `;
 
+const MOVIE_CREATE_IMDB = gql`
+  mutation($pollIdentifier: String!, $id: ID!) {
+    createMovieImdb(pollIdentifier: $pollIdentifier, id: $id) {
+      identifier
+      title
+      thumbnail
+      description
+      released
+      duration
+      genres {
+        id
+        value
+      }
+      trailers {
+        identifier
+        platform
+        url
+        slug
+      }
+      ratings {
+        imdb
+        rottenTomatoes
+        metacritic
+        googleUsers
+      }
+      createdAt
+    }
+  }
+`;
+
 const Create = props => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [creating, setCreating] = useState(false);
   const [results, setResults] = useState(null);
 
   const goToPoll = () => {
@@ -67,6 +98,28 @@ const Create = props => {
     [],
   );
 
+  const createMovie = movieImdb => {
+    if (creating) {
+      return;
+    }
+
+    setCreating(true);
+    apolloClient
+      .mutate({
+        mutation: MOVIE_CREATE_IMDB,
+        variables: {
+          pollIdentifier: props.match.params.identifier,
+          id: movieImdb.id,
+        },
+      })
+      .then(res => {
+        props.movieAdd(res.data.createMovieImdb);
+        goToPoll();
+      })
+      .catch(console.log)
+      .finally(() => setCreating(false));
+  };
+
   const handleSearch = e => {
     const { value } = e.target;
     setQuery(value);
@@ -89,19 +142,39 @@ const Create = props => {
       hideAccept
     >
       <LoadingIconContainer>
-        <LoadingIcon>{loading && <SpinnerThird />}</LoadingIcon>
+        <LoadingIcon>{(loading || creating) && <SpinnerThird />}</LoadingIcon>
       </LoadingIconContainer>
-      <TextField title="Search movie" value={query} onChange={handleSearch} />
+      <TextField
+        focusOnMount
+        disabled={creating}
+        title="Search movie"
+        value={query}
+        onChange={handleSearch}
+      />
       <SearchResults>
-        {results && results.map(imdb => <ImdbCard key={imdb.id} imdb={imdb} />)}
+        {results &&
+          results.map(imdb => (
+            <ImdbCard
+              disabled={creating}
+              onClick={createMovie}
+              key={imdb.id}
+              imdb={imdb}
+            />
+          ))}
       </SearchResults>
     </Modal>
   );
 };
 
 Create.propTypes = {
+  movieAdd: PropTypes.func.isRequired,
   poll: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      identifier: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

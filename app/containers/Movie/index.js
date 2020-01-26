@@ -73,23 +73,12 @@ const Movie = props => {
     });
   };
 
-  const {
-    title,
-    description,
-    rottenTomatoes,
-    metacritic,
-    googleUsers,
-    imdb,
-    duration,
-    released,
-    ratings,
-    genres,
-  } = movie;
+  const { title, description, duration, released, ratings, genres } = movie;
 
   return (
     <Container>
       <Row>
-        <Thumbnail src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQA_-tL18_rj9zEcjN6n41NEaJm-kRNF9UeOtvksZ4z_OW6jRA9" />
+        <Thumbnail src={movie.thumbnail} />
         <Info>
           <Title>
             <TextField
@@ -113,12 +102,12 @@ const Movie = props => {
       <Meta>
         <RateField>
           <TextField
-            name="rottenTomatoes"
+            name="imdb"
             type="number"
             min="0"
             max="100"
-            title={intl.formatMessage(messages.rottenTomatoes)}
-            value={ratings.rottenTomatoes}
+            title={intl.formatMessage(messages.imdb)}
+            value={ratings.imdb}
             onChange={handleRating}
           />
         </RateField>
@@ -135,23 +124,23 @@ const Movie = props => {
         </RateField>
         <RateField>
           <TextField
+            name="rottenTomatoes"
+            type="number"
+            min="0"
+            max="100"
+            title={intl.formatMessage(messages.rottenTomatoes)}
+            value={ratings.rottenTomatoes}
+            onChange={handleRating}
+          />
+        </RateField>
+        <RateField>
+          <TextField
             name="googleUsers"
             type="number"
             min="0"
             max="100"
             title={intl.formatMessage(messages.googleUsers)}
             value={ratings.googleUsers}
-            onChange={handleRating}
-          />
-        </RateField>
-        <RateField>
-          <TextField
-            name="imdb"
-            type="number"
-            min="0"
-            max="100"
-            title={intl.formatMessage(messages.imdb)}
-            value={ratings.imdb}
             onChange={handleRating}
           />
         </RateField>

@@ -9,8 +9,8 @@ import Year from './styles/Year';
 import Stars from './styles/Stars';
 
 const ImdbCard = props => (
-  <Result>
-    <Thumbnail src={props.imdb.image} />
+  <Result disabled={props.disabled} onClick={() => props.onClick(props.imdb)}>
+    {props.imdb.image && <Thumbnail src={props.imdb.image} />}
     <Information>
       <Title>{props.imdb.title}</Title>
       <Meta>
@@ -22,6 +22,8 @@ const ImdbCard = props => (
 );
 
 ImdbCard.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
   imdb: PropTypes.shape({
     image: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,

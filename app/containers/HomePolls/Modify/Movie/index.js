@@ -4,6 +4,7 @@ import { generatePathHomePollMovie } from 'utils/paths';
 import history from 'utils/history';
 
 import MovieLink from './styles/MovieLink';
+import Thumbnail from './styles/Thumbnail';
 
 const goToPage = (url, e) => {
   e.preventDefault();
@@ -19,7 +20,11 @@ const Movie = ({ movie }) => {
       onClick={e => goToPage(url, e)}
       href={url}
     >
-      {movie.title}
+      {movie.thumbnail ? (
+        <Thumbnail src={movie.thumbnail}></Thumbnail>
+      ) : (
+        movie.title
+      )}
     </MovieLink>
   );
 };
@@ -27,6 +32,7 @@ const Movie = ({ movie }) => {
 Movie.propTypes = {
   movie: PropTypes.shape({
     identifier: PropTypes.string.isRequired,
+    thumbnail: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
   }).isRequired,
 };

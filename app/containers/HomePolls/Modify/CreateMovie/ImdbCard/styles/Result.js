@@ -1,4 +1,8 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const disabled = css`
+  opacity: 0.6;
+`;
 
 const Result = styled.button`
   width: 100%;
@@ -16,6 +20,8 @@ const Result = styled.button`
   border: 1px solid rgba(0, 0, 0, 0.1);
 
   transition: box-shadow 200ms;
+
+  ${p => p.disabled && disabled}
 
   &:hover {
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);

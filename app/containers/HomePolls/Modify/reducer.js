@@ -36,7 +36,7 @@ const homePollProviderReducer = (state = initialState, action) =>
         break;
 
       case MOVIE_ADD:
-        draft.poll.movies = [...state.poll.movies, action.movie];
+        draft.poll.movies = [action.movie, ...state.poll.movies];
         break;
 
       case MOVIE_MODIFY: {
@@ -81,11 +81,12 @@ const homePollProviderReducer = (state = initialState, action) =>
         const movieIndex = state.poll.movies.findIndex(
           movie => movie.identifier === action.movie.identifier,
         );
-        const newTrailers = state.poll.movies[movieIndex].trailers.map(
-          trailer =>
-            trailer.identifier === action.trailer.identifier
-              ? action.trailer
-              : trailer,
+        const newTrailers = state.poll.movies[
+          movieIndex
+        ].trailers.map(trailer =>
+          trailer.identifier === action.trailer.identifier
+            ? action.trailer
+            : trailer,
         );
         state.poll.movies[movieIndex].trailers = newTrailers;
         break;

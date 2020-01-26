@@ -8,7 +8,7 @@ const MoviesContainer = styled.div`
   & > div {
     margin-bottom: 20px;
     width: 25%;
-    height: 200px;
+    height: 240px;
   }
 
   & > div:nth-child(4n + 1) {
