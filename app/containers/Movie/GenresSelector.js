@@ -23,13 +23,9 @@ const GenresSelector = props => {
   const { genres, onChange } = props;
 
   const handleGenreToggle = (genre, isActive) => {
-    const newGenres = [...genres];
-    if (isActive) {
-      const index = newGenres.findIndex(genre.id);
-      newGenres.splice(index, 1);
-    } else {
-      newGenres.push(genre.id);
-    }
+    const newGenres = isActive
+      ? genres.filter(g => g.id !== genre.id)
+      : [...genres, genre];
 
     onChange(newGenres);
   };
@@ -37,7 +33,7 @@ const GenresSelector = props => {
   return (
     <Genres>
       {availableGenres.map(genre => {
-        const isActive = genres.find(x => x === genre.id);
+        const isActive = genres.find(x => x.id === genre.id);
         return (
           <Genre
             key={genre.id}

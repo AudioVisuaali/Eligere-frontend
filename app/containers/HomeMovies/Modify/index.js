@@ -12,8 +12,6 @@ import apolloClient from 'apolloClient';
 import BlockTitle from 'components/BlockTitle';
 import UnsavedChanges from 'components/UnsavedChanges';
 import Movie from 'containers/Movie';
-import history from 'utils/history';
-import { generatePathHomePoll } from 'utils/paths';
 
 import { makeSelectHomeMovie } from './selectors';
 import { movieSet, movieUpdate } from './actions';
@@ -60,14 +58,13 @@ const MOVIE_MODIFY = gql`
     $title: String!
     $thumbnail: String!
     $description: String!
-    $released: String!
+    $released: Int!
     $duration: Int!
     $imdb: Int!
     $rottenTomatoes: Int!
     $metacritic: Int!
     $googleUsers: Int!
     $genres: [ID!]!
-    $trailers: [String!]!
   ) {
     updateMovie(
       identifier: $identifier
@@ -83,7 +80,6 @@ const MOVIE_MODIFY = gql`
         googleUsers: $googleUsers
       }
       genres: $genres
-      trailers: $trailers
     ) {
       identifier
       title
@@ -135,22 +131,19 @@ const Modify = props => {
       .finally(() => setLoaded(true));
   }, []);
 
-  const handleMovieChange = movie => {
-    setMovieChange(movie);
-  };
-
   const handleReset = () => {
-    console.log(123);
+    setMovieChange(movie);
   };
 
   const handleSave = () => {
     const { identifier } = props.match.params;
+
     const newMovie = {
-      ...movie,
-      ...movie.ratings,
+      ...movieChange,
+      ...movieChange.ratings,
+      genres: movieChange.genres.map(genre => genre.id),
       identifier,
       thumbnail: '',
-      trailers: movie.trailers.filter(t => t),
     };
 
     apolloClient
@@ -158,9 +151,8 @@ const Modify = props => {
         mutation: MOVIE_MODIFY,
         variables: newMovie,
       })
-      .then(() => {
-        // props.movieModify(res.data.updateMovie);
-        goToPoll();
+      .then(res => {
+        props.movieSet(res.data.updateMovie);
       })
       .catch();
   };
@@ -169,6 +161,7 @@ const Modify = props => {
     if (movie.title !== movieChange.title) return true;
     if (movie.duration !== movieChange.duration) return true;
     if (movie.description !== movieChange.description) return true;
+    if (movie.released !== movieChange.released) return true;
 
     const { ratings } = movieChange;
     if (movie.ratings.imdb !== ratings.imdb) return true;
@@ -177,10 +170,6 @@ const Modify = props => {
     if (movie.ratings.googleUsers !== ratings.googleUsers) return true;
 
     return false;
-  };
-
-  const goToPoll = () => {
-    history.push(generatePathHomePoll(props.poll));
   };
 
   if (!loaded) {
@@ -195,7 +184,7 @@ const Modify = props => {
     <>
       <Section>
         <BlockTitle title={props.intl.formatMessage(messages.modifyMovie)} />
-        <Movie movie={movieChange} onChange={handleMovieChange} />
+        <Movie movie={movieChange} onChange={setMovieChange} />
       </Section>
       {isUnsavedChanges() && (
         <UnsavedChanges onSave={handleSave} onReset={handleReset} />
@@ -215,7 +204,6 @@ Modify.propTypes = {
       identifier: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  poll: PropTypes.object,
   movie: PropTypes.object,
   movieSet: PropTypes.func.isRequired,
 };

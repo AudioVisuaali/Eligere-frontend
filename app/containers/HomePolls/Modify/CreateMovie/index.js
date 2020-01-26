@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { injectIntl } from 'react-intl';
@@ -8,108 +8,93 @@ import { compose } from 'redux';
 
 import { makeSelectHomePoll } from 'containers/HomePolls/Modify/selectors';
 import apolloClient from 'apolloClient';
-import Movie from 'containers/Movie';
+import TextField from 'components/TextField';
 import Modal from 'components/Modal';
 import history from 'utils/history';
+import SpinnerThird from 'svgs/SpinnerThird';
 import { movieAdd } from 'containers/HomePolls/Modify/actions';
 import { generatePathHomePoll } from 'utils/paths';
+import debounce from 'utils/debounce';
+import SearchResults from './styles/SearchResults';
+import LoadingIcon from './styles/LoadingIcon';
+import LoadingIconContainer from './styles/LoadingIconContainer';
 
+import ImdbCard from './ImdbCard';
 import messages from './messages';
 
-const MOVIE_CREATE = gql`
-  mutation(
-    $pollIdentifier: String!
-    $title: String!
-    $thumbnail: String!
-    $description: String!
-    $released: String!
-    $duration: Int!
-    $genres: [ID!]!
-    $trailers: [String!]!
-    $imdb: Int!
-    $rottenTomatoes: Int!
-    $metacritic: Int!
-    $googleUsers: Int!
-  ) {
-    createMovie(
-      pollIdentifier: $pollIdentifier
-      movie: {
-        title: $title
-        thumbnail: $thumbnail
-        description: $description
-        released: $released
-        duration: $duration
-        ratings: {
-          imdb: $imdb
-          rottenTomatoes: $rottenTomatoes
-          metacritic: $metacritic
-          googleUsers: $googleUsers
-        }
-        genres: $genres
-        trailers: $trailers
-      }
-    ) {
-      identifier
+const MOVIE_SEARCH = gql`
+  query($query: String!, $max: Int) {
+    imdb(query: $query, max: $max) {
+      id
       title
-      thumbnail
-      description
-      released
-      duration
-      genres {
-        id
-        value
-      }
-      trailers {
-        identifier
-        platform
-        url
-        slug
-      }
-      ratings {
-        imdb
-        rottenTomatoes
-        metacritic
-        googleUsers
-      }
-      createdAt
+      year
+      image
+      stars
     }
   }
 `;
 
 const Create = props => {
-  const [movie, setMovie] = useState(null);
-
-  const handleCreate = () => {
-    const newMovie = {
-      pollIdentifier: props.poll.identifier, // props.poll.identifier,
-      thumbnail: '',
-      trailers: [],
-      ...movie,
-      ...movie.ratings,
-    };
-
-    apolloClient
-      .mutate({
-        mutation: MOVIE_CREATE,
-        variables: newMovie,
-      })
-      .then(res => {
-        props.movieAdd(res.data.createMovie);
-        goToPoll();
-      });
-  };
+  const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState(null);
 
   const goToPoll = () => {
     history.push(generatePathHomePoll(props.poll));
   };
 
+  const onResultsSuccess = useCallback(
+    res => {
+      setLoading(false);
+      setResults(res.data.imdb);
+    },
+    [query],
+  );
+
+  const getMovies = useCallback(
+    debounce(queryVal => {
+      apolloClient
+        .query({
+          query: MOVIE_SEARCH,
+          variables: { query: queryVal, max: 4 },
+        })
+        .then(onResultsSuccess)
+        .catch(() => {
+          setResults(null);
+          setLoading(false);
+        });
+    }, 300),
+    [],
+  );
+
+  const handleSearch = e => {
+    const { value } = e.target;
+    setQuery(value);
+
+    if (!value) {
+      setResults(null);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    getMovies(value);
+  };
+
   return (
     <Modal
+      maxWidth={500}
       title={props.intl.formatMessage(messages.createMovie)}
       onClose={goToPoll}
-      onAccept={handleCreate}
+      hideAccept
     >
-      <Movie onChange={setMovie} />
+      <LoadingIconContainer>
+        <LoadingIcon>{loading && <SpinnerThird />}</LoadingIcon>
+      </LoadingIconContainer>
+      <TextField title="Search movie" value={query} onChange={handleSearch} />
+      <SearchResults>
+        {results && results.map(imdb => <ImdbCard key={imdb.id} imdb={imdb} />)}
+      </SearchResults>
     </Modal>
   );
 };
@@ -117,7 +102,6 @@ const Create = props => {
 Create.propTypes = {
   poll: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
-  movieAdd: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -128,12 +112,6 @@ const mapDispatchToProps = dispatch => ({
   movieAdd: movie => dispatch(movieAdd(movie)),
 });
 
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectIntl,
-  withConnect,
-)(Create);
+export default compose(injectIntl, withConnect)(Create);

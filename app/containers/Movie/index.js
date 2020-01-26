@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 
 import TextField from 'components/TextField';
 import TextArea from 'components/TextArea';
-import { dateToStringDashed } from 'utils/time';
 
 import messages from './messages';
 import Row from './styles/Row';
@@ -21,55 +20,60 @@ import GenresSelector from './GenresSelector';
 
 const parseValue = e => parseInt(e.target.value, 10);
 
-const getDate = str => {
-  const d = new Date(parseInt(str, 10));
-  return dateToStringDashed(d);
+const movieTemplate = {
+  title: '',
+  setDescription: '',
+  ratings: {
+    rottenTomatoes: '',
+    metacritic: '',
+    googleUsers: '',
+    imdb: '',
+  },
+  duration: '',
+  released: '',
+  genres: [],
 };
 
 const Movie = props => {
   const { intl, movie, onChange } = props;
 
-  const [title, setTitle] = useState(movie ? movie.title : '');
-  const [description, setDescription] = useState(
-    movie ? movie.description : '',
-  );
+  if (!movie) {
+    return movieTemplate;
+  }
 
-  const [rottenTomatoes, setRottenTomatoes] = useState(
-    movie ? movie.ratings.rottenTomatoes : '',
-  );
-  const [metacritic, setMetacritic] = useState(
-    movie ? movie.ratings.metacritic : '',
-  );
-  const [googleUsers, setGoogleUsers] = useState(
-    movie ? movie.ratings.googleUsers : '',
-  );
-  const [imdb, setImdb] = useState(movie ? movie.ratings.imdb : '');
-  const [duration, setDuration] = useState(movie ? movie.duration : '');
-  const [released, setReleased] = useState(
-    movie ? getDate(movie.released) : '',
-  );
+  const handleField = e => {
+    onChange({
+      ...movie,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  const [genres, setGenres] = useState(movie ? movie.genres : []);
+  const handleRating = e => {
+    const newMovie = {
+      ...movie,
+      ratings: {
+        ...movie.ratings,
+        [e.target.name]: parseValue(e.target.value),
+      },
+    };
+    onChange(newMovie);
+  };
 
-  const generateMovie = () => ({
-    title,
-    description,
-    ratings: {
-      rottenTomatoes,
-      metacritic,
-      googleUsers,
-      imdb,
-    },
-    duration,
-    released,
-    genres,
-  });
+  const handleNumber = e => {
+    onChange({
+      ...movie,
+      [e.target.name]: parseValue(e.target.value),
+    });
+  };
 
-  useEffect(() => {
-    if (onChange) {
-      onChange(generateMovie());
-    }
-  }, [
+  const handleGenres = genres => {
+    onChange({
+      ...movie,
+      genres,
+    });
+  };
+
+  const {
     title,
     description,
     rottenTomatoes,
@@ -78,8 +82,9 @@ const Movie = props => {
     imdb,
     duration,
     released,
+    ratings,
     genres,
-  ]);
+  } = movie;
 
   return (
     <Container>
@@ -88,16 +93,18 @@ const Movie = props => {
         <Info>
           <Title>
             <TextField
+              name="title"
               title={intl.formatMessage(messages.movieTitle)}
               value={title}
-              onChange={e => setTitle(e.target.value)}
+              onChange={handleField}
             />
           </Title>
           <Description>
             <TextArea
+              name="description"
               title={intl.formatMessage(messages.movieDescription)}
               value={description}
-              onChange={e => setDescription(e.target.value)}
+              onChange={handleField}
             />
           </Description>
         </Info>
@@ -106,64 +113,74 @@ const Movie = props => {
       <Meta>
         <RateField>
           <TextField
+            name="rottenTomatoes"
             type="number"
             min="0"
             max="100"
             title={intl.formatMessage(messages.rottenTomatoes)}
-            value={rottenTomatoes}
-            onChange={e => setRottenTomatoes(parseValue(e))}
+            value={ratings.rottenTomatoes}
+            onChange={handleRating}
           />
         </RateField>
         <RateField>
           <TextField
+            name="metacritic"
             type="number"
             min="0"
             max="100"
             title={intl.formatMessage(messages.metacritic)}
-            value={metacritic}
-            onChange={e => setMetacritic(parseValue(e))}
+            value={ratings.metacritic}
+            onChange={handleRating}
           />
         </RateField>
         <RateField>
           <TextField
+            name="googleUsers"
             type="number"
             min="0"
             max="100"
             title={intl.formatMessage(messages.googleUsers)}
-            value={googleUsers}
-            onChange={e => setGoogleUsers(parseValue(e))}
+            value={ratings.googleUsers}
+            onChange={handleRating}
           />
         </RateField>
         <RateField>
           <TextField
+            name="imdb"
             type="number"
             min="0"
             max="100"
             title={intl.formatMessage(messages.imdb)}
-            value={imdb}
-            onChange={e => setImdb(parseValue(e))}
+            value={ratings.imdb}
+            onChange={handleRating}
           />
         </RateField>
         <MetaField>
           <TextField
+            name="duration"
             type="number"
             min="0"
+            placeholder="minutes"
             title={intl.formatMessage(messages.duration)}
             value={duration}
-            onChange={e => setDuration(parseValue(e))}
+            onChange={handleNumber}
           />
         </MetaField>
         <MetaField>
           <TextField
-            type="date"
+            name="released"
+            type="number"
+            min="0"
+            max="6666"
+            placeholder="Year"
             title={intl.formatMessage(messages.releaseDate)}
             value={released}
-            onChange={e => setReleased(e.target.value)}
+            onChange={handleNumber}
           />
         </MetaField>
       </Meta>
 
-      <GenresSelector genres={genres} onChange={setGenres} />
+      <GenresSelector genres={genres} onChange={handleGenres} />
     </Container>
   );
 };

@@ -28,6 +28,8 @@ function Modal({
   disableAccept,
   title,
   maxWidth,
+  centered,
+  hideAccept,
 }) {
   const [closing, setClosing] = useState(false);
 
@@ -42,7 +44,7 @@ function Modal({
   return (
     <Wrapper fadingOut={closing}>
       <Background onClick={handleClose} />
-      <ModalWrapper maxWidth={maxWidth}>
+      <ModalWrapper centered={centered} maxWidth={maxWidth}>
         <Title>
           <BlockTitle title={title} />
         </Title>
@@ -51,9 +53,11 @@ function Modal({
           <Button onClick={handleClose}>
             {closeText || <FormattedMessage {...messages.cancel} />}
           </Button>
-          <Button disabled={disableAccept} onClick={onAccept}>
-            {acceptText || <FormattedMessage {...messages.save} />}
-          </Button>
+          {!hideAccept && (
+            <Button disabled={disableAccept} onClick={onAccept}>
+              {acceptText || <FormattedMessage {...messages.save} />}
+            </Button>
+          )}
         </Actions>
       </ModalWrapper>
     </Wrapper>
@@ -69,6 +73,12 @@ Modal.propTypes = {
   title: PropTypes.string.isRequired,
   maxWidth: PropTypes.number,
   disableAccept: PropTypes.bool,
+  centered: PropTypes.bool,
+  hideAccept: PropTypes.bool,
+};
+
+Modal.defaultProps = {
+  centered: true,
 };
 
 export default Modal;
