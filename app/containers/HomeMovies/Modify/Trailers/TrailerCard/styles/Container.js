@@ -3,7 +3,9 @@ import styled from 'styled-components';
 const backgroundColor = p =>
   p.theme.isDark ? p.theme.dark[500] : p.theme.grey[700];
 
-const Container = styled.article`
+const Container = styled.button`
+  border: none;
+  padding: 0;
   margin-bottom: 10px;
   border-radius: 6px;
   overflow: hidden;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from './styles/Button';
+import ThumbnailFade from './styles/ThumbnailFade';
 import Container from './styles/Container';
 import Thumbnail from './styles/Thumbnail';
 import Title from './styles/Title';
@@ -11,11 +11,11 @@ const TrailerCard = props => {
   const handleOnClick = e => onClick(trailer, e);
 
   return (
-    <Container>
-      <Button onClick={handleOnClick}>
+    <Container onClick={handleOnClick}>
+      <ThumbnailFade>
         <Thumbnail src={trailer.thumbnailURL} />
-      </Button>
-      <Title onClick={handleOnClick}>{trailer.title}</Title>
+      </ThumbnailFade>
+      <Title>{trailer.title}</Title>
     </Container>
   );
 };
