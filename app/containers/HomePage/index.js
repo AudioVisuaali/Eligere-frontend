@@ -39,7 +39,7 @@ export function HomePage(props) {
     return () => {
       document.body.setAttribute('style', 'overflow-y: auto;');
     };
-  });
+  }, []);
 
   if (userLoaded && !user) {
     history.push(pathLogin);

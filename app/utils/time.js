@@ -13,6 +13,12 @@ export const months = [
   'December',
 ];
 
+export const getISODate = dateString => {
+  const isoString = new Date(dateString).toISOString();
+
+  return isoString.split('.')[0].slice(0, -3);
+};
+
 export function doublePrecision(number) {
   return `0${number}`.slice(-2);
 }

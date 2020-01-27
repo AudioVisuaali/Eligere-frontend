@@ -27,6 +27,7 @@ import Poll from 'containers/Poll';
 import BlockTitle from 'components/BlockTitle';
 import UnsavedChanges from 'components/UnsavedChanges';
 import PlusSVG from 'svgs/Plus';
+import { getISODate } from 'utils/time';
 
 import messages from './messages';
 import { setPoll, pollUpdate } from './actions';
@@ -110,8 +111,13 @@ const Modify = props => {
     apolloClient
       .query({ query: POLL_GET, variables: { identifier } })
       .then(res => {
+        const localPoll = {
+          ...res.data.poll,
+          opensAt: getISODate(res.data.poll.opensAt),
+          closesAt: getISODate(res.data.poll.closesAt),
+        };
         props.setPoll(res.data.poll);
-        setModifiedPoll(res.data.poll);
+        setModifiedPoll(localPoll);
       })
       .catch();
   }, []);
@@ -143,9 +149,8 @@ const Modify = props => {
     if (poll.title !== modifiedPoll.title) return true;
     if (poll.description !== modifiedPoll.description) return true;
     if (poll.userRequired !== modifiedPoll.userRequired) return true;
-    // TODO
-    // if (poll.opensAt !== modifiedPoll.opensAt) return true;
-    // if (poll.closesAt !== modifiedPoll.closesAt) return true;
+    if (poll.opensAt !== modifiedPoll.opensAt) return true;
+    if (poll.closesAt !== modifiedPoll.closesAt) return true;
     if (poll.community !== modifiedPoll.community) return true;
     if (poll.allowComments !== modifiedPoll.allowComments) return true;
     if (poll.totalVotes !== modifiedPoll.totalVotes) return true;

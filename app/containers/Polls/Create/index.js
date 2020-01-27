@@ -68,7 +68,14 @@ const Create = props => {
   const handleCreate = () => {
     setCreating(true);
     apolloClient
-      .query({ query: POLL_CREATE, variables: poll })
+      .query({
+        query: POLL_CREATE,
+        variables: {
+          ...poll,
+          opensAt: poll.opensAt ? new Date(poll.opensAt).toString() : null,
+          closesAt: poll.closesAt ? new Date(poll.closesAt).toString() : null,
+        },
+      })
       .then(res => {
         const { createPoll } = res.data;
         props.addPoll(createPoll);

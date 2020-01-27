@@ -6,6 +6,7 @@
 
 import produce from 'immer';
 
+import { getISODate } from 'utils/time';
 import {
   POLL_SET,
   POLL_UPDATE,
@@ -28,12 +29,24 @@ const homePollProviderReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
       case POLL_SET:
-        draft.poll = action.poll;
+        draft.poll = {
+          ...action.poll,
+          opensAt: getISODate(action.poll.opensAt),
+          closesAt: getISODate(action.poll.closesAt),
+        };
         break;
 
-      case POLL_UPDATE:
-        draft.poll = { ...state.poll, ...action.poll };
+      case POLL_UPDATE: {
+        const newPoll = { ...state.poll, ...action.poll };
+        if (action.poll.opensAt) {
+          newPoll.opensAt = getISODate(action.poll.opensAt);
+        }
+        if (action.poll.closesAt) {
+          newPoll.closesAt = getISODate(action.poll.closesAt);
+        }
+        draft.poll = newPoll;
         break;
+      }
 
       case MOVIE_ADD:
         draft.poll.movies = [action.movie, ...state.poll.movies];
