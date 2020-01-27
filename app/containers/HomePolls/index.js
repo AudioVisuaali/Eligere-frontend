@@ -22,9 +22,9 @@ import Modify from './Modify';
 const HomePolls = () => (
   <Container>
     <Switch>
+      <Route path={pathHomePollMovies} component={HomeMovies} />
       <Route path={pathHomePoll} component={Modify} />
       <Route path={pathHomePolls} component={Polls} />
-      <Route path={pathHomePollMovies} component={HomeMovies} />
       <Redirect to={pathNotFound} />
     </Switch>
   </Container>
