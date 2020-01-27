@@ -8,14 +8,14 @@ import Meta from './styles/Meta';
 import Year from './styles/Year';
 import Stars from './styles/Stars';
 
-const ImdbCard = props => (
-  <Result disabled={props.disabled} onClick={() => props.onClick(props.imdb)}>
-    {props.imdb.image && <Thumbnail src={props.imdb.image} />}
+const ImdbCard = ({ disabled, onClick, imdb }) => (
+  <Result disabled={disabled} onClick={() => onClick(imdb)}>
+    {imdb.image && <Thumbnail src={imdb.image} />}
     <Information>
-      <Title>{props.imdb.title}</Title>
+      <Title>{imdb.title}</Title>
       <Meta>
-        <Year>{props.imdb.year}</Year>
-        <Stars>{props.imdb.stars}</Stars>
+        {imdb.year && <Year>{imdb.year}</Year>}
+        {imdb.stars && <Stars>{imdb.stars}</Stars>}
       </Meta>
     </Information>
   </Result>

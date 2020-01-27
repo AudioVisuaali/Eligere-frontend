@@ -4,7 +4,7 @@
  *
  */
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
@@ -14,11 +14,9 @@ import { compose } from 'redux';
 import Checkbox from 'components/Checkbox';
 import TextArea from 'components/TextArea';
 import TextField from 'components/TextField';
-import BlockTitle from 'components/BlockTitle';
 import Select from 'components/Select';
 import Option from 'components/Option';
 import { makeSelectCommunities } from 'containers/App/selectors';
-import { dateToStringDashed } from 'utils/time';
 
 import messages from './messages';
 import Meta from './styles/Meta';
@@ -31,46 +29,54 @@ const textAreaSize = {
   maxHeight: 200,
 };
 
-const getDay = date => {
-  if (!date) {
-    return '';
-  }
-  return dateToStringDashed(new Date(date));
+export const defaultPoll = {
+  title: '',
+  description: '',
+  userRequired: false,
+  allowComments: false,
+  allowMovieSuggestions: true,
+  opensAt: '',
+  closesAt: '',
+  community: '',
+  totalVotes: 1,
 };
 
 const Poll = props => {
-  const { communities, poll, loading, onPoll, intl } = props;
-  const [title, setTitle] = useState(poll ? poll.title : '');
-  const [description, setDescription] = useState(poll ? poll.description : '');
-  const [userRequired, setUserRequired] = useState(
-    poll ? poll.userRequired : false,
-  );
-  const [allowComments, setAllowComments] = useState(
-    poll ? poll.allowComments : false,
-  );
-  const [allowMovieSuggestions, setAllowMovieSuggestions] = useState(
-    poll ? poll.allowMovieSuggestions : false,
-  );
-  const [opensAt, setOpensAt] = useState(poll ? getDay(poll.opensAt) : '');
-  const [closesAt, setClosesAt] = useState(poll ? getDay(poll.closesAt) : '');
-  const [community, setCommunity] = useState(poll ? poll.community : '');
-  const [totalVotes, setTotalVotes] = useState(1);
+  const { communities, poll, onChange, intl } = props;
 
-  const createPoll = () => ({
-    title,
-    description,
-    userRequired,
-    allowComments,
-    allowMovieSuggestions,
-    opensAt: opensAt || null,
-    closesAt: closesAt || null,
-    community,
-    totalVotes,
-  });
+  const handleChange = e => {
+    onChange({
+      ...poll,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  useEffect(() => {
-    onPoll(createPoll(), allowSubmit());
-  }, [
+  const handleChangeNumber = e => {
+    onChange({
+      ...poll,
+      [e.target.name]: parseInt(e.target.value, 10),
+    });
+  };
+
+  const handleChangeBoolean = e => {
+    onChange({
+      ...poll,
+      [e.target.name]: e.target.checked,
+    });
+  };
+
+  const handleChangeCommunity = e => {
+    onChange({
+      ...poll,
+      [e.target.name]: e.target.value || null,
+    });
+  };
+
+  if (!poll) {
+    return null;
+  }
+
+  const {
     title,
     description,
     userRequired,
@@ -80,106 +86,71 @@ const Poll = props => {
     closesAt,
     community,
     totalVotes,
-  ]);
-
-  const pollMatch = () => {
-    if (poll.title !== title) return true;
-    if (poll.description !== description) return true;
-    if (poll.userRequired !== userRequired) return true;
-    // TODO
-    // if (originalPoll.opensAt !== opensAt) return true;
-    // if (originalPoll.closesAt !== closesAt) return true;
-    if (poll.community !== community) return true;
-    if (poll.allowComments !== allowComments) return true;
-    if (poll.totalVotes !== totalVotes) return true;
-    if (poll.allowMovieSuggestions !== allowMovieSuggestions) return true;
-
-    return false;
-  };
-
-  const allowSubmit = () => {
-    if (!title) {
-      return false;
-    }
-
-    if (!description) {
-      return false;
-    }
-
-    if (totalVotes < 0) {
-      return false;
-    }
-
-    if (poll) {
-      return pollMatch();
-    }
-
-    return true;
-  };
-
-  const pollTitleMessage = poll ? messages.pollModify : messages.pollCreate;
+  } = props.poll;
 
   return (
     <Container>
       <Section>
-        <BlockTitle title={intl.formatMessage(pollTitleMessage)} />
-      </Section>
-
-      <Section>
         <TextField
+          name="title"
           title={intl.formatMessage(messages.formPollTitle)}
-          disabled={loading}
           formnovalidate
           value={title}
-          onChange={e => setTitle(e.target.value)}
+          onChange={handleChange}
         />
       </Section>
 
       <Section>
         <TextArea
+          name="description"
           title={intl.formatMessage(messages.formPollDescription)}
-          disabled={loading}
           style={textAreaSize}
           formnovalidate
           value={description}
-          onChange={e => setDescription(e.target.value)}
+          onChange={handleChange}
         />
 
         <Checkboxes>
           <Checkbox
+            name="userRequired"
             label={intl.formatMessage(messages.userIsRequiredToVote)}
             checked={userRequired}
-            onClick={() => setUserRequired(!userRequired)}
+            onClick={handleChangeBoolean}
           />
           <Checkbox
+            name="allowComments"
             label={intl.formatMessage(messages.allowFeedBack)}
             checked={allowComments}
-            onClick={() => setAllowComments(!allowComments)}
+            onClick={handleChangeBoolean}
           />
           <Checkbox
+            name="allowMovieSuggestions"
             label={intl.formatMessage(messages.allowMovieSuggestions)}
             checked={allowMovieSuggestions}
-            onClick={() => setAllowMovieSuggestions(!allowMovieSuggestions)}
+            onClick={handleChangeBoolean}
           />
         </Checkboxes>
 
         <Meta>
           <TextField
-            type="date"
+            type="datetime-local"
+            name="opensAt"
             title={intl.formatMessage(messages.pollOpensAt)}
             value={opensAt}
-            onChange={e => setOpensAt(e.target.value)}
+            onChange={handleChange}
           />
           <TextField
-            type="date"
+            type="datetime-local"
+            name="closesAt"
             title={intl.formatMessage(messages.pollClosesAt)}
             value={closesAt}
-            onChange={e => setClosesAt(e.target.value)}
+            onChange={handleChange}
           />
           <Select
+            name="community"
             title={intl.formatMessage(messages.community)}
             value={community}
-            onChange={setCommunity}
+            onChange={handleChangeCommunity}
           >
             <Option value="" />
             {communities &&
@@ -188,9 +159,13 @@ const Poll = props => {
               ))}
           </Select>
           <TextField
+            name="totalVotes"
+            type="number"
+            min="1"
+            max="999"
             title={intl.formatMessage(messages.totalVotes)}
             value={totalVotes}
-            onChange={e => setTotalVotes(e.target.value)}
+            onChange={handleChangeNumber}
           />
         </Meta>
       </Section>
@@ -217,8 +192,7 @@ Poll.propTypes = {
       identifier: PropTypes.string.isRequired,
     }),
   ),
-  onPoll: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
   intl: PropTypes.object,
 };
 
@@ -228,7 +202,4 @@ const mapStateToProps = createStructuredSelector({
 
 const withConnect = connect(mapStateToProps);
 
-export default compose(
-  withConnect,
-  injectIntl,
-)(Poll);
+export default compose(withConnect, injectIntl)(Poll);

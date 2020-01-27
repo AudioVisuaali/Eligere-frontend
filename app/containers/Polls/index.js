@@ -4,6 +4,7 @@
  *
  */
 import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -14,10 +15,16 @@ import { makeSelectPolls } from 'containers/App/selectors';
 import PollCard from 'components/PollCard';
 import BlockTitle from 'components/BlockTitle';
 import PlusSVG from 'svgs/Plus';
-import { pathHomePollCreate, generatePathHomePoll } from 'utils/paths';
 import history from 'utils/history';
+import {
+  generatePathHomePoll,
+  pathHomePolls,
+  pathHomePollCreate,
+  pathNotFound,
+} from 'utils/paths';
 
 import messages from './messages';
+import Create from './Create';
 import Action from './styles/Action';
 
 const handleCreateNew = () => {
@@ -61,6 +68,12 @@ function Polls(props) {
           poll={poll}
         />
       ))}
+
+      <Switch>
+        <Route exact path={pathHomePolls} component={Polls} />
+        <Route exact path={pathHomePollCreate} component={Create} />
+        <Redirect to={pathNotFound} />
+      </Switch>
     </>
   );
 }

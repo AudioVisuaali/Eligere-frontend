@@ -9,14 +9,6 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.containers.Poll';
 
 export default defineMessages({
-  pollCreate: {
-    id: `${scope}.pollCreate`,
-    defaultMessage: 'Create Poll',
-  },
-  pollModify: {
-    id: `${scope}.pollModify`,
-    defaultMessage: 'Modify Poll',
-  },
   formPollTitle: {
     id: `${scope}.formPollTitle`,
     defaultMessage: 'Title',

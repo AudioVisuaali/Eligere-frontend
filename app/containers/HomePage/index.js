@@ -54,7 +54,7 @@ export function HomePage(props) {
     <>
       <NavBar />
 
-      <LoadingBarTop />
+      {/* <LoadingBarTop /> */}
       <Switch>
         <Redirect exact path={pathHome} to={pathHomePolls} />
 

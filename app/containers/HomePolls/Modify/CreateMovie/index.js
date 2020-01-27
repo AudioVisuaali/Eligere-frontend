@@ -22,6 +22,8 @@ import LoadingIconContainer from './styles/LoadingIconContainer';
 import ImdbCard from './ImdbCard';
 import messages from './messages';
 
+const MOVIE_SEARCH_MAX = 5;
+
 const MOVIE_SEARCH = gql`
   query($query: String!, $max: Int) {
     imdb(query: $query, max: $max) {
@@ -87,7 +89,7 @@ const Create = props => {
       apolloClient
         .query({
           query: MOVIE_SEARCH,
-          variables: { query: queryVal, max: 4 },
+          variables: { query: queryVal, max: MOVIE_SEARCH_MAX },
         })
         .then(onResultsSuccess)
         .catch(() => {

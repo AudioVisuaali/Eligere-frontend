@@ -6,15 +6,19 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { gql } from 'apollo-boost';
 
 import apolloClient from 'apolloClient';
 import { addPoll } from 'containers/App/actions';
-import Poll from 'containers/Poll';
+import Poll, { defaultPoll } from 'containers/Poll';
+import Modal from 'components/Modal';
 import history from 'utils/history';
 import { pathHomePolls, generatePathHomePoll } from 'utils/paths';
+
+import messages from './messages';
 
 const POLL_CREATE = gql`
   mutation(
@@ -24,6 +28,9 @@ const POLL_CREATE = gql`
     $opensAt: String!
     $closesAt: String!
     $community: String!
+    $allowMovieSuggestions: Boolean!
+    $allowComments: Boolean!
+    $totalVotes: Int!
   ) {
     createPoll(
       title: $title
@@ -32,6 +39,9 @@ const POLL_CREATE = gql`
       opensAt: $opensAt
       closesAt: $closesAt
       community: $community
+      allowMovieSuggestions: $allowMovieSuggestions
+      allowComments: $allowComments
+      totalVotes: $totalVotes
     ) {
       identifier
       title
@@ -40,6 +50,9 @@ const POLL_CREATE = gql`
       createdAt
       opensAt
       closesAt
+      allowMovieSuggestions
+      allowComments
+      totalVotes
       community {
         identifier
         title
@@ -49,18 +62,20 @@ const POLL_CREATE = gql`
 `;
 
 const Create = props => {
-  const [loading, setLoading] = useState(false);
-  const handleCreate = newPoll => {
-    setLoading(true);
+  const [creating, setCreating] = useState(false);
+  const [poll, setPoll] = useState(defaultPoll);
+
+  const handleCreate = () => {
+    setCreating(true);
     apolloClient
-      .query({ query: POLL_CREATE, variables: newPoll })
+      .query({ query: POLL_CREATE, variables: poll })
       .then(res => {
         const { createPoll } = res.data;
         props.addPoll(createPoll);
         history.push(generatePathHomePoll(createPoll));
       })
       .catch()
-      .finally(() => setLoading(false));
+      .finally(() => setCreating(false));
   };
 
   const handleCancel = () => {
@@ -68,21 +83,26 @@ const Create = props => {
   };
 
   return (
-    <Poll onCreate={handleCreate} onCancel={handleCancel} loading={loading} />
+    <Modal
+      title={props.intl.formatMessage(messages.createPoll)}
+      disableAccept={creating}
+      onAccept={handleCreate}
+      onClose={handleCancel}
+    >
+      <Poll onChange={setPoll} poll={poll} />
+    </Modal>
   );
 };
 
 Create.propTypes = {
   addPoll: PropTypes.func.isRequired,
+  intl: PropTypes.object,
 };
 
 const mapDispatchToProps = dispatch => ({
   addPoll: poll => dispatch(addPoll(poll)),
 });
 
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
+const withConnect = connect(null, mapDispatchToProps);
 
-export default compose(withConnect)(Create);
+export default compose(withConnect, injectIntl)(Create);

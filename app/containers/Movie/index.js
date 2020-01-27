@@ -18,7 +18,7 @@ import Container from './styles/Container';
 import Meta from './styles/Meta';
 import GenresSelector from './GenresSelector';
 
-const parseValue = e => parseInt(e.target.value, 10);
+const parseValue = value => parseInt(value, 10);
 
 const movieTemplate = {
   title: '',

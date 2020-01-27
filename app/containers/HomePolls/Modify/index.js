@@ -139,7 +139,7 @@ const Modify = props => {
     setModifiedPoll(poll);
   };
 
-  const isMatch = () => {
+  const isChange = () => {
     if (poll.title !== modifiedPoll.title) return true;
     if (poll.description !== modifiedPoll.description) return true;
     if (poll.userRequired !== modifiedPoll.userRequired) return true;
@@ -162,7 +162,8 @@ const Modify = props => {
   return (
     <>
       <Section>
-        <Poll poll={modifiedPoll} onPoll={setModifiedPoll} />
+        <BlockTitle title={intl.formatMessage(messages.pollModify)} />
+        <Poll poll={modifiedPoll} onChange={setModifiedPoll} />
       </Section>
 
       <Section>
@@ -184,7 +185,7 @@ const Modify = props => {
                 </div>
               ))}
             </MoviesContainer>
-            {!isMatch() && (
+            {isChange() && (
               <UnsavedChanges onReset={resetPoll} onSave={handleUpdate} />
             )}
           </>
