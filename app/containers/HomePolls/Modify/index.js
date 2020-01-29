@@ -26,6 +26,8 @@ import injectReducer from 'utils/injectReducer';
 import Poll from 'containers/Poll';
 import BlockTitle from 'components/BlockTitle';
 import UnsavedChanges from 'components/UnsavedChanges';
+import PreviewLinkVotePage from 'containers/PreviewLinks/VotePage';
+import PreviewLinkPolls from 'containers/PreviewLinks/Polls';
 import PlusSVG from 'svgs/Plus';
 import { getISODate } from 'utils/time';
 
@@ -35,6 +37,7 @@ import reducer, { key } from './reducer';
 import { makeSelectHomePoll } from './selectors';
 import MoviesContainer from './styles/MoviesContainer';
 import MovieCreation from './styles/MovieCreation';
+import Navigation from './styles/Navigation';
 import CreateMovie from './CreateMovie';
 import Movie from './Movie';
 import Section from './styles/Section';
@@ -192,6 +195,11 @@ const Modify = props => {
 
   return (
     <>
+      <Navigation>
+        <PreviewLinkPolls />
+        <PreviewLinkVotePage poll={poll} />
+      </Navigation>
+
       <Section>
         <BlockTitle title={intl.formatMessage(messages.pollModify)} />
         <Poll poll={modifiedPoll} onChange={setModifiedPoll} />

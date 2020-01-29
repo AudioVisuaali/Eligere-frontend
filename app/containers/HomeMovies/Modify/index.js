@@ -11,6 +11,7 @@ import injectReducer from 'utils/injectReducer';
 import apolloClient from 'apolloClient';
 import BlockTitle from 'components/BlockTitle';
 import UnsavedChanges from 'components/UnsavedChanges';
+import PreviewLinkPoll from 'containers/PreviewLinks/Poll';
 import Movie from 'containers/Movie';
 
 import { makeSelectHomeMovie } from './selectors';
@@ -19,6 +20,7 @@ import reducer, { key } from './reducer';
 import Trailers from './Trailers';
 import messages from './messages';
 import Section from './styles/Section';
+import Navigation from './styles/Navigation';
 
 const MOVIE_GET = gql`
   query($identifier: String!) {
@@ -48,6 +50,10 @@ const MOVIE_GET = gql`
         googleUsers
       }
       createdAt
+      poll {
+        identifier
+        title
+      }
     }
   }
 `;
@@ -182,6 +188,9 @@ const Modify = props => {
 
   return (
     <>
+      <Navigation>
+        <PreviewLinkPoll poll={movie.poll} />
+      </Navigation>
       <Section>
         <BlockTitle title={props.intl.formatMessage(messages.modifyMovie)} />
         <Movie movie={movieChange} onChange={setMovieChange} />
