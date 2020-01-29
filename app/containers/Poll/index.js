@@ -37,8 +37,8 @@ export const defaultPoll = {
   allowMovieSuggestions: true,
   opensAt: '',
   closesAt: '',
-  community: '',
   totalVotes: 1,
+  community: null,
 };
 
 const Poll = props => {
@@ -66,10 +66,13 @@ const Poll = props => {
   };
 
   const handleChangeCommunity = e => {
-    onChange({
+    const { value } = e.target;
+    const community = value ? { identifier: value } : null;
+    const newPoll = {
       ...poll,
-      [e.target.name]: e.target.value || null,
-    });
+      community,
+    };
+    onChange(newPoll);
   };
 
   if (!poll) {
@@ -149,7 +152,7 @@ const Poll = props => {
           <Select
             name="community"
             title={intl.formatMessage(messages.community)}
-            value={community}
+            value={community ? community.identifier : ''}
             onChange={handleChangeCommunity}
           >
             <Option value="" />

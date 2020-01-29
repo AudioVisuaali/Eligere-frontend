@@ -33,11 +33,20 @@ const homePollProviderReducer = (state = initialState, action) =>
           ...action.poll,
           opensAt: getISODate(action.poll.opensAt),
           closesAt: getISODate(action.poll.closesAt),
+          community: action.poll.community
+            ? { ...action.poll.community, __typename: undefined }
+            : null,
         };
         break;
 
       case POLL_UPDATE: {
-        const newPoll = { ...state.poll, ...action.poll };
+        const newPoll = {
+          ...state.poll,
+          ...action.poll,
+          community: action.poll.community
+            ? { ...action.poll.community, __typename: undefined }
+            : null,
+        };
         if (action.poll.opensAt) {
           newPoll.opensAt = getISODate(action.poll.opensAt);
         }

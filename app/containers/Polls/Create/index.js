@@ -25,9 +25,9 @@ const POLL_CREATE = gql`
     $title: String!
     $description: String!
     $userRequired: Boolean!
-    $opensAt: String!
-    $closesAt: String!
-    $community: String!
+    $opensAt: String
+    $closesAt: String
+    $community: CommunityCreate!
     $allowMovieSuggestions: Boolean!
     $allowComments: Boolean!
     $totalVotes: Int!

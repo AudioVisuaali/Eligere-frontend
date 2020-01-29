@@ -58,7 +58,6 @@ const POLL_GET = gql`
       }
       community {
         identifier
-        title
       }
     }
   }
@@ -75,6 +74,7 @@ const POLL_MODIFY = gql`
     $userRequired: Boolean!
     $allowComments: Boolean!
     $allowMovieSuggestions: Boolean!
+    $community: CommunityCreate
   ) {
     updatePoll(
       identifier: $identifier
@@ -86,6 +86,7 @@ const POLL_MODIFY = gql`
       userRequired: $userRequired
       allowComments: $allowComments
       allowMovieSuggestions: $allowMovieSuggestions
+      community: $community
     ) {
       identifier
       title
@@ -97,9 +98,17 @@ const POLL_MODIFY = gql`
       userRequired
       allowComments
       allowMovieSuggestions
+      community {
+        identifier
+      }
     }
   }
 `;
+
+const formatDate = dateStr => (dateStr ? new Date(dateStr).toString() : null);
+
+const formatCommunity = community =>
+  community ? { ...community, __typename: null } : null;
 
 const Modify = props => {
   const { poll, intl } = props;
@@ -128,7 +137,13 @@ const Modify = props => {
     apolloClient
       .mutate({
         mutation: POLL_MODIFY,
-        variables: { ...modifiedPoll, identifier },
+        variables: {
+          ...modifiedPoll,
+          identifier,
+          opensAt: formatDate(modifiedPoll.opensAt),
+          closesAt: formatDate(modifiedPoll.closesAt),
+          community: formatCommunity(modifiedPoll.community),
+        },
       })
       .then(res => {
         props.pollUpdate(res.data.updatePoll);
@@ -145,19 +160,30 @@ const Modify = props => {
     setModifiedPoll(poll);
   };
 
+  const isCommunityChanged = () => {
+    if (!poll.community && !modifiedPoll.community) return false;
+
+    if (poll.community && modifiedPoll.community) {
+      if (poll.community.identifier === modifiedPoll.community.identifier) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const isChange = () => {
     if (poll.title !== modifiedPoll.title) return true;
     if (poll.description !== modifiedPoll.description) return true;
     if (poll.userRequired !== modifiedPoll.userRequired) return true;
     if (poll.opensAt !== modifiedPoll.opensAt) return true;
     if (poll.closesAt !== modifiedPoll.closesAt) return true;
-    if (poll.community !== modifiedPoll.community) return true;
     if (poll.allowComments !== modifiedPoll.allowComments) return true;
     if (poll.totalVotes !== modifiedPoll.totalVotes) return true;
     if (poll.allowMovieSuggestions !== modifiedPoll.allowMovieSuggestions)
       return true;
 
-    return false;
+    return isCommunityChanged();
   };
 
   if (!poll) {

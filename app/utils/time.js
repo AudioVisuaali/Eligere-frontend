@@ -13,8 +13,14 @@ export const months = [
   'December',
 ];
 
+function addMinutes(date, minutes) {
+  // 60000 = 60 minutes * 1000ms
+  return new Date(date.getTime() - minutes * 60000);
+}
+
 export const getISODate = dateString => {
-  const isoString = new Date(dateString).toISOString();
+  const date = new Date(dateString);
+  const isoString = addMinutes(date, date.getTimezoneOffset()).toISOString();
 
   return isoString.split('.')[0].slice(0, -3);
 };
