@@ -13,6 +13,8 @@ import BlockTitle from 'components/BlockTitle';
 import UnsavedChanges from 'components/UnsavedChanges';
 import PreviewLinkPoll from 'containers/PreviewLinks/Poll';
 import Movie from 'containers/Movie';
+import history from 'utils/history';
+import { generatePathHomePoll } from 'utils/paths';
 
 import { makeSelectHomeMovie } from './selectors';
 import { movieSet, movieUpdate } from './actions';
@@ -21,6 +23,7 @@ import Trailers from './Trailers';
 import messages from './messages';
 import Section from './styles/Section';
 import Navigation from './styles/Navigation';
+import DeleteMovie from './DeleteMovie';
 
 const MOVIE_GET = gql`
   query($identifier: String!) {
@@ -115,6 +118,12 @@ const MOVIE_MODIFY = gql`
   }
 `;
 
+const MOVIE_DELETE = gql`
+  mutation($identifier: String!) {
+    deleteMovie(identifier: $identifier)
+  }
+`;
+
 const Modify = props => {
   const [movieChange, setMovieChange] = useState(null);
   const { movie } = props;
@@ -133,7 +142,7 @@ const Modify = props => {
       .then(res => {
         props.movieSet(res.data.movie);
       })
-      .catch(console.log)
+      .catch()
       .finally(() => setLoaded(true));
   }, []);
 
@@ -159,6 +168,18 @@ const Modify = props => {
       })
       .then(res => {
         props.movieSet(res.data.updateMovie);
+      })
+      .catch();
+  };
+
+  const handleDelete = () => {
+    apolloClient
+      .mutate({
+        mutation: MOVIE_DELETE,
+        variables: { identifier: movie.identifier },
+      })
+      .then(() => {
+        history.push(generatePathHomePoll(movie.poll));
       })
       .catch();
   };
@@ -201,6 +222,11 @@ const Modify = props => {
 
       <Section>
         <Trailers movie={movie} />
+      </Section>
+
+      <Section>
+        <BlockTitle title={props.intl.formatMessage(messages.deleteMovie)} />
+        <DeleteMovie onDelete={handleDelete} />
       </Section>
     </>
   );

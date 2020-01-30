@@ -4,7 +4,7 @@
  *
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -32,6 +32,17 @@ function Modal({
   hideAccept,
 }) {
   const [closing, setClosing] = useState(false);
+
+  useEffect(() => {
+    const handleKey = e => {
+      if (e.keyCode === 27) handleClose();
+    };
+
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+    };
+  }, []);
 
   const handleClose = () => {
     if (!onClose) {

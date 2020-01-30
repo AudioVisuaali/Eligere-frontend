@@ -11,6 +11,7 @@ export const INITIAL_LOAD_USER = 'app/App/INITIAL_LOAD_USER';
 
 export const POLL_ADD = 'app/App/POLL_ADD';
 export const POLL_UPDATE = 'app/App/POLL_UPDATE';
+export const POLL_DELETE = 'app/App/POLL_DELETE';
 
 export const COMMUNITY_ADD = 'app/App/COMMUNITY_ADD';
 export const COMMUNITY_UPDATE = 'app/App/COMMUNITY_UPDATE';

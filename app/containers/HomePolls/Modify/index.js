@@ -21,6 +21,7 @@ import {
   generatePathHomePollMovieCreate,
   pathHomePoll,
   pathNotFound,
+  pathHomePolls,
 } from 'utils/paths';
 import injectReducer from 'utils/injectReducer';
 import Poll from 'containers/Poll';
@@ -28,6 +29,7 @@ import BlockTitle from 'components/BlockTitle';
 import UnsavedChanges from 'components/UnsavedChanges';
 import PreviewLinkVotePage from 'containers/PreviewLinks/VotePage';
 import PreviewLinkPolls from 'containers/PreviewLinks/Polls';
+import { deletePoll } from 'containers/App/actions';
 import PlusSVG from 'svgs/Plus';
 import { getISODate } from 'utils/time';
 
@@ -39,6 +41,7 @@ import MoviesContainer from './styles/MoviesContainer';
 import MovieCreation from './styles/MovieCreation';
 import Navigation from './styles/Navigation';
 import CreateMovie from './CreateMovie';
+import DeletePoll from './DeletePoll';
 import Movie from './Movie';
 import Section from './styles/Section';
 
@@ -108,6 +111,12 @@ const POLL_MODIFY = gql`
   }
 `;
 
+const DELETE_POLL = gql`
+  mutation($identifier: String!) {
+    deletePoll(identifier: $identifier)
+  }
+`;
+
 const formatDate = dateStr => (dateStr ? new Date(dateStr).toString() : null);
 
 const formatCommunity = community =>
@@ -153,6 +162,21 @@ const Modify = props => {
       })
       .catch()
       .finally(() => setLoading(false));
+  };
+
+  const handleDelete = () => {
+    apolloClient
+      .mutate({
+        mutation: DELETE_POLL,
+        variables: {
+          identifier: poll.identifier,
+        },
+      })
+      .then(() => {
+        props.deletePoll(poll);
+        history.push(pathHomePolls);
+      })
+      .catch();
   };
 
   const goToCreateMovie = () => {
@@ -231,6 +255,11 @@ const Modify = props => {
         )}
       </Section>
 
+      <Section>
+        <BlockTitle title={intl.formatMessage(messages.deletePoll)} />
+        <DeletePoll onDelete={handleDelete} />
+      </Section>
+
       <Switch>
         <Route path={pathHomePoll} exact />
         <Route path={pathHomePollMovieCreate} component={CreateMovie} />
@@ -242,6 +271,7 @@ const Modify = props => {
 
 Modify.propTypes = {
   pollUpdate: PropTypes.func.isRequired,
+  deletePoll: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
@@ -258,6 +288,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   setPoll: poll => dispatch(setPoll(poll)),
+  deletePoll: poll => dispatch(deletePoll(poll)),
   pollUpdate: evt => dispatch(pollUpdate(evt)),
 });
 

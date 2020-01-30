@@ -13,6 +13,7 @@ import {
   COMMUNITY_UPDATE,
   POLL_ADD,
   POLL_UPDATE,
+  POLL_DELETE,
 } from './constants';
 
 export function handleInitialUserLoad(
@@ -59,4 +60,8 @@ export function addPoll(poll) {
 
 export function modifyPoll(poll) {
   return { type: POLL_UPDATE, poll };
+}
+
+export function deletePoll(poll) {
+  return { type: POLL_DELETE, poll };
 }

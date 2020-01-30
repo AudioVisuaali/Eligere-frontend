@@ -13,4 +13,21 @@ export default defineMessages({
     id: `${scope}.modifyMovie`,
     defaultMessage: 'Modify Movie',
   },
+  deleteMovie: {
+    id: `${scope}.deleteMovie`,
+    defaultMessage: 'Delete Movie',
+  },
+  confirmation: {
+    id: `${scope}.confirmation`,
+    defaultMessage: 'Confirmation',
+  },
+  confirmDescription: {
+    id: `${scope}.confirmDescription`,
+    defaultMessage:
+      "This action can't be undone. All the attached trailers will be deleted.",
+  },
+  confirm: {
+    id: `${scope}.confirm`,
+    defaultMessage: 'Confirm',
+  },
 });

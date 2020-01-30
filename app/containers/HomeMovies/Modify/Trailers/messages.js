@@ -21,4 +21,8 @@ export default defineMessages({
     id: `${scope}.buttonTrailerCreate`,
     defaultMessage: 'Create Trailer',
   },
+  noTrailers: {
+    id: `${scope}.noTrailers`,
+    defaultMessage: 'No Trailers',
+  },
 });

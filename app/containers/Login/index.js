@@ -69,7 +69,6 @@ export const Login = props => {
       .query({ query: LOGIN_USER, variables: { username, password } })
       .then(res => {
         const { token, user } = res.data.login;
-        console.log(token);
         setItem(SESSION_TOKEN, token);
         const newUser = { ...user, polls: undefined };
         props.handleLogin(newUser, user.polls, user.communities);
@@ -132,9 +131,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
+const withConnect = connect(null, mapDispatchToProps);
 
 export default compose(withConnect)(Login);

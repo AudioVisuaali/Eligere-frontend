@@ -10,6 +10,7 @@ import { makeSelectHomePoll } from 'containers/HomePolls/Modify/selectors';
 import apolloClient from 'apolloClient';
 import TextField from 'components/TextField';
 import Modal from 'components/Modal';
+import LoadingBox from 'components/LoadingBox';
 import history from 'utils/history';
 import SpinnerThird from 'svgs/SpinnerThird';
 import { movieAdd } from 'containers/HomePolls/Modify/actions';
@@ -154,7 +155,15 @@ const Create = props => {
         onChange={handleSearch}
       />
       <SearchResults>
-        {results &&
+        {loading &&
+          Array.from({ length: MOVIE_SEARCH_MAX }, (_, k) => (
+            <LoadingBox
+              key={k}
+              style={{ height: 44, width: '100%', marginBottom: 10 }}
+            />
+          ))}
+        {!loading &&
+          results &&
           results.map(imdb => (
             <ImdbCard
               disabled={creating}

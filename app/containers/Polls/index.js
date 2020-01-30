@@ -79,7 +79,7 @@ function Polls(props) {
 }
 
 Polls.propTypes = {
-  polls: PropTypes.array.isRequired,
+  polls: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({

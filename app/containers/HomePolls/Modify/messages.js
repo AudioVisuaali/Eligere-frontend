@@ -25,4 +25,21 @@ export default defineMessages({
     id: `${scope}.formPollMovies`,
     defaultMessage: 'Movies',
   },
+  deletePoll: {
+    id: `${scope}.deletePoll`,
+    defaultMessage: 'Delete Poll',
+  },
+  confirmation: {
+    id: `${scope}.confirmation`,
+    defaultMessage: 'Confirmation',
+  },
+  confirmDescription: {
+    id: `${scope}.confirmDescription`,
+    defaultMessage:
+      "This action can't be undone. All the attached movies and trailers will be deleted.",
+  },
+  confirm: {
+    id: `${scope}.confirm`,
+    defaultMessage: 'Confirm',
+  },
 });

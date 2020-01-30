@@ -18,6 +18,7 @@ import { trailerAdd, trailerUpdate } from '../actions';
 import TrailerCard from './TrailerCard';
 import messages from './messages';
 import Action from './styles/Action';
+import NoTrailers from './styles/NoTrailers';
 
 const TRAILER_UPDATE = gql`
   mutation($identifier: String!, $url: String!) {
@@ -146,6 +147,11 @@ const Trailers = props => {
         title={props.intl.formatMessage(messages.trailers)}
         action={createTrailerButton(handleCreateNew)}
       />
+      {!props.movie.trailers.length && (
+        <NoTrailers>
+          <FormattedMessage {...messages.noTrailers} />
+        </NoTrailers>
+      )}
       {props.movie.trailers.map(trailer => (
         <TrailerCard
           key={trailer.identifier}

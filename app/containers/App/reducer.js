@@ -17,6 +17,7 @@ import {
   COMMUNITY_UPDATE,
   POLL_ADD,
   POLL_UPDATE,
+  POLL_DELETE,
 } from './constants';
 
 // The initial state of the App
@@ -72,6 +73,13 @@ const appReducer = (state = initialState, action) =>
         draft.polls = state.polls.map(p =>
           p.identifier === action.poll.identifier ? action.poll : p,
         );
+        break;
+
+      case POLL_DELETE:
+        draft.polls = state.polls.filter(
+          poll => poll.identifier !== action.poll.identifier,
+        );
+        break;
     }
   });
 
