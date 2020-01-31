@@ -19,7 +19,7 @@ import NavBar from 'containers/NavBar';
 import HomeProfile from 'containers/HomeProfile';
 import HomePolls from 'containers/HomePolls';
 import HomeCommunities from 'containers/HomeCommunities';
-import LoadingBarTop from 'components/LoadingBarTop';
+import ProgressBarTop from 'containers/ProgressBarTop';
 import {
   pathLogin,
   pathHome,
@@ -52,9 +52,9 @@ export function HomePage(props) {
 
   return (
     <>
+      <ProgressBarTop />
       <NavBar />
 
-      {/* <LoadingBarTop /> */}
       <Switch>
         <Redirect exact path={pathHome} to={pathHomePolls} />
 

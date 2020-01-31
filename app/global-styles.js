@@ -6,6 +6,7 @@ const backgroundColor = props =>
 const GlobalStyle = createGlobalStyle`
   html,
   body {
+    background-color: #222;
     margin: 0px;
     padding: 0px;
   }

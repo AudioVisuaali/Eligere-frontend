@@ -8,6 +8,9 @@ const Progress = styled.div`
   bottom: 0;
   left: 0;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+
+  will-change: width;
+  transition: width 200ms;
 `;
 
 export default Progress;

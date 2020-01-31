@@ -12,6 +12,7 @@ const Select = styled.select`
   border-radius: 4px;
   width: 100%;
   cursor: pointer;
+  height: 100%;
 
   transition: all 200ms;
 
