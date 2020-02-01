@@ -6,14 +6,13 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { makeSelectHomePoll } from 'containers/HomePolls/Modify/selectors';
+import { makeSelectHomePagePoll } from 'containers/HomePage/selectors';
 import apolloClient from 'apolloClient';
 import TextField from 'components/TextField';
 import Modal from 'components/Modal';
 import LoadingBox from 'components/LoadingBox';
 import history from 'utils/history';
 import SpinnerThird from 'svgs/SpinnerThird';
-import { movieAdd } from 'containers/HomePolls/Modify/actions';
 import { generatePathHomePoll } from 'utils/paths';
 import debounce from 'utils/debounce';
 import SearchResults from './styles/SearchResults';
@@ -115,8 +114,7 @@ const Create = props => {
           id: movieImdb.id,
         },
       })
-      .then(res => {
-        props.movieAdd(res.data.createMovieImdb);
+      .then(() => {
         goToPoll();
       })
       .catch(console.log)
@@ -178,7 +176,6 @@ const Create = props => {
 };
 
 Create.propTypes = {
-  movieAdd: PropTypes.func.isRequired,
   poll: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
   match: PropTypes.shape({
@@ -189,7 +186,7 @@ Create.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  poll: makeSelectHomePoll(),
+  poll: makeSelectHomePagePoll(),
 });
 
 const mapDispatchToProps = dispatch => ({
