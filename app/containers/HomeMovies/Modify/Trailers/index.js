@@ -13,8 +13,8 @@ import BlockTitle from 'components/BlockTitle';
 import Trailer from 'containers/Trailer';
 import Modal from 'components/Modal';
 
-import { makeSelectHomeMovie } from '../selectors';
-import { trailerAdd, trailerUpdate } from '../actions';
+import { makeSelectHomePageMovie } from 'containers/HomePage/selectors';
+import { trailerAdd, trailerModify } from 'containers/HomePage/actions';
 import TrailerCard from './TrailerCard';
 import messages from './messages';
 import Action from './styles/Action';
@@ -121,7 +121,7 @@ const Trailers = props => {
         },
       })
       .then(res => {
-        props.trailerUpdate(res.data.updateTrailer);
+        props.trailerModify(res.data.updateTrailer);
         setIsOpen(false);
       })
       .catch();
@@ -178,16 +178,16 @@ Trailers.propTypes = {
   intl: PropTypes.object.isRequired,
   movie: PropTypes.object.isRequired,
   trailerAdd: PropTypes.func.isRequired,
-  trailerUpdate: PropTypes.func.isRequired,
+  trailerModify: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  movie: makeSelectHomeMovie(),
+  movie: makeSelectHomePageMovie(),
 });
 
 const mapDispatchToProps = dispatch => ({
   trailerAdd: trailer => dispatch(trailerAdd(trailer)),
-  trailerUpdate: trailer => dispatch(trailerUpdate(trailer)),
+  trailerModify: trailer => dispatch(trailerModify(trailer)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

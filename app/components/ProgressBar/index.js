@@ -16,7 +16,9 @@ function ProgressBar(props) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    setProgress(props.progress);
+    window.requestAnimationFrame(() => {
+      setProgress(props.progress);
+    });
   }, [props.progress]);
 
   return (

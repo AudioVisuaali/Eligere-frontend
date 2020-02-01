@@ -12,16 +12,10 @@ const selectHomePoll = state => state.homePoll || initialState;
  */
 
 const makeSelectHomePoll = () =>
-  createSelector(
-    selectHomePoll,
-    homePollState => homePollState.poll,
-  );
+  createSelector(selectHomePoll, homePollState => homePollState.poll);
 
 const makeSelectHomePollMovies = () =>
-  createSelector(
-    selectHomePoll,
-    homePollState => homePollState.poll.movies,
-  );
+  createSelector(selectHomePoll, homePollState => homePollState.poll.movies);
 
 const makeSelectHomePollMovie = (identifier = null) =>
   createSelector(

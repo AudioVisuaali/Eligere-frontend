@@ -38,9 +38,7 @@ const DeleteMovie = ({ intl, onDelete }) => {
 
 DeleteMovie.propTypes = {
   onDelete: PropTypes.func.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.object.isRequired,
-  }).isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(DeleteMovie);

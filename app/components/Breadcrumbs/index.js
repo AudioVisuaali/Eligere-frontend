@@ -4,26 +4,29 @@
  *
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-import ChevronRightThinSVG from 'svgs/ChevronRight';
+import ChevronRightThinSVG from 'svgs/ChevronRightThin';
 import Container from './styles/Container';
 
 const chevronStyle = {
   height: 10,
   width: 10,
-  marginRight: 5,
-  marginLeft: 5,
+  marginRight: 10,
+  marginLeft: 10,
+  flexShrink: 0,
 };
 
 const Breadcrumbs = props => (
   <Container>
-    {props.children.reduce((prev, curr) => [
-      prev,
-      <ChevronRightThinSVG style={chevronStyle} />,
-      curr,
-    ])}
+    {props.children.map((item, index) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <Fragment key={index}>
+        {!!index && <ChevronRightThinSVG style={chevronStyle} />}
+        {item}
+      </Fragment>
+    ))}
   </Container>
 );
 

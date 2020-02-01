@@ -6,12 +6,11 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { makeSelectHomePoll } from 'containers/HomePolls/Modify/selectors';
+import { makeSelectHomePagePoll } from 'containers/HomePage/selectors';
 import apolloClient from 'apolloClient';
 import Movie from 'containers/Movie';
 import Modal from 'components/Modal';
 import history from 'utils/history';
-import { movieAdd } from 'containers/HomePolls/Modify/actions';
 import { generatePathHomePoll } from 'utils/paths';
 
 import messages from './messages';
@@ -121,19 +120,9 @@ Create.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  poll: makeSelectHomePoll(),
+  poll: makeSelectHomePagePoll(),
 });
 
-const mapDispatchToProps = dispatch => ({
-  movieAdd: movie => dispatch(movieAdd(movie)),
-});
+const withConnect = connect(mapStateToProps);
 
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(
-  injectIntl,
-  withConnect,
-)(Create);
+export default compose(injectIntl, withConnect)(Create);

@@ -6,7 +6,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   color: ${color};
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 `;
 
 export default Container;

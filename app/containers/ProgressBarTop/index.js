@@ -29,9 +29,8 @@ export function ProgressBarTop(props) {
   }, [props.progress]);
 
   useEffect(() => {
-    setLoading(props.loading);
-
     if (props.loading) {
+      setLoading(props.loading);
       // Show simulated "progress" to user
       const autoProgress = setInterval(() => {
         setProgress(currCount => {
@@ -43,7 +42,7 @@ export function ProgressBarTop(props) {
 
           return newCount;
         });
-      }, 500);
+      }, 400);
 
       return () => {
         clearInterval(autoProgress);
@@ -54,7 +53,7 @@ export function ProgressBarTop(props) {
     setProgress(100);
     const timeout = setTimeout(() => {
       setLoading(false);
-    }, 200);
+    }, 400);
 
     return () => {
       clearTimeout(timeout);

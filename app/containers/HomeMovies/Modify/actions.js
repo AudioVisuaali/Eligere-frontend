@@ -11,6 +11,7 @@ import {
   TRAILER_ADD,
   TRAILER_MODIFY,
   TRAILER_DELETE,
+  LOAD_AND_GOTO_MOVIE,
 } from './constants';
 
 export function movieSet(movie) {
@@ -52,5 +53,12 @@ export function trailerDelete(trailer) {
   return {
     type: TRAILER_DELETE,
     trailer,
+  };
+}
+
+export function loadAndGotoMovie(identifier) {
+  return {
+    type: LOAD_AND_GOTO_MOVIE,
+    identifier,
   };
 }

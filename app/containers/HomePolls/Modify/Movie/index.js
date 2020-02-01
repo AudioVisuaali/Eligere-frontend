@@ -1,25 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { generatePathHomePollMovie } from 'utils/paths';
-import history from 'utils/history';
 
 import MovieLink from './styles/MovieLink';
 import Thumbnail from './styles/Thumbnail';
 
-const goToPage = (url, e) => {
-  e.preventDefault();
-  history.push(url);
-};
-
-const Movie = ({ movie }) => {
+const Movie = ({ movie, onClick }) => {
   const url = generatePathHomePollMovie(movie);
 
+  const goToPage = e => {
+    if (onClick) {
+      e.preventDefault();
+      onClick(movie);
+    }
+  };
+
   return (
-    <MovieLink
-      key={movie.identifier}
-      onClick={e => goToPage(url, e)}
-      href={url}
-    >
+    <MovieLink key={movie.identifier} onClick={goToPage} href={url}>
       {movie.thumbnail ? (
         <Thumbnail src={movie.thumbnail}></Thumbnail>
       ) : (
@@ -30,6 +27,7 @@ const Movie = ({ movie }) => {
 };
 
 Movie.propTypes = {
+  onClick: PropTypes.func.isRequired,
   movie: PropTypes.shape({
     identifier: PropTypes.string.isRequired,
     thumbnail: PropTypes.string.isRequired,

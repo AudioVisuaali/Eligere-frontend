@@ -108,7 +108,7 @@ const Movie = props => {
             max="100"
             title={intl.formatMessage(messages.imdb)}
             value={ratings.imdb}
-            onChange={handleRating}
+            onChange={handleRating || ''}
           />
         </RateField>
         <RateField>
@@ -118,7 +118,7 @@ const Movie = props => {
             min="0"
             max="100"
             title={intl.formatMessage(messages.metacritic)}
-            value={ratings.metacritic}
+            value={ratings.metacritic || ''}
             onChange={handleRating}
           />
         </RateField>
@@ -130,7 +130,7 @@ const Movie = props => {
             max="100"
             title={intl.formatMessage(messages.rottenTomatoes)}
             value={ratings.rottenTomatoes}
-            onChange={handleRating}
+            onChange={handleRating || ''}
           />
         </RateField>
         <RateField>
@@ -140,7 +140,7 @@ const Movie = props => {
             min="0"
             max="100"
             title={intl.formatMessage(messages.googleUsers)}
-            value={ratings.googleUsers}
+            value={ratings.googleUsers || ''}
             onChange={handleRating}
           />
         </RateField>
@@ -151,7 +151,7 @@ const Movie = props => {
             min="0"
             placeholder="minutes"
             title={intl.formatMessage(messages.duration)}
-            value={duration}
+            value={duration || ''}
             onChange={handleNumber}
           />
         </MetaField>
@@ -163,7 +163,7 @@ const Movie = props => {
             max="6666"
             placeholder="Year"
             title={intl.formatMessage(messages.releaseDate)}
-            value={released}
+            value={released || ''}
             onChange={handleNumber}
           />
         </MetaField>

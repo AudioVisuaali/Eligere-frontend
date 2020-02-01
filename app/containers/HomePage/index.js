@@ -15,6 +15,8 @@ import {
   makeSelectUserLoadedInitial,
   makeSelectUser,
 } from 'containers/App/selectors';
+import injectReducer from 'utils/injectReducer';
+import injectSaga from 'utils/injectSaga';
 import NavBar from 'containers/NavBar';
 import HomeProfile from 'containers/HomeProfile';
 import HomePolls from 'containers/HomePolls';
@@ -29,6 +31,9 @@ import {
   pathNotFound,
 } from 'utils/paths';
 import history from 'utils/history';
+
+import saga from './saga';
+import reducer, { key } from './reducer';
 
 export function HomePage(props) {
   const { userLoaded, user } = props;
@@ -80,4 +85,8 @@ const mapStateToProps = createStructuredSelector({
 
 const withConnect = connect(mapStateToProps, null);
 
-export default compose(withConnect)(HomePage);
+export default compose(
+  injectSaga({ saga, key }),
+  injectReducer({ reducer, key }),
+  withConnect,
+)(HomePage);

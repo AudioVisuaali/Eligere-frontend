@@ -38,9 +38,7 @@ const DeletePoll = ({ intl, onDelete }) => {
 
 DeletePoll.propTypes = {
   onDelete: PropTypes.func.isRequired,
-  intl: PropTypes.shape({
-    formatMessage: PropTypes.object.isRequired,
-  }).isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(DeletePoll);

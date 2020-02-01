@@ -23,51 +23,29 @@ import {
   pathNotFound,
   pathHomePolls,
 } from 'utils/paths';
-import injectReducer from 'utils/injectReducer';
 import Poll from 'containers/Poll';
 import BlockTitle from 'components/BlockTitle';
 import UnsavedChanges from 'components/UnsavedChanges';
-import PreviewLinkVotePage from 'containers/PreviewLinks/VotePage';
-import PreviewLinkPolls from 'containers/PreviewLinks/Polls';
+import Breadcrumbs from 'components/Breadcrumbs';
+import Breadcrumb from 'components/Breadcrumb';
+import HouseSVG from 'svgs/House';
+import PollSVG from 'svgs/Poll';
 import { deletePoll } from 'containers/App/actions';
 import PlusSVG from 'svgs/Plus';
-import { getISODate } from 'utils/time';
+import {
+  loadAndGotoMovie,
+  loadAndGotoPoll,
+  pollModify,
+} from 'containers/HomePage/actions';
+import { makeSelectHomePagePoll } from 'containers/HomePage/selectors';
 
 import messages from './messages';
-import { setPoll, pollUpdate } from './actions';
-import reducer, { key } from './reducer';
-import { makeSelectHomePoll } from './selectors';
 import MoviesContainer from './styles/MoviesContainer';
 import MovieCreation from './styles/MovieCreation';
-import Navigation from './styles/Navigation';
 import CreateMovie from './CreateMovie';
 import DeletePoll from './DeletePoll';
 import Movie from './Movie';
 import Section from './styles/Section';
-
-const POLL_GET = gql`
-  query($identifier: String!) {
-    poll(identifier: $identifier) {
-      identifier
-      title
-      description
-      userRequired
-      opensAt
-      closesAt
-      totalVotes
-      allowComments
-      allowMovieSuggestions
-      movies {
-        identifier
-        title
-        thumbnail
-      }
-      community {
-        identifier
-      }
-    }
-  }
-`;
 
 const POLL_MODIFY = gql`
   mutation(
@@ -125,27 +103,22 @@ const formatCommunity = community =>
 const Modify = props => {
   const { poll, intl } = props;
   const [modifiedPoll, setModifiedPoll] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const { identifier } = props.match.params;
-    apolloClient
-      .query({ query: POLL_GET, variables: { identifier } })
-      .then(res => {
-        const localPoll = {
-          ...res.data.poll,
-          opensAt: getISODate(res.data.poll.opensAt),
-          closesAt: getISODate(res.data.poll.closesAt),
-        };
-        props.setPoll(res.data.poll);
-        setModifiedPoll(localPoll);
-      })
-      .catch();
+    if (props.poll && identifier === props.poll.identifier) {
+      return;
+    }
+
+    props.loadAndGotoPoll(identifier);
   }, []);
+
+  useEffect(() => {
+    setModifiedPoll(props.poll);
+  }, [props.poll]);
 
   const handleUpdate = () => {
     const { identifier } = props.match.params;
-    setLoading(true);
     apolloClient
       .mutate({
         mutation: POLL_MODIFY,
@@ -158,10 +131,9 @@ const Modify = props => {
         },
       })
       .then(res => {
-        props.pollUpdate(res.data.updatePoll);
+        props.pollModify(res.data.updatePoll);
       })
-      .catch()
-      .finally(() => setLoading(false));
+      .catch();
   };
 
   const handleDelete = () => {
@@ -181,6 +153,14 @@ const Modify = props => {
 
   const goToCreateMovie = () => {
     history.push(generatePathHomePollMovieCreate(poll));
+  };
+
+  const goToHomePolls = () => {
+    history.push(pathHomePolls);
+  };
+
+  const goToMovie = movie => {
+    props.loadAndGotoMovie(movie.identifier);
   };
 
   const resetPoll = () => {
@@ -219,10 +199,14 @@ const Modify = props => {
 
   return (
     <>
-      <Navigation>
-        <PreviewLinkPolls />
-        <PreviewLinkVotePage poll={poll} />
-      </Navigation>
+      <Breadcrumbs>
+        <Breadcrumb onClick={goToHomePolls} icon={<HouseSVG />}>
+          Polls
+        </Breadcrumb>
+        <Breadcrumb disabled icon={<PollSVG />}>
+          {poll.title}
+        </Breadcrumb>
+      </Breadcrumbs>
 
       <Section>
         <BlockTitle title={intl.formatMessage(messages.pollModify)} />
@@ -243,8 +227,8 @@ const Modify = props => {
                 </MovieCreation>
               </div>
               {poll.movies.map(movie => (
-                <div>
-                  <Movie key={movie.identifier} movie={movie} />
+                <div key={movie.identifier}>
+                  <Movie onClick={goToMovie} movie={movie} />
                 </div>
               ))}
             </MoviesContainer>
@@ -270,7 +254,7 @@ const Modify = props => {
 };
 
 Modify.propTypes = {
-  pollUpdate: PropTypes.func.isRequired,
+  pollModify: PropTypes.func.isRequired,
   deletePoll: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -278,25 +262,22 @@ Modify.propTypes = {
     }).isRequired,
   }).isRequired,
   poll: PropTypes.object,
-  setPoll: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
+  loadAndGotoPoll: PropTypes.func.isRequired,
+  loadAndGotoMovie: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  poll: makeSelectHomePoll(),
+  poll: makeSelectHomePagePoll(),
 });
 
 const mapDispatchToProps = dispatch => ({
-  setPoll: poll => dispatch(setPoll(poll)),
   deletePoll: poll => dispatch(deletePoll(poll)),
-  pollUpdate: evt => dispatch(pollUpdate(evt)),
+  pollModify: evt => dispatch(pollModify(evt)),
+  loadAndGotoPoll: evt => dispatch(loadAndGotoPoll(evt)),
+  loadAndGotoMovie: evt => dispatch(loadAndGotoMovie(evt)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectReducer({ reducer, key }),
-  withConnect,
-  withRouter,
-  injectIntl,
-)(Modify);
+export default compose(withConnect, withRouter, injectIntl)(Modify);

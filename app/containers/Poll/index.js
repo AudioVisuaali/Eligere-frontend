@@ -158,7 +158,9 @@ const Poll = props => {
             <Option value="" />
             {communities &&
               communities.map(comm => (
-                <Option value={comm.identifier}>{comm.title}</Option>
+                <Option key={comm.identifier} value={comm.identifier}>
+                  {comm.title}
+                </Option>
               ))}
           </Select>
           <TextField
@@ -183,7 +185,7 @@ Poll.propTypes = {
     movies: PropTypes.array.isRequired,
     opensAt: PropTypes.string,
     closesAt: PropTypes.string,
-    community: PropTypes.string,
+    community: PropTypes.object,
     totalVotes: PropTypes.number.isRequired,
     userRequired: PropTypes.bool,
     allowComments: PropTypes.bool,

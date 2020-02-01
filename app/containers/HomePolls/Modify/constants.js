@@ -14,3 +14,5 @@ export const MOVIE_REMOVE = 'app/HomePolls/Poll/POLL_MOVIE_REMOVE';
 export const TRAILER_ADD = 'app/HomePolls/Poll/POLL_MOVIE_TRAILER_ADD';
 export const TRAILER_MODIFY = 'app/HomePolls/Poll/POLL_MOVIE_TRAILER_MODIFY';
 export const TRAILER_REMOVE = 'app/HomePolls/Poll/POLL_MOVIE_TRAILER_REMOVE';
+
+export const LOAD_AND_GOTO_POLL = 'app/HomePolls/Poll/LOAD_AND_GOTO_POLL';

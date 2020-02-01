@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Text = styled.a`
+const Text = styled.span`
   max-width: 300px;
   white-space: nowrap;
   overflow: hidden;

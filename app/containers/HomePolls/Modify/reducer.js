@@ -16,6 +16,7 @@ import {
   TRAILER_ADD,
   TRAILER_MODIFY,
   TRAILER_REMOVE,
+  LOAD_AND_GOTO_POLL,
 } from './constants';
 
 export const initialState = {
@@ -112,6 +113,10 @@ const homePollProviderReducer = (state = initialState, action) =>
         );
         state.poll.movies[movieIndex].trailers = newTrailers;
         break;
+      }
+
+      case LOAD_AND_GOTO_POLL: {
+        console.log(action);
       }
     }
   });

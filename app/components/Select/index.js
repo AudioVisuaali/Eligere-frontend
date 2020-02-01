@@ -6,12 +6,7 @@ import Title from './styles/Title';
 import Select from './styles/Select';
 
 const SelectComponent = props => {
-  const { children: childrenProps, value, title, onChange, ...rest } = props;
-
-  const children = React.Children.map(childrenProps, child =>
-    React.cloneElement(child, {}),
-  );
-
+  const { children, value, title, onChange, ...rest } = props;
   return (
     <Container>
       <Title>{title}</Title>

@@ -7,59 +7,29 @@ import { injectIntl } from 'react-intl';
 import { withRouter } from 'react-router';
 import { compose } from 'redux';
 
-import injectReducer from 'utils/injectReducer';
 import apolloClient from 'apolloClient';
 import BlockTitle from 'components/BlockTitle';
 import UnsavedChanges from 'components/UnsavedChanges';
-import PreviewLinkPoll from 'containers/PreviewLinks/Poll';
 import Movie from 'containers/Movie';
+import Breadcrumbs from 'components/Breadcrumbs';
+import Breadcrumb from 'components/Breadcrumb';
+import FilmSVG from 'svgs/Film';
+import HouseSVG from 'svgs/House';
+import PollSVG from 'svgs/Poll';
+import {
+  loadAndGotoMovie,
+  loadAndGotoPoll,
+  movieSet,
+  movieModify,
+} from 'containers/HomePage/actions';
+import { pathHomePolls } from 'utils/paths';
 import history from 'utils/history';
-import { generatePathHomePoll } from 'utils/paths';
 
-import { makeSelectHomeMovie } from './selectors';
-import { movieSet, movieUpdate } from './actions';
-import reducer, { key } from './reducer';
+import { makeSelectHomePageMovie } from 'containers/HomePage/selectors';
 import Trailers from './Trailers';
 import messages from './messages';
 import Section from './styles/Section';
-import Navigation from './styles/Navigation';
 import DeleteMovie from './DeleteMovie';
-
-const MOVIE_GET = gql`
-  query($identifier: String!) {
-    movie(identifier: $identifier) {
-      identifier
-      title
-      thumbnail
-      description
-      released
-      duration
-      genres {
-        id
-        value
-      }
-      trailers {
-        identifier
-        platform
-        url
-        slug
-        thumbnailURL
-        title
-      }
-      ratings {
-        imdb
-        rottenTomatoes
-        metacritic
-        googleUsers
-      }
-      createdAt
-      poll {
-        identifier
-        title
-      }
-    }
-  }
-`;
 
 const MOVIE_MODIFY = gql`
   mutation(
@@ -125,26 +95,21 @@ const MOVIE_DELETE = gql`
 `;
 
 const Modify = props => {
-  const [movieChange, setMovieChange] = useState(null);
+  const [movieChange, setMovieChange] = useState(props.movie);
   const { movie } = props;
-
-  useEffect(() => setMovieChange(movie), [movie]);
-  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const { identifier } = props.match.params;
+    if (props.movie && props.movie.identifier === identifier) {
+      return;
+    }
 
-    apolloClient
-      .query({
-        query: MOVIE_GET,
-        variables: { identifier },
-      })
-      .then(res => {
-        props.movieSet(res.data.movie);
-      })
-      .catch()
-      .finally(() => setLoaded(true));
+    props.loadAndGotoMovie(identifier);
   }, []);
+
+  useEffect(() => {
+    setMovieChange(props.movie);
+  }, [props.movie]);
 
   const handleReset = () => {
     setMovieChange(movie);
@@ -167,7 +132,7 @@ const Modify = props => {
         variables: newMovie,
       })
       .then(res => {
-        props.movieSet(res.data.updateMovie);
+        props.movieModify(res.data.updateMovie);
       })
       .catch();
   };
@@ -178,10 +143,16 @@ const Modify = props => {
         mutation: MOVIE_DELETE,
         variables: { identifier: movie.identifier },
       })
-      .then(() => {
-        history.push(generatePathHomePoll(movie.poll));
-      })
+      .then(goToPoll)
       .catch();
+  };
+
+  const goToPoll = () => {
+    props.loadAndGotoPoll(movie.poll.identifier);
+  };
+
+  const goToHomePolls = () => {
+    history.push(pathHomePolls);
   };
 
   const isUnsavedChanges = () => {
@@ -199,19 +170,23 @@ const Modify = props => {
     return false;
   };
 
-  if (!loaded) {
-    return null;
-  }
-
-  if (!movie) {
+  if (!movie || !movieChange) {
     return 'movie does not exist';
   }
 
   return (
     <>
-      <Navigation>
-        <PreviewLinkPoll poll={movie.poll} />
-      </Navigation>
+      <Breadcrumbs>
+        <Breadcrumb onClick={goToHomePolls} icon={<HouseSVG />}>
+          Polls
+        </Breadcrumb>
+        <Breadcrumb onClick={goToPoll} icon={<PollSVG />}>
+          {movie.poll.title}
+        </Breadcrumb>
+        <Breadcrumb disabled icon={<FilmSVG />}>
+          {movie.title}
+        </Breadcrumb>
+      </Breadcrumbs>
       <Section>
         <BlockTitle title={props.intl.formatMessage(messages.modifyMovie)} />
         <Movie movie={movieChange} onChange={setMovieChange} />
@@ -240,23 +215,22 @@ Modify.propTypes = {
     }).isRequired,
   }).isRequired,
   movie: PropTypes.object,
-  movieSet: PropTypes.func.isRequired,
+  movieModify: PropTypes.func.isRequired,
+  loadAndGotoPoll: PropTypes.func.isRequired,
+  loadAndGotoMovie: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  movie: makeSelectHomeMovie(),
+  movie: makeSelectHomePageMovie(),
 });
 
 const mapDispatchToProps = dispatch => ({
   movieSet: poll => dispatch(movieSet(poll)),
-  movieUpdate: evt => dispatch(movieUpdate(evt)),
+  movieModify: evt => dispatch(movieModify(evt)),
+  loadAndGotoPoll: evt => dispatch(loadAndGotoPoll(evt)),
+  loadAndGotoMovie: evt => dispatch(loadAndGotoMovie(evt)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(
-  injectReducer({ reducer, key }),
-  withRouter,
-  injectIntl,
-  withConnect,
-)(Modify);
+export default compose(withRouter, injectIntl, withConnect)(Modify);

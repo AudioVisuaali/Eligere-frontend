@@ -10,7 +10,7 @@ const OptionContainer = props => {
 };
 
 OptionContainer.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 

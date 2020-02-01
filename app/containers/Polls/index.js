@@ -11,17 +11,13 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
+import { loadAndGotoPoll } from 'containers/HomePage/actions';
 import { makeSelectPolls } from 'containers/App/selectors';
 import PollCard from 'components/PollCard';
 import BlockTitle from 'components/BlockTitle';
 import PlusSVG from 'svgs/Plus';
 import history from 'utils/history';
-import {
-  generatePathHomePoll,
-  pathHomePolls,
-  pathHomePollCreate,
-  pathNotFound,
-} from 'utils/paths';
+import { pathHomePolls, pathHomePollCreate, pathNotFound } from 'utils/paths';
 
 import messages from './messages';
 import Create from './Create';
@@ -44,7 +40,7 @@ function Polls(props) {
   const { polls } = props;
 
   const handleEdit = poll => {
-    history.push(generatePathHomePoll(poll));
+    props.loadAndGotoPoll(poll.identifier);
   };
 
   if (!polls) {
@@ -80,12 +76,17 @@ function Polls(props) {
 
 Polls.propTypes = {
   polls: PropTypes.array,
+  loadAndGotoPoll: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   polls: makeSelectPolls(),
 });
 
-const withConnect = connect(mapStateToProps);
+const mapDispatchToProps = dispatch => ({
+  loadAndGotoPoll: evt => dispatch(loadAndGotoPoll(evt)),
+});
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 export default compose(withConnect)(Polls);
