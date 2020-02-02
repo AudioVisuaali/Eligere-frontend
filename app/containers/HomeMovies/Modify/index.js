@@ -19,11 +19,10 @@ import PollSVG from 'svgs/Poll';
 import {
   loadAndGotoMovie,
   loadAndGotoPoll,
+  loadAndGotoCommunities,
   movieSet,
   movieModify,
 } from 'containers/HomePage/actions';
-import { pathHomePolls } from 'utils/paths';
-import history from 'utils/history';
 
 import { makeSelectHomePageMovie } from 'containers/HomePage/selectors';
 import Trailers from './Trailers';
@@ -152,7 +151,7 @@ const Modify = props => {
   };
 
   const goToHomePolls = () => {
-    history.push(pathHomePolls);
+    props.loadAndGotoCommunities();
   };
 
   const isUnsavedChanges = () => {
@@ -218,6 +217,7 @@ Modify.propTypes = {
   movieModify: PropTypes.func.isRequired,
   loadAndGotoPoll: PropTypes.func.isRequired,
   loadAndGotoMovie: PropTypes.func.isRequired,
+  loadAndGotoCommunities: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -229,6 +229,7 @@ const mapDispatchToProps = dispatch => ({
   movieModify: evt => dispatch(movieModify(evt)),
   loadAndGotoPoll: evt => dispatch(loadAndGotoPoll(evt)),
   loadAndGotoMovie: evt => dispatch(loadAndGotoMovie(evt)),
+  loadAndGotoCommunities: () => dispatch(loadAndGotoCommunities()),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

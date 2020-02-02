@@ -8,10 +8,20 @@ import apolloClient from 'apolloClient';
 import { getISODate } from 'utils/time';
 import { startLoading, endLoading } from 'containers/ProgressBarTop/actions';
 import history from 'utils/history';
-import { generatePathHomePoll, generatePathHomePollMovie } from 'utils/paths';
+import {
+  pathHomePolls,
+  pathHomeCommunities,
+  generatePathHomePoll,
+  generatePathHomePollMovie,
+} from 'utils/paths';
 
-import { pollSet, movieSet } from './actions';
-import { LOAD_AND_GOTO_POLL, LOAD_AND_GOTO_MOVIE } from './constants';
+import { pollsSet, communitiesSet, pollSet, movieSet } from './actions';
+import {
+  LOAD_AND_GOTO_POLL,
+  LOAD_AND_GOTO_MOVIE,
+  LOAD_AND_GOTO_POLLS,
+  LOAD_AND_GOTO_COMMUNITIES,
+} from './constants';
 
 const POLL_GET = gql`
   query($identifier: String!) {
@@ -131,6 +141,84 @@ export function* getMovie(action) {
   }
 }
 
+const POLLS_GET = gql`
+  query {
+    polls {
+      identifier
+      title
+      description
+      createdAt
+      userRequired
+      opensAt
+      closesAt
+    }
+  }
+`;
+
+/**
+ * Github repos request/response handler
+ */
+export function* getPolls(action) {
+  if (action.showLoadingBar) {
+    yield put(startLoading());
+  }
+
+  try {
+    const res = yield apolloClient.query({
+      query: POLLS_GET,
+    });
+
+    const { polls } = res.data;
+    console.log(res);
+    history.push(pathHomePolls);
+    yield put(pollsSet(polls));
+  } catch (e) {
+    // TODO ADD TOAST
+    console.log(e);
+  } finally {
+    if (action.showLoadingBar) {
+      yield put(endLoading());
+    }
+  }
+}
+
+const COMMUNITIES_GET = gql`
+  query {
+    communities {
+      identifier
+      title
+      description
+      createdAt
+    }
+  }
+`;
+
+/**
+ * Github repos request/response handler
+ */
+export function* getCommunities(action) {
+  if (action.showLoadingBar) {
+    yield put(startLoading());
+  }
+
+  try {
+    const res = yield apolloClient.query({
+      query: COMMUNITIES_GET,
+    });
+
+    const { communities } = res.data;
+    yield put(communitiesSet(communities));
+    history.push(pathHomeCommunities);
+  } catch (e) {
+    // TODO ADD TOAST
+    console.log(e);
+  } finally {
+    if (action.showLoadingBar) {
+      yield put(endLoading());
+    }
+  }
+}
+
 /**
  * HomaPage saga manages watcher lifecycle
  */
@@ -141,4 +229,6 @@ export default function* pollData() {
   // It will be cancelled automatically on component unmount
   yield takeLatest(LOAD_AND_GOTO_POLL, getPoll);
   yield takeLatest(LOAD_AND_GOTO_MOVIE, getMovie);
+  yield takeLatest(LOAD_AND_GOTO_POLLS, getPolls);
+  yield takeLatest(LOAD_AND_GOTO_COMMUNITIES, getCommunities);
 }

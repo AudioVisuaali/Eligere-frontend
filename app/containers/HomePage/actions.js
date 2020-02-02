@@ -5,6 +5,8 @@
  */
 
 import {
+  POLLS_SET,
+  COMMUNITIES_SET,
   POLL_SET,
   POLL_MODIFY,
   MOVIE_SET,
@@ -14,7 +16,23 @@ import {
   TRAILER_REMOVE,
   LOAD_AND_GOTO_POLL,
   LOAD_AND_GOTO_MOVIE,
+  LOAD_AND_GOTO_POLLS,
+  LOAD_AND_GOTO_COMMUNITIES,
 } from './constants';
+
+export function pollsSet(polls) {
+  return {
+    type: POLLS_SET,
+    polls,
+  };
+}
+
+export function communitiesSet(communities) {
+  return {
+    type: COMMUNITIES_SET,
+    communities,
+  };
+}
 
 export function pollSet(poll) {
   return {
@@ -77,6 +95,20 @@ export function loadAndGotoMovie(identifier, showLoadingBar = true) {
   return {
     type: LOAD_AND_GOTO_MOVIE,
     identifier,
+    showLoadingBar,
+  };
+}
+
+export function loadAndGotoPolls(showLoadingBar = true) {
+  return {
+    type: LOAD_AND_GOTO_POLLS,
+    showLoadingBar,
+  };
+}
+
+export function loadAndGotoCommunities(showLoadingBar = true) {
+  return {
+    type: LOAD_AND_GOTO_COMMUNITIES,
     showLoadingBar,
   };
 }

@@ -4,14 +4,15 @@
  *
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import { makeSelectCommunities } from 'containers/App/selectors';
+import { makeSelectHomePageCommunities } from 'containers/HomePage/selectors';
+import { loadAndGotoCommunities } from 'containers/HomePage/actions';
 import CommunityCard from 'components/CommunityCard';
 import BlockTitle from 'components/BlockTitle';
 import PlusSVG from 'svgs/Plus';
@@ -38,13 +39,21 @@ function CreateCommunity() {
 }
 
 function Communities(props) {
-  const { communities } = props;
+  useEffect(() => {
+    if (!props.communities) {
+      props.loadAndGotoCommunities(false);
+    }
+  }, []);
 
   const handleEdit = community => {
     history.push(generatePathHomeCommunity(community));
   };
 
-  if (!communities.length) {
+  if (!props.communities) {
+    return null;
+  }
+
+  if (!props.communities.length) {
     return 'No communities';
   }
 
@@ -54,7 +63,8 @@ function Communities(props) {
         title={<FormattedMessage {...messages.communities} />}
         action={<CreateCommunity />}
       />
-      {communities.map(community => (
+
+      {props.communities.map(community => (
         <CommunityCard
           key={community.identifier}
           onEdit={() => handleEdit(community)}
@@ -67,15 +77,17 @@ function Communities(props) {
 
 Communities.propTypes = {
   communities: PropTypes.array.isRequired,
+  loadAndGotoCommunities: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  communities: makeSelectCommunities(),
+  communities: makeSelectHomePageCommunities(),
 });
 
-const withConnect = connect(
-  mapStateToProps,
-  null,
-);
+const mapDispatchToProps = dispatch => ({
+  loadAndGotoCommunities: evt => dispatch(loadAndGotoCommunities(evt)),
+});
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
 export default compose(withConnect)(Communities);

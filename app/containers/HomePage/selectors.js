@@ -23,9 +23,17 @@ const makeSelectHomePageMovie = () =>
 const makeSelectHomePageMovieTrailers = () =>
   createSelector(selectHomePage, homePageState => homePageState.movie.trailers);
 
+const makeSelectHomePagePolls = () =>
+  createSelector(selectHomePage, homePageState => homePageState.polls);
+
+const makeSelectHomePageCommunities = () =>
+  createSelector(selectHomePage, homePageState => homePageState.communities);
+
 export {
   makeSelectHomePagePoll,
   makeSelectHomePagePollMovies,
   makeSelectHomePageMovie,
   makeSelectHomePageMovieTrailers,
+  makeSelectHomePagePolls,
+  makeSelectHomePageCommunities,
 };

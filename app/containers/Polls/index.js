@@ -3,7 +3,7 @@
  * HomePolls / Create
  *
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -11,8 +11,8 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import { loadAndGotoPoll } from 'containers/HomePage/actions';
-import { makeSelectPolls } from 'containers/App/selectors';
+import { loadAndGotoPoll, loadAndGotoPolls } from 'containers/HomePage/actions';
+import { makeSelectHomePagePolls } from 'containers/HomePage/selectors';
 import PollCard from 'components/PollCard';
 import BlockTitle from 'components/BlockTitle';
 import PlusSVG from 'svgs/Plus';
@@ -39,6 +39,12 @@ function createPollButton() {
 function Polls(props) {
   const { polls } = props;
 
+  useEffect(() => {
+    if (!props.polls) {
+      props.loadAndGotoPolls(false);
+    }
+  }, []);
+
   const handleEdit = poll => {
     props.loadAndGotoPoll(poll.identifier);
   };
@@ -57,6 +63,7 @@ function Polls(props) {
         title={<FormattedMessage {...messages.pollsTitle} />}
         action={createPollButton()}
       />
+
       {polls.map(poll => (
         <PollCard
           key={poll.identifier}
@@ -66,7 +73,7 @@ function Polls(props) {
       ))}
 
       <Switch>
-        <Route exact path={pathHomePolls} component={Polls} />
+        <Route exact path={pathHomePolls} />
         <Route exact path={pathHomePollCreate} component={Create} />
         <Redirect to={pathNotFound} />
       </Switch>
@@ -77,16 +84,18 @@ function Polls(props) {
 Polls.propTypes = {
   polls: PropTypes.array,
   loadAndGotoPoll: PropTypes.func,
+  loadAndGotoPolls: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
-  polls: makeSelectPolls(),
+  polls: makeSelectHomePagePolls(),
 });
 
 const mapDispatchToProps = dispatch => ({
   loadAndGotoPoll: evt => dispatch(loadAndGotoPoll(evt)),
+  loadAndGotoPolls: evt => dispatch(loadAndGotoPolls(evt)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(withConnect)(Polls);
+export default withConnect(Polls);

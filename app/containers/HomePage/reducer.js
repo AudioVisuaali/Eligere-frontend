@@ -8,6 +8,8 @@ import produce from 'immer';
 
 import { getISODate } from 'utils/time';
 import {
+  POLLS_SET,
+  COMMUNITIES_SET,
   POLL_SET,
   POLL_MODIFY,
   MOVIE_SET,
@@ -18,7 +20,9 @@ import {
 } from './constants';
 
 export const initialState = {
+  polls: null,
   poll: null,
+  communities: null,
   movie: null,
 };
 
@@ -50,6 +54,16 @@ const mergePolls = (newPoll, oldPoll = {}) => {
 const homePollProviderReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case POLLS_SET:
+        console.log('polls', action);
+        draft.polls = action.polls;
+        break;
+
+      case COMMUNITIES_SET:
+        console.log('communities', action);
+        draft.communities = action.communities;
+        break;
+
       case POLL_SET:
         draft.poll = mergePolls(action.poll);
         break;

@@ -8,6 +8,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 import PersonSVG from 'svgs/Person';
 import PollSVG from 'svgs/Poll';
@@ -19,6 +21,10 @@ import {
   pathHomeCommunities,
   pathHomeProfile,
 } from 'utils/paths';
+import {
+  loadAndGotoPolls,
+  loadAndGotoCommunities,
+} from 'containers/HomePage/actions';
 import Link from './styles/Link';
 import messages from './messages';
 
@@ -34,17 +40,16 @@ export function NavBar(props) {
 
   const handleToElegire = e => {
     e.preventDefault();
-    history.push(pathFrontPage);
   };
 
   const handleToPolls = e => {
     e.preventDefault();
-    history.push(pathHomePolls);
+    props.loadAndGotoPolls();
   };
 
   const handleToCommunities = e => {
     e.preventDefault();
-    history.push(pathHomeCommunities);
+    props.loadAndGotoCommunities();
   };
 
   const handleToProfile = e => {
@@ -99,6 +104,15 @@ NavBar.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }),
+  loadAndGotoPolls: PropTypes.func.isRequired,
+  loadAndGotoCommunities: PropTypes.func.isRequired,
 };
 
-export default withRouter(NavBar);
+const mapDispatchToProps = dispatch => ({
+  loadAndGotoPolls: () => dispatch(loadAndGotoPolls()),
+  loadAndGotoCommunities: () => dispatch(loadAndGotoCommunities()),
+});
+
+const withConnect = connect(null, mapDispatchToProps);
+
+export default compose(withRouter, withConnect)(NavBar);
