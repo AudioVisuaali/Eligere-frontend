@@ -35,7 +35,7 @@ import PlusSVG from 'svgs/Plus';
 import {
   loadAndGotoMovie,
   loadAndGotoPoll,
-  loadAndGotoCommunities,
+  loadAndGotoPolls,
   pollModify,
 } from 'containers/HomePage/actions';
 import { makeSelectHomePagePoll } from 'containers/HomePage/selectors';
@@ -157,7 +157,7 @@ const Modify = props => {
   };
 
   const goToHomePolls = () => {
-    props.loadAndGotoCommunities();
+    props.loadAndGotoPolls();
   };
 
   const goToMovie = movie => {
@@ -266,7 +266,7 @@ Modify.propTypes = {
   intl: PropTypes.object.isRequired,
   loadAndGotoPoll: PropTypes.func.isRequired,
   loadAndGotoMovie: PropTypes.func.isRequired,
-  loadAndGotoCommunities: PropTypes.func.isRequired,
+  loadAndGotoPolls: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -278,7 +278,7 @@ const mapDispatchToProps = dispatch => ({
   pollModify: evt => dispatch(pollModify(evt)),
   loadAndGotoPoll: evt => dispatch(loadAndGotoPoll(evt)),
   loadAndGotoMovie: evt => dispatch(loadAndGotoMovie(evt)),
-  loadAndGotoCommunities: () => dispatch(loadAndGotoCommunities()),
+  loadAndGotoPolls: () => dispatch(loadAndGotoPolls()),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
