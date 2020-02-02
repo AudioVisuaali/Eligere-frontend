@@ -3,7 +3,7 @@ import spin from 'styles/animations/spin';
 
 const LoadingIcon = styled.div`
   position: absolute;
-  top: 22px;
+  bottom: 6px;
   right: 8px;
 
   & svg {

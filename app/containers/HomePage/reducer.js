@@ -55,12 +55,10 @@ const homePollProviderReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
       case POLLS_SET:
-        console.log('polls', action);
         draft.polls = action.polls;
         break;
 
       case COMMUNITIES_SET:
-        console.log('communities', action);
         draft.communities = action.communities;
         break;
 

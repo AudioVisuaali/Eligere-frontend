@@ -142,9 +142,6 @@ const Create = props => {
       onClose={goToPoll}
       hideAccept
     >
-      <LoadingIconContainer>
-        <LoadingIcon>{(loading || creating) && <SpinnerThird />}</LoadingIcon>
-      </LoadingIconContainer>
       <TextField
         focusOnMount
         disabled={creating}
@@ -152,6 +149,9 @@ const Create = props => {
         value={query}
         onChange={handleSearch}
       />
+      <LoadingIconContainer>
+        <LoadingIcon>{(loading || creating) && <SpinnerThird />}</LoadingIcon>
+      </LoadingIconContainer>
       <SearchResults>
         {loading &&
           Array.from({ length: MOVIE_SEARCH_MAX }, (_, k) => (
