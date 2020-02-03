@@ -5,13 +5,12 @@
  */
 
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { gql } from 'apollo-boost';
 
 import apolloClient from 'apolloClient';
-import { addCommunity } from 'containers/App/actions';
 import history from 'utils/history';
 import { pathHomeCommunities } from 'utils/paths';
 
@@ -28,15 +27,15 @@ const COMMUNITY_CREATE = gql`
   }
 `;
 
-const Create = props => {
+const Create = () => {
   const [loading, setLoading] = useState(false);
 
   const handleCreate = community => {
     setLoading(true);
     apolloClient
       .query({ query: COMMUNITY_CREATE, variables: community })
-      .then(res => {
-        props.addCommunity(res.data.createCommunity);
+      .then(() => {
+        // props.addCommunity(res.data.createCommunity);
         history.push(pathHomeCommunities);
       })
       .catch()
@@ -56,17 +55,10 @@ const Create = props => {
   );
 };
 
-Create.propTypes = {
-  addCommunity: PropTypes.func.isRequired,
-};
+Create.propTypes = {};
 
-const mapDispatchToProps = dispatch => ({
-  addCommunity: poll => dispatch(addCommunity(poll)),
-});
+const mapDispatchToProps = () => ({});
 
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
+const withConnect = connect(null, mapDispatchToProps);
 
 export default compose(withConnect)(Create);

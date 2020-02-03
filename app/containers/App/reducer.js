@@ -13,19 +13,12 @@ import {
   USER_LOGOUT,
   USER_UPDATE_DISPLAY_NAME,
   LOGIN_SET_USER,
-  COMMUNITY_ADD,
-  COMMUNITY_UPDATE,
-  POLL_ADD,
-  POLL_UPDATE,
-  POLL_DELETE,
 } from './constants';
 
 // The initial state of the App
 export const initialState = {
   user: null,
   userLoaded: false,
-  polls: null,
-  communities: null,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -53,32 +46,6 @@ const appReducer = (state = initialState, action) =>
         draft.user = action.user;
         draft.polls = action.polls;
         draft.communities = action.communities;
-        break;
-
-      case COMMUNITY_ADD:
-        draft.communities = [action.community, ...state.communities];
-        break;
-
-      case COMMUNITY_UPDATE:
-        draft.communities = state.communities.map(c =>
-          c.identifier === action.community.identifier ? action.community : c,
-        );
-        break;
-
-      case POLL_ADD:
-        draft.polls = [action.poll, ...state.polls];
-        break;
-
-      case POLL_UPDATE:
-        draft.polls = state.polls.map(p =>
-          p.identifier === action.poll.identifier ? action.poll : p,
-        );
-        break;
-
-      case POLL_DELETE:
-        draft.polls = state.polls.filter(
-          poll => poll.identifier !== action.poll.identifier,
-        );
         break;
     }
   });

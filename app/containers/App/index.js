@@ -21,6 +21,7 @@ import PollPage from 'containers/PollPage/Loadable';
 import CommunityPage from 'containers/CommunityPage/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import LogoutPage from 'containers/LogoutPage';
 import {
   pathFrontPage,
   pathRegister,
@@ -28,6 +29,7 @@ import {
   pathHome,
   pathPoll,
   pathCommunity,
+  pathLogout,
   pathNotFound,
 } from 'utils/paths';
 import GlobalStyle from '../../global-styles';
@@ -39,21 +41,6 @@ const USER_CHECK_SESSION = gql`
       username
       displayName
       createdAt
-      communities {
-        identifier
-        title
-        description
-        createdAt
-      }
-      polls {
-        identifier
-        title
-        description
-        createdAt
-        userRequired
-        opensAt
-        closesAt
-      }
     }
   }
 `;
@@ -63,8 +50,8 @@ const App = props => {
     apolloClient
       .query({ query: USER_CHECK_SESSION })
       .then(res => {
-        const { polls, communities, ...user } = res.data.checkSession;
-        props.handleInitialUserLoad(user, polls, communities);
+        const { user } = res.data.checkSession;
+        props.handleInitialUserLoad(user);
       })
       .catch(() => props.handleInitialUserLoad());
   }, []);
@@ -75,6 +62,7 @@ const App = props => {
         <meta name="description" content="Vote for movies" />
       </Helmet>
       <Switch>
+        <Route path={pathLogout} component={LogoutPage} />
         <Redirect exact path={pathFrontPage} to={pathLogin} />
         <Route path={[pathRegister, pathLogin]} component={FrontPage} />
 
@@ -100,9 +88,6 @@ const mapDispatchToProps = dispatch => ({
     dispatch(handleInitialUserLoad(usr, polls, communities)),
 });
 
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
+const withConnect = connect(null, mapDispatchToProps);
 
 export default compose(withConnect)(App);

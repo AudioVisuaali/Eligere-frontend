@@ -4,7 +4,6 @@ import orange from 'styles/palettes/orange';
 const Nav = styled.nav`
   height: 50px;
   margin: 0 auto;
-  position: relative;
   background-color: ${orange[900]};
   z-index: 10;
   position: sticky;

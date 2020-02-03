@@ -16,25 +16,7 @@ const selectAppDomain = state => state.global || initialState;
  */
 
 export const makeSelectUserLoadedInitial = () =>
-  createSelector(
-    selectAppDomain,
-    substate => substate.userLoaded,
-  );
+  createSelector(selectAppDomain, substate => substate.userLoaded);
 
 export const makeSelectUser = () =>
-  createSelector(
-    selectAppDomain,
-    substate => substate.user,
-  );
-
-export const makeSelectPolls = () =>
-  createSelector(
-    selectAppDomain,
-    substate => substate.polls,
-  );
-
-export const makeSelectCommunities = () =>
-  createSelector(
-    selectAppDomain,
-    substate => substate.communities,
-  );
+  createSelector(selectAppDomain, substate => substate.user);

@@ -3,8 +3,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import { onError } from 'apollo-link-error';
+
 import { SESSION_TOKEN, getItem } from 'utils/localStorage';
-import { concat } from 'apollo-boost';
+import history from 'utils/history';
+import { pathLogout } from 'utils/paths';
 
 // Instantiate required constructor fields
 const cache = new InMemoryCache();
@@ -25,11 +27,16 @@ const authLink = setContext((_, { headers }) => ({
   },
 }));
 
-const logoutLink = onError(({ networkError }) => {
-  if (networkError.statusCode === 401) {
-    // eslint-disable-next-line no-console
-    console.log('TODO INVALID SESSION LOG ME OUT');
+const errorLink = onError(({ graphQLErrors, operation, forward }) => {
+  const isUnAuthenticated =
+    graphQLErrors &&
+    graphQLErrors.find(error => error.message === 'UNAUTHENTICATED');
+
+  if (isUnAuthenticated) {
+    history.push(pathLogout);
   }
+
+  return forward(operation);
 });
 
 const defaultOptions = {
@@ -45,7 +52,7 @@ const defaultOptions = {
 
 const apolloClient = new ApolloClient({
   cache,
-  link: concat(authLink, httpLink, logoutLink),
+  link: errorLink.concat(authLink.concat(httpLink)),
   defaultOptions,
 });
 

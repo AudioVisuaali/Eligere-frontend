@@ -12,7 +12,6 @@ import { gql } from 'apollo-boost';
 import { withRouter } from 'react-router';
 
 import apolloClient from 'apolloClient';
-import { modifyCommunity } from 'containers/App/actions';
 import history from 'utils/history';
 import { pathHomeCommunities } from 'utils/paths';
 
@@ -62,8 +61,8 @@ const Modify = props => {
     setLoading(true);
     apolloClient
       .mutate({ mutation: COMMUNITY_MODIFY, variables: modifiedCommunity })
-      .then(res => {
-        props.modifyCommunity(res.data.updateCommunity);
+      .then(() => {
+        // props.modifyCommunity(res.data.updateCommunity);
         history.push(pathHomeCommunities);
       })
       .catch()
@@ -89,7 +88,7 @@ const Modify = props => {
 };
 
 Modify.propTypes = {
-  modifyCommunity: PropTypes.func.isRequired,
+  // modifyCommunity: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
@@ -97,13 +96,10 @@ Modify.propTypes = {
   }).isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  modifyCommunity: evt => dispatch(modifyCommunity(evt)),
+const mapDispatchToProps = () => ({
+  // modifyCommunity: evt => dispatch(modifyCommunity(evt)),
 });
 
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
+const withConnect = connect(null, mapDispatchToProps);
 
 export default compose(withConnect)(withRouter(Modify));

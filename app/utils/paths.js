@@ -17,6 +17,7 @@ export const pathHomeCommunity = '/home/communities/:identifier/:slugTitle';
 export const pathHomeProfile = '/home/profile';
 export const pathPoll = '/poll/:identifier/:slugTitle';
 export const pathCommunity = '/community/:identifier/:slugTitle';
+export const pathLogout = '/logout';
 export const pathNotFound = '/not-found';
 
 function slugify(string) {

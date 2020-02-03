@@ -30,7 +30,6 @@ import Breadcrumbs from 'components/Breadcrumbs';
 import Breadcrumb from 'components/Breadcrumb';
 import HouseSVG from 'svgs/House';
 import PollSVG from 'svgs/Poll';
-import { deletePoll } from 'containers/App/actions';
 import PlusSVG from 'svgs/Plus';
 import {
   loadAndGotoMovie,
@@ -146,7 +145,7 @@ const Modify = props => {
         },
       })
       .then(() => {
-        props.deletePoll(poll);
+        // props.deletePoll(poll);
         history.push(pathHomePolls);
       })
       .catch();
@@ -256,7 +255,7 @@ const Modify = props => {
 
 Modify.propTypes = {
   pollModify: PropTypes.func.isRequired,
-  deletePoll: PropTypes.func.isRequired,
+  // deletePoll: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
@@ -274,7 +273,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  deletePoll: poll => dispatch(deletePoll(poll)),
+  // deletePoll: poll => dispatch(deletePoll(poll)),
   pollModify: evt => dispatch(pollModify(evt)),
   loadAndGotoPoll: evt => dispatch(loadAndGotoPoll(evt)),
   loadAndGotoMovie: evt => dispatch(loadAndGotoMovie(evt)),

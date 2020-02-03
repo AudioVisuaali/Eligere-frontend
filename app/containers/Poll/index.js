@@ -16,7 +16,7 @@ import TextArea from 'components/TextArea';
 import TextField from 'components/TextField';
 import Select from 'components/Select';
 import Option from 'components/Option';
-import { makeSelectCommunities } from 'containers/App/selectors';
+import { makeSelectHomePageCommunities } from 'containers/HomePage/selectors';
 
 import messages from './messages';
 import Meta from './styles/Meta';
@@ -202,7 +202,7 @@ Poll.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  communities: makeSelectCommunities(),
+  communities: makeSelectHomePageCommunities(),
 });
 
 const withConnect = connect(mapStateToProps);

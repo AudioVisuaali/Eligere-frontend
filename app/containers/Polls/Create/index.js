@@ -12,7 +12,6 @@ import { compose } from 'redux';
 import { gql } from 'apollo-boost';
 
 import apolloClient from 'apolloClient';
-import { addPoll } from 'containers/App/actions';
 import Poll, { defaultPoll } from 'containers/Poll';
 import Modal from 'components/Modal';
 import history from 'utils/history';
@@ -78,7 +77,7 @@ const Create = props => {
       })
       .then(res => {
         const { createPoll } = res.data;
-        props.addPoll(createPoll);
+        // props.addPoll(res.data.createPoll);
         history.push(generatePathHomePoll(createPoll));
       })
       .catch()
@@ -102,13 +101,11 @@ const Create = props => {
 };
 
 Create.propTypes = {
-  addPoll: PropTypes.func.isRequired,
+  // addPoll: PropTypes.func.isRequired,
   intl: PropTypes.object,
 };
 
-const mapDispatchToProps = dispatch => ({
-  addPoll: poll => dispatch(addPoll(poll)),
-});
+const mapDispatchToProps = () => ({});
 
 const withConnect = connect(null, mapDispatchToProps);
 
