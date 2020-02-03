@@ -50,7 +50,7 @@ const App = props => {
     apolloClient
       .query({ query: USER_CHECK_SESSION })
       .then(res => {
-        const { user } = res.data.checkSession;
+        const user = res.data.checkSession;
         props.handleInitialUserLoad(user);
       })
       .catch(() => props.handleInitialUserLoad());
