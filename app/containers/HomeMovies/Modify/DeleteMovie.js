@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
 import Modal from 'components/Modal';
+import DangerZone from 'components/DangerZone';
+import Label from 'components/Label';
 import DeleteButton from './styles/DeleteButton';
 import messages from './messages';
 
@@ -16,9 +18,14 @@ const DeleteMovie = ({ intl, onDelete }) => {
 
   return (
     <>
-      <DeleteButton onClick={() => setConfirmModalOpen(true)}>
-        <FormattedMessage {...messages.deleteMovie} />
-      </DeleteButton>
+      <DangerZone>
+        <Label style={{ marginRight: 40 }}>
+          <FormattedMessage {...messages.movieDeletionDescription} />
+        </Label>
+        <DeleteButton onClick={() => setConfirmModalOpen(true)}>
+          <FormattedMessage {...messages.deleteMovie} />
+        </DeleteButton>
+      </DangerZone>
       {isConfirmModalOpen && (
         <Modal
           maxWidth={500}

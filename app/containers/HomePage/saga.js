@@ -172,7 +172,6 @@ export function* getPolls(action) {
     });
 
     const { polls } = res.data;
-    console.log(res);
     history.push(pathHomePolls);
     yield put(pollsSet(polls));
   } catch (e) {

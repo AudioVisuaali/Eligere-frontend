@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
 import Modal from 'components/Modal';
+import Label from 'components/Label';
+import DangerZone from 'components/DangerZone';
 import DeleteButton from './styles/DeleteButton';
 import messages from './messages';
 
@@ -16,9 +18,17 @@ const DeletePoll = ({ intl, onDelete }) => {
 
   return (
     <>
-      <DeleteButton onClick={() => setConfirmModalOpen(true)}>
-        <FormattedMessage {...messages.deletePoll} />
-      </DeleteButton>
+      <DangerZone>
+        <Label style={{ marginRight: 40 }}>
+          <FormattedMessage {...messages.pollDeletionDescription} />
+        </Label>
+        <DeleteButton
+          style={{ flexShrink: 0 }}
+          onClick={() => setConfirmModalOpen(true)}
+        >
+          <FormattedMessage {...messages.deletePoll} />
+        </DeleteButton>
+      </DangerZone>
       {isConfirmModalOpen && (
         <Modal
           maxWidth={500}

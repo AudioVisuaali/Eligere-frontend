@@ -30,4 +30,9 @@ export default defineMessages({
     id: `${scope}.confirm`,
     defaultMessage: 'Confirm',
   },
+  movieDeletionDescription: {
+    id: `${scope}.movieDeletionDescription`,
+    defaultMessage:
+      "Deleting movie will delete all the thetrailers attached. This action can't be undone!",
+  },
 });
