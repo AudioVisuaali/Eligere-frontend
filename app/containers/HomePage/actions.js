@@ -14,10 +14,14 @@ import {
   TRAILER_ADD,
   TRAILER_MODIFY,
   TRAILER_REMOVE,
+  COMMUNITY_SET,
+  COMMUNITY_MODIFY,
+  COMMUNITY_REMOVE,
   LOAD_AND_GOTO_POLL,
   LOAD_AND_GOTO_MOVIE,
   LOAD_AND_GOTO_POLLS,
   LOAD_AND_GOTO_COMMUNITIES,
+  LOAD_AND_GOTO_COMMUNITY,
   LOAD_AND_GOTO_PROFILE,
 } from './constants';
 
@@ -84,6 +88,26 @@ export function trailerRemove(trailer) {
   };
 }
 
+export function communitySet(community) {
+  return {
+    type: COMMUNITY_SET,
+    community,
+  };
+}
+
+export function communityModify(community) {
+  return {
+    type: COMMUNITY_MODIFY,
+    community,
+  };
+}
+
+export function communityRemove() {
+  return {
+    type: COMMUNITY_REMOVE,
+  };
+}
+
 export function loadAndGotoPoll(identifier, showLoadingBar = true) {
   return {
     type: LOAD_AND_GOTO_POLL,
@@ -110,6 +134,13 @@ export function loadAndGotoPolls(showLoadingBar = true) {
 export function loadAndGotoCommunities(showLoadingBar = true) {
   return {
     type: LOAD_AND_GOTO_COMMUNITIES,
+    showLoadingBar,
+  };
+}
+
+export function loadAndGotoCommunity(showLoadingBar = true) {
+  return {
+    type: LOAD_AND_GOTO_COMMUNITY,
     showLoadingBar,
   };
 }

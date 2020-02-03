@@ -17,12 +17,16 @@ import {
   TRAILER_ADD,
   TRAILER_MODIFY,
   TRAILER_REMOVE,
+  COMMUNITY_SET,
+  COMMUNITY_MODIFY,
+  COMMUNITY_REMOVE,
 } from './constants';
 
 export const initialState = {
   polls: null,
   poll: null,
   communities: null,
+  community: null,
   movie: null,
 };
 
@@ -95,6 +99,21 @@ const homePollProviderReducer = (state = initialState, action) =>
         draft.movie.trailers = state.movie.trailers.filter(
           trailer => trailer.identifier !== action.trailer.identifier,
         );
+        break;
+
+      case COMMUNITY_SET:
+        draft.community = action.community;
+        break;
+
+      case COMMUNITY_MODIFY:
+        draft.community = {
+          ...state.community,
+          ...action.community,
+        };
+        break;
+
+      case COMMUNITY_REMOVE:
+        draft.community = null;
         break;
     }
   });
