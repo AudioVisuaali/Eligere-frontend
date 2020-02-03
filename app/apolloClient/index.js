@@ -33,7 +33,13 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
     graphQLErrors.find(error => error.message === 'UNAUTHENTICATED');
 
   if (isUnAuthenticated) {
-    history.push(pathLogout);
+    const currentPathName = window.location.pathname;
+    history.push({
+      pathname: pathLogout,
+      state: {
+        redirectTo: currentPathName,
+      },
+    });
   }
 
   return forward(operation);

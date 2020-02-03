@@ -11,7 +11,6 @@ import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
 import { gql } from 'apollo-boost';
 
-import Label from 'components/Label';
 import { pathRegister } from 'utils/paths';
 import history from 'utils/history';
 import { SESSION_TOKEN, setItem } from 'utils/localStorage';
@@ -62,6 +61,13 @@ export const Login = props => {
   const handlePasswordChange = e => setPassword(e.target.value);
   const handleUsernameChange = e => setUsername(e.target.value);
 
+  const checkForRedirect = () => {
+    const { state: routerState } = props.location;
+    if (routerState && routerState.redirectTo) {
+      history.push(routerState.redirectTo);
+    }
+  };
+
   const handleLogIn = e => {
     e.preventDefault();
     setLoading(true);
@@ -72,6 +78,7 @@ export const Login = props => {
         setItem(SESSION_TOKEN, token);
         const newUser = { ...user, polls: undefined };
         props.handleLogin(newUser, user.polls, user.communities);
+        checkForRedirect();
       })
       .catch()
       .finally(() => setLoading(false));
@@ -122,14 +129,15 @@ export const Login = props => {
 Login.propTypes = {
   handleLogin: PropTypes.func.isRequired,
   authenticating: PropTypes.bool,
+  location: PropTypes.shape({
+    state: PropTypes.any,
+  }).isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    handleLogin: (user, polls, communities) =>
-      dispatch(handleLoginAction(user, polls, communities)),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  handleLogin: (user, polls, communities) =>
+    dispatch(handleLoginAction(user, polls, communities)),
+});
 
 const withConnect = connect(null, mapDispatchToProps);
 
