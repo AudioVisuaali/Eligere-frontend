@@ -18,6 +18,7 @@ import {
   LOAD_AND_GOTO_MOVIE,
   LOAD_AND_GOTO_POLLS,
   LOAD_AND_GOTO_COMMUNITIES,
+  LOAD_AND_GOTO_PROFILE,
 } from './constants';
 
 export function pollsSet(polls) {
@@ -109,6 +110,13 @@ export function loadAndGotoPolls(showLoadingBar = true) {
 export function loadAndGotoCommunities(showLoadingBar = true) {
   return {
     type: LOAD_AND_GOTO_COMMUNITIES,
+    showLoadingBar,
+  };
+}
+
+export function loadAndGotoProfile(showLoadingBar = true) {
+  return {
+    type: LOAD_AND_GOTO_PROFILE,
     showLoadingBar,
   };
 }

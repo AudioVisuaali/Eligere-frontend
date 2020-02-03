@@ -14,7 +14,6 @@ import { compose } from 'redux';
 import PersonSVG from 'svgs/Person';
 import PollSVG from 'svgs/Poll';
 import UserClassSVG from 'svgs/UserClass';
-import history from 'utils/history';
 import {
   pathFrontPage,
   pathHomePolls,
@@ -24,6 +23,7 @@ import {
 import {
   loadAndGotoPolls,
   loadAndGotoCommunities,
+  loadAndGotoProfile,
 } from 'containers/HomePage/actions';
 import Link from './styles/Link';
 import messages from './messages';
@@ -54,7 +54,7 @@ export function NavBar(props) {
 
   const handleToProfile = e => {
     e.preventDefault();
-    history.push(pathHomeProfile);
+    props.loadAndGotoProfile();
   };
 
   const isUrlMatch = compareTo => {
@@ -106,11 +106,13 @@ NavBar.propTypes = {
   }),
   loadAndGotoPolls: PropTypes.func.isRequired,
   loadAndGotoCommunities: PropTypes.func.isRequired,
+  loadAndGotoProfile: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
   loadAndGotoPolls: () => dispatch(loadAndGotoPolls()),
   loadAndGotoCommunities: () => dispatch(loadAndGotoCommunities()),
+  loadAndGotoProfile: () => dispatch(loadAndGotoProfile()),
 });
 
 const withConnect = connect(null, mapDispatchToProps);

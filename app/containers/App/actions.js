@@ -11,25 +11,17 @@ import {
   LOGIN_SET_USER,
 } from './constants';
 
-export function handleInitialUserLoad(
-  user = null,
-  polls = null,
-  communities = null,
-) {
+export function handleInitialUserLoad(user = null) {
   return {
     type: INITIAL_LOAD_USER,
     user,
-    polls,
-    communities,
   };
 }
 
-export function handleLoginAction(user, polls, communities) {
+export function handleLoginAction(user) {
   return {
     type: LOGIN_SET_USER,
     user,
-    polls,
-    communities,
   };
 }
 

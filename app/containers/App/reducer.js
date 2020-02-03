@@ -38,14 +38,10 @@ const appReducer = (state = initialState, action) =>
       case INITIAL_LOAD_USER:
         draft.userLoaded = true;
         draft.user = action.user;
-        draft.polls = action.polls;
-        draft.communities = action.communities;
         break;
 
       case LOGIN_SET_USER:
         draft.user = action.user;
-        draft.polls = action.polls;
-        draft.communities = action.communities;
         break;
     }
   });

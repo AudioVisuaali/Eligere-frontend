@@ -13,7 +13,9 @@ import {
   pathHomeCommunities,
   generatePathHomePoll,
   generatePathHomePollMovie,
+  pathHomeProfile,
 } from 'utils/paths';
+import { handleLoginAction } from 'containers/App/actions';
 
 import { pollsSet, communitiesSet, pollSet, movieSet } from './actions';
 import {
@@ -21,6 +23,7 @@ import {
   LOAD_AND_GOTO_MOVIE,
   LOAD_AND_GOTO_POLLS,
   LOAD_AND_GOTO_COMMUNITIES,
+  LOAD_AND_GOTO_PROFILE,
 } from './constants';
 
 const POLL_GET = gql`
@@ -219,6 +222,42 @@ export function* getCommunities(action) {
   }
 }
 
+const PROFILE_GET = gql`
+  query {
+    checkSession {
+      username
+      displayName
+      createdAt
+    }
+  }
+`;
+
+/**
+ * Github repos request/response handler
+ */
+export function* getProfile(action) {
+  if (action.showLoadingBar) {
+    yield put(startLoading());
+  }
+
+  try {
+    const res = yield apolloClient.query({
+      query: PROFILE_GET,
+    });
+
+    const user = res.data.checkSession;
+    yield put(handleLoginAction(user));
+    history.push(pathHomeProfile);
+  } catch (e) {
+    // TODO ADD TOAST
+    console.log(e);
+  } finally {
+    if (action.showLoadingBar) {
+      yield put(endLoading());
+    }
+  }
+}
+
 /**
  * HomaPage saga manages watcher lifecycle
  */
@@ -231,4 +270,5 @@ export default function* pollData() {
   yield takeLatest(LOAD_AND_GOTO_MOVIE, getMovie);
   yield takeLatest(LOAD_AND_GOTO_POLLS, getPolls);
   yield takeLatest(LOAD_AND_GOTO_COMMUNITIES, getCommunities);
+  yield takeLatest(LOAD_AND_GOTO_PROFILE, getProfile);
 }

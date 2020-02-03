@@ -19,3 +19,4 @@ export const LOAD_AND_GOTO_MOVIE = 'app/HomePage/LOAD_AND_GOTO_MOVIE';
 export const LOAD_AND_GOTO_POLLS = 'app/HomePage/LOAD_AND_GOTO_POLLS';
 export const LOAD_AND_GOTO_COMMUNITIES =
   'app/HomePage/LOAD_AND_GOTO_COMMUNITIES';
+export const LOAD_AND_GOTO_PROFILE = 'app/App/LOAD_AND_GOTO_PROFILE';
