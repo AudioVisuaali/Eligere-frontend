@@ -35,4 +35,8 @@ export default defineMessages({
     defaultMessage:
       "Deleting community will delete connections to polls. This action can't be undone!",
   },
+  assignedMovies: {
+    id: `${scope}.assignedMovies`,
+    defaultMessage: 'Assigned Movies',
+  },
 });

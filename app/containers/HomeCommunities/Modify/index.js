@@ -15,6 +15,7 @@ import { withRouter } from 'react-router';
 
 import apolloClient from 'apolloClient';
 import history from 'utils/history';
+import PollCard from 'components/PollCard';
 import Breadcrumbs from 'components/Breadcrumbs';
 import Breadcrumb from 'components/Breadcrumb';
 import { pathHomeCommunities } from 'utils/paths';
@@ -27,6 +28,7 @@ import UserClassSVG from 'svgs/UserClass';
 import {
   loadAndGotoCommunity,
   loadAndGotoCommunities,
+  loadAndGotoPoll,
   communitySet,
 } from 'containers/HomePage/actions';
 import { makeSelectHomePageCommunity } from 'containers/HomePage/selectors';
@@ -85,6 +87,10 @@ const Modify = props => {
     props.loadAndGotoCommunities();
   };
 
+  const goToPoll = poll => {
+    props.loadAndGotoPoll(poll.identifier);
+  };
+
   const isChange = () => {
     if (community.title !== modifiedCommunity.title) return true;
     if (community.description !== modifiedCommunity.description) return true;
@@ -107,12 +113,23 @@ const Modify = props => {
         </Breadcrumb>
       </Breadcrumbs>
 
-      <BlockTitle title={intl.formatMessage(messages.modifyCommunity)} />
       <Section>
+        <BlockTitle title={intl.formatMessage(messages.modifyCommunity)} />
         <Community
           community={modifiedCommunity}
           onChange={setModifiedCommunity}
         />
+      </Section>
+
+      <Section>
+        <BlockTitle title={intl.formatMessage(messages.assignedMovies)} />
+        {community.polls.map(poll => (
+          <PollCard
+            key={poll.identifier}
+            onEdit={() => goToPoll(poll)}
+            poll={poll}
+          />
+        ))}
       </Section>
 
       <Section>
@@ -131,6 +148,7 @@ Modify.propTypes = {
   communitySet: PropTypes.func.isRequired,
   loadAndGotoCommunity: PropTypes.func.isRequired,
   loadAndGotoCommunities: PropTypes.func.isRequired,
+  loadAndGotoPoll: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
@@ -141,12 +159,14 @@ Modify.propTypes = {
     identifier: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
+    polls: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
   }),
 };
 
 const mapDispatchToProps = dispatch => ({
   loadAndGotoCommunities: evt => dispatch(loadAndGotoCommunities(evt)),
   loadAndGotoCommunity: (a, b) => dispatch(loadAndGotoCommunity(a, b)),
+  loadAndGotoPoll: evt => dispatch(loadAndGotoPoll(evt)),
   communitySet: evt => dispatch(communitySet(evt)),
 });
 

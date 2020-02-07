@@ -272,6 +272,11 @@ const COMMUNITY_GET = gql`
       title
       description
       createdAt
+      polls {
+        identifier
+        title
+        description
+      }
     }
   }
 `;
