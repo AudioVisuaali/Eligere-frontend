@@ -11,6 +11,7 @@ import history from 'utils/history';
 import {
   pathHomePolls,
   pathHomeCommunities,
+  generatePathHomeCommunity,
   generatePathHomePoll,
   generatePathHomePollMovie,
   pathHomeProfile,
@@ -265,10 +266,11 @@ export function* getProfile(action) {
 }
 
 const COMMUNITY_GET = gql`
-  query {
-    checkSession {
-      username
-      displayName
+  query($identifier: String!) {
+    community(identifier: $identifier) {
+      identifier
+      title
+      description
       createdAt
     }
   }
@@ -290,7 +292,7 @@ export function* getCommunity(action) {
 
     const { community } = res.data;
     yield put(communitySet(community));
-    history.push(pathHomeProfile);
+    history.push(generatePathHomeCommunity(community));
   } catch (e) {
     // TODO ADD TOAST
     console.log(e);

@@ -9,21 +9,27 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { compose } from 'redux';
 
 import { makeSelectHomePageCommunities } from 'containers/HomePage/selectors';
-import { loadAndGotoCommunities } from 'containers/HomePage/actions';
+import {
+  loadAndGotoCommunities,
+  loadAndGotoCommunity,
+} from 'containers/HomePage/actions';
 import CommunityCard from 'components/CommunityCard';
 import BlockTitle from 'components/BlockTitle';
 import PlusSVG from 'svgs/Plus';
 import history from 'utils/history';
 import {
+  pathHomeCommunities,
   pathHomeCommunityCreate,
-  generatePathHomeCommunity,
+  pathNotFound,
 } from 'utils/paths';
 
+import Create from './Create';
 import messages from './messages';
-import Action from '../styles/Action';
+import Action from './styles/Action';
 
 function CreateCommunity() {
   const handleCreateNew = () => {
@@ -46,7 +52,7 @@ function Communities(props) {
   }, []);
 
   const handleEdit = community => {
-    history.push(generatePathHomeCommunity(community));
+    props.loadAndGotoCommunity(community.identifier);
   };
 
   if (!props.communities) {
@@ -71,6 +77,12 @@ function Communities(props) {
           community={community}
         />
       ))}
+
+      <Switch>
+        <Route exact path={pathHomeCommunities} />
+        <Route exact path={pathHomeCommunityCreate} component={Create} />
+        <Redirect to={pathNotFound} />
+      </Switch>
     </>
   );
 }
@@ -78,6 +90,7 @@ function Communities(props) {
 Communities.propTypes = {
   communities: PropTypes.array.isRequired,
   loadAndGotoCommunities: PropTypes.func.isRequired,
+  loadAndGotoCommunity: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -86,6 +99,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   loadAndGotoCommunities: evt => dispatch(loadAndGotoCommunities(evt)),
+  loadAndGotoCommunity: evt => dispatch(loadAndGotoCommunity(evt)),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

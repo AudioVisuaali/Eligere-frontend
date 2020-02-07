@@ -10,7 +10,7 @@ import Container from './styles/Container';
 import DisplayName from './DisplayName';
 import Password from './Password';
 import Sessions from './Sessions';
-import Language from './Language';
+import LanguageAndTheme from './LanguageAndTheme';
 
 const HomeProfile = () => (
   <Container>
@@ -18,7 +18,7 @@ const HomeProfile = () => (
 
     <Password />
 
-    <Language />
+    <LanguageAndTheme />
 
     <Sessions />
   </Container>

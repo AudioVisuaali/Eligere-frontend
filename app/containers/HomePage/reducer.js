@@ -18,6 +18,7 @@ import {
   TRAILER_MODIFY,
   TRAILER_REMOVE,
   COMMUNITY_SET,
+  COMMUNITY_ADD,
   COMMUNITY_MODIFY,
   COMMUNITY_REMOVE,
 } from './constants';
@@ -103,6 +104,10 @@ const homePollProviderReducer = (state = initialState, action) =>
 
       case COMMUNITY_SET:
         draft.community = action.community;
+        break;
+
+      case COMMUNITY_ADD:
+        draft.communities = [action.community, ...state.communities];
         break;
 
       case COMMUNITY_MODIFY:

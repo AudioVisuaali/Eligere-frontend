@@ -9,13 +9,13 @@ import messages from './messages';
 const SectionStyle = {
   marginBottom: 50,
 };
-const LanguageSelector = () => (
+const LanguageAndTheme = () => (
   <>
-    <BlockTitle title={<FormattedMessage {...messages.changeLanguage} />} />
+    <BlockTitle title={<FormattedMessage {...messages.languageAndTheme} />} />
     <Section style={SectionStyle}>
       <LocaleToggle />
     </Section>
   </>
 );
 
-export default LanguageSelector;
+export default LanguageAndTheme;

@@ -15,6 +15,7 @@ import {
   TRAILER_MODIFY,
   TRAILER_REMOVE,
   COMMUNITY_SET,
+  COMMUNITY_ADD,
   COMMUNITY_MODIFY,
   COMMUNITY_REMOVE,
   LOAD_AND_GOTO_POLL,
@@ -95,6 +96,13 @@ export function communitySet(community) {
   };
 }
 
+export function communityAdd(community) {
+  return {
+    type: COMMUNITY_ADD,
+    community,
+  };
+}
+
 export function communityModify(community) {
   return {
     type: COMMUNITY_MODIFY,
@@ -138,9 +146,10 @@ export function loadAndGotoCommunities(showLoadingBar = true) {
   };
 }
 
-export function loadAndGotoCommunity(showLoadingBar = true) {
+export function loadAndGotoCommunity(identifier, showLoadingBar = true) {
   return {
     type: LOAD_AND_GOTO_COMMUNITY,
+    identifier,
     showLoadingBar,
   };
 }

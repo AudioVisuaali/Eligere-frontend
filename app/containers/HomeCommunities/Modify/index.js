@@ -9,24 +9,26 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { gql } from 'apollo-boost';
+import { createStructuredSelector } from 'reselect';
+import { injectIntl } from 'react-intl';
 import { withRouter } from 'react-router';
 
 import apolloClient from 'apolloClient';
 import history from 'utils/history';
 import { pathHomeCommunities } from 'utils/paths';
+import Community from 'containers/Community';
+import BlockTitle from 'components/BlockTitle';
+import UnsavedChanges from 'components/UnsavedChanges';
 
-import Community from '../Community';
+import {
+  loadAndGotoCommunity,
+  communitySet,
+} from 'containers/HomePage/actions';
+import { makeSelectHomePageCommunity } from 'containers/HomePage/selectors';
 
-const COMMUNITY_GET = gql`
-  query($identifier: String!) {
-    community(identifier: $identifier) {
-      identifier
-      title
-      description
-      createdAt
-    }
-  }
-`;
+import DeleteCommunity from './DeleteCommunity';
+import messages from './messages';
+import Section from './styles/Section';
 
 const COMMUNITY_MODIFY = gql`
   mutation($identifier: String!, $title: String!, $description: String!) {
@@ -44,62 +46,94 @@ const COMMUNITY_MODIFY = gql`
 `;
 
 const Modify = props => {
-  const [community, setCommunity] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { intl, community } = props;
+  const [modifiedCommunity, setModifiedCommunity] = useState(props.community);
 
   useEffect(() => {
+    if (community) {
+      return;
+    }
+
     const { identifier } = props.match.params;
-    apolloClient
-      .query({ query: COMMUNITY_GET, variables: { identifier } })
-      .then(res => {
-        setCommunity(res.data.community);
-      })
-      .catch();
+    props.loadAndGotoCommunity(identifier);
   }, []);
 
-  const handleUpdate = modifiedCommunity => {
-    setLoading(true);
+  useEffect(() => {
+    setModifiedCommunity(community);
+  }, [community]);
+
+  const handleUpdate = () => {
     apolloClient
       .mutate({ mutation: COMMUNITY_MODIFY, variables: modifiedCommunity })
-      .then(() => {
-        // props.modifyCommunity(res.data.updateCommunity);
+      .then(res => {
+        props.communitySet(res.data.updateCommunity);
         history.push(pathHomeCommunities);
       })
-      .catch()
-      .finally(() => setLoading(false));
+      .catch();
   };
 
-  const handleCancel = () => {
-    history.push(pathHomeCommunities);
+  const resetPoll = () => {
+    setModifiedCommunity(community);
   };
 
-  if (!community) {
+  const isChange = () => {
+    if (community.title !== modifiedCommunity.title) return true;
+    if (community.description !== modifiedCommunity.description) return true;
+
+    return false;
+  };
+
+  if (!community || !modifiedCommunity) {
     return null;
   }
 
   return (
-    <Community
-      community={community}
-      onUpdate={handleUpdate}
-      onCancel={handleCancel}
-      loading={loading}
-    />
+    <>
+      <BlockTitle title={intl.formatMessage(messages.modifyCommunity)} />
+      <Section>
+        <Community
+          community={modifiedCommunity}
+          onChange={setModifiedCommunity}
+        />
+      </Section>
+
+      <Section>
+        <BlockTitle title={intl.formatMessage(messages.deleteCommunity)} />
+        <DeleteCommunity onDelete={() => {}} />
+      </Section>
+
+      {isChange() && (
+        <UnsavedChanges onReset={resetPoll} onSave={handleUpdate} />
+      )}
+    </>
   );
 };
 
 Modify.propTypes = {
-  // modifyCommunity: PropTypes.func.isRequired,
+  communitySet: PropTypes.func.isRequired,
+  loadAndGotoCommunity: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  intl: PropTypes.object.isRequired,
+  community: PropTypes.shape({
+    identifier: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  }),
 };
 
-const mapDispatchToProps = () => ({
-  // modifyCommunity: evt => dispatch(modifyCommunity(evt)),
+const mapDispatchToProps = dispatch => ({
+  loadAndGotoCommunity: (a, b) => dispatch(loadAndGotoCommunity(a, b)),
+  communitySet: evt => dispatch(communitySet(evt)),
 });
 
-const withConnect = connect(null, mapDispatchToProps);
+const mapStateToProps = createStructuredSelector({
+  community: makeSelectHomePageCommunity(),
+});
 
-export default compose(withConnect)(withRouter(Modify));
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
+
+export default compose(withConnect, withRouter, injectIntl)(Modify);

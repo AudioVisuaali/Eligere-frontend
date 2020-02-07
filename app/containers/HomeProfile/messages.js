@@ -41,8 +41,8 @@ export default defineMessages({
     id: `${scope}.profileSessions`,
     defaultMessage: 'Sessions',
   },
-  changeLanguage: {
-    id: `${scope}.changeLanguage`,
-    defaultMessage: 'Change languageg',
+  languageAndTheme: {
+    id: `${scope}.languageAndTheme`,
+    defaultMessage: 'Language & Theme',
   },
 });
