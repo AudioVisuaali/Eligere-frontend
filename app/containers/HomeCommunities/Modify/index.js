@@ -15,13 +15,18 @@ import { withRouter } from 'react-router';
 
 import apolloClient from 'apolloClient';
 import history from 'utils/history';
+import Breadcrumbs from 'components/Breadcrumbs';
+import Breadcrumb from 'components/Breadcrumb';
 import { pathHomeCommunities } from 'utils/paths';
 import Community from 'containers/Community';
 import BlockTitle from 'components/BlockTitle';
 import UnsavedChanges from 'components/UnsavedChanges';
+import HouseSVG from 'svgs/House';
+import UserClassSVG from 'svgs/UserClass';
 
 import {
   loadAndGotoCommunity,
+  loadAndGotoCommunities,
   communitySet,
 } from 'containers/HomePage/actions';
 import { makeSelectHomePageCommunity } from 'containers/HomePage/selectors';
@@ -76,6 +81,10 @@ const Modify = props => {
     setModifiedCommunity(community);
   };
 
+  const goToHomeCommunities = () => {
+    props.loadAndGotoCommunities();
+  };
+
   const isChange = () => {
     if (community.title !== modifiedCommunity.title) return true;
     if (community.description !== modifiedCommunity.description) return true;
@@ -89,6 +98,15 @@ const Modify = props => {
 
   return (
     <>
+      <Breadcrumbs>
+        <Breadcrumb onClick={goToHomeCommunities} icon={<HouseSVG />}>
+          Communities
+        </Breadcrumb>
+        <Breadcrumb disabled icon={<UserClassSVG />}>
+          {community.title}
+        </Breadcrumb>
+      </Breadcrumbs>
+
       <BlockTitle title={intl.formatMessage(messages.modifyCommunity)} />
       <Section>
         <Community
@@ -112,6 +130,7 @@ const Modify = props => {
 Modify.propTypes = {
   communitySet: PropTypes.func.isRequired,
   loadAndGotoCommunity: PropTypes.func.isRequired,
+  loadAndGotoCommunities: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       identifier: PropTypes.string.isRequired,
@@ -126,6 +145,7 @@ Modify.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
+  loadAndGotoCommunities: evt => dispatch(loadAndGotoCommunities(evt)),
   loadAndGotoCommunity: (a, b) => dispatch(loadAndGotoCommunity(a, b)),
   communitySet: evt => dispatch(communitySet(evt)),
 });
