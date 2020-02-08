@@ -7,14 +7,14 @@
 import React from 'react';
 
 import Container from './styles/Container';
-import DisplayName from './DisplayName';
+import Profile from './Profile';
 import Password from './Password';
 import Sessions from './Sessions';
 import LanguageAndTheme from './LanguageAndTheme';
 
 const HomeProfile = () => (
   <Container>
-    <DisplayName />
+    <Profile />
 
     <Password />
 

@@ -17,6 +17,14 @@ export default defineMessages({
     id: `${scope}.profileDisplayName`,
     defaultMessage: 'Display name',
   },
+  firstName: {
+    id: `${scope}.firstName`,
+    defaultMessage: 'First name',
+  },
+  surname: {
+    id: `${scope}.surName`,
+    defaultMessage: 'Surname',
+  },
   update: {
     id: `${scope}.update`,
     defaultMessage: 'Update',

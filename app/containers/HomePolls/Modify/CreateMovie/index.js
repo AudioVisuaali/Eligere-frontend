@@ -13,6 +13,7 @@ import Modal from 'components/Modal';
 import LoadingBox from 'components/LoadingBox';
 import history from 'utils/history';
 import SpinnerThird from 'svgs/SpinnerThird';
+import { movieAdd } from 'containers/HomePage/actions';
 import { generatePathHomePoll } from 'utils/paths';
 import debounce from 'utils/debounce';
 import SearchResults from './styles/SearchResults';
@@ -114,7 +115,8 @@ const Create = props => {
           id: movieImdb.id,
         },
       })
-      .then(() => {
+      .then(res => {
+        props.movieAdd(res.data.createMovieImdb);
         goToPoll();
       })
       .catch(console.log)
@@ -183,6 +185,7 @@ Create.propTypes = {
       identifier: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  movieAdd: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

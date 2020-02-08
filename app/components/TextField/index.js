@@ -21,10 +21,12 @@ const TextField = forwardRef((props, ref) => {
   }, []);
 
   return (
-    <Container ref={ref} disabled={disabled}>
-      <Title>{title}</Title>
-      <Input ref={inputRef} disabled={disabled} hasTitle={title} {...rest} />
-    </Container>
+    <div>
+      <Container ref={ref} disabled={disabled}>
+        <Title>{title}</Title>
+        <Input ref={inputRef} disabled={disabled} hasTitle={title} {...rest} />
+      </Container>
+    </div>
   );
 });
 

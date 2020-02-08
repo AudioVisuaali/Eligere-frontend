@@ -31,23 +31,10 @@ const LOGIN_USER = gql`
       user {
         identifier
         username
+        firstName
+        surname
         displayName
         createdAt
-        communities {
-          identifier
-          title
-          description
-          createdAt
-        }
-        polls {
-          identifier
-          title
-          description
-          createdAt
-          userRequired
-          opensAt
-          closesAt
-        }
       }
     }
   }

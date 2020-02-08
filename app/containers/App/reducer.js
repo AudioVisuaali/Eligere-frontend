@@ -11,7 +11,7 @@ import produce from 'immer';
 import {
   INITIAL_LOAD_USER,
   USER_LOGOUT,
-  USER_UPDATE_DISPLAY_NAME,
+  USER_PROFILE_UPDATE_NAME,
   LOGIN_SET_USER,
 } from './constants';
 
@@ -25,8 +25,10 @@ export const initialState = {
 const appReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case USER_UPDATE_DISPLAY_NAME:
+      case USER_PROFILE_UPDATE_NAME:
         draft.user.displayName = action.displayName;
+        draft.user.firstName = action.firstName;
+        draft.user.surname = action.surname;
         break;
 
       case USER_LOGOUT:

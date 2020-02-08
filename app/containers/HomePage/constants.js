@@ -9,6 +9,7 @@ export const COMMUNITIES_SET = 'app/HomePage/COMMUNITIES_SET';
 
 export const POLL_SET = 'app/HomePage/POLL_SET';
 export const POLL_MODIFY = 'app/HomePage/POLL_MODIFY';
+export const MOVIE_ADD = 'app/HomePage/MOVIE_ADD';
 export const MOVIE_SET = 'app/HomePage/MOVIE_SET';
 export const MOVIE_MODIFY = 'app/HomePage/MOVIE_MODIFY';
 export const TRAILER_ADD = 'app/HomePage/TRAILER_ADD';

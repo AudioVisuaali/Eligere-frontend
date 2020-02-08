@@ -233,6 +233,8 @@ const PROFILE_GET = gql`
   query {
     checkSession {
       username
+      firstName
+      surname
       displayName
       createdAt
     }

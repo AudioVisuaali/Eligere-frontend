@@ -12,6 +12,7 @@ import {
   COMMUNITIES_SET,
   POLL_SET,
   POLL_MODIFY,
+  MOVIE_ADD,
   MOVIE_SET,
   MOVIE_MODIFY,
   TRAILER_ADD,
@@ -73,6 +74,10 @@ const homePollProviderReducer = (state = initialState, action) =>
 
       case POLL_MODIFY:
         draft.poll = mergePolls(action.poll, state.poll);
+        break;
+
+      case MOVIE_ADD:
+        draft.poll.movies = [action.movie, ...state.poll.movies];
         break;
 
       case MOVIE_SET:

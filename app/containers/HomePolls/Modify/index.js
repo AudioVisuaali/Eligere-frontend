@@ -110,7 +110,7 @@ const Modify = props => {
       return;
     }
 
-    props.loadAndGotoPoll(identifier);
+    props.loadAndGotoPoll(identifier, false);
   }, []);
 
   useEffect(() => {
@@ -273,9 +273,9 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  // deletePoll: poll => dispatch(deletePoll(poll)),
   pollModify: evt => dispatch(pollModify(evt)),
-  loadAndGotoPoll: evt => dispatch(loadAndGotoPoll(evt)),
+  loadAndGotoPoll: (identifier, showLoadBar) =>
+    dispatch(loadAndGotoPoll(identifier, showLoadBar)),
   loadAndGotoMovie: evt => dispatch(loadAndGotoMovie(evt)),
   loadAndGotoPolls: () => dispatch(loadAndGotoPolls()),
 });

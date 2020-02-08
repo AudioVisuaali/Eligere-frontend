@@ -39,6 +39,8 @@ const USER_CHECK_SESSION = gql`
     checkSession {
       identifier
       username
+      firstName
+      surname
       displayName
       createdAt
     }

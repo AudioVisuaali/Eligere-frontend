@@ -7,7 +7,7 @@
 import {
   INITIAL_LOAD_USER,
   USER_LOGOUT,
-  USER_UPDATE_DISPLAY_NAME,
+  USER_PROFILE_UPDATE_NAME,
   LOGIN_SET_USER,
 } from './constants';
 
@@ -29,6 +29,6 @@ export function handleLogOutAction() {
   return { type: USER_LOGOUT };
 }
 
-export function handleUsernameChangeAction(displayName) {
-  return { type: USER_UPDATE_DISPLAY_NAME, displayName };
+export function handleProfileUpdateAction(profile) {
+  return { type: USER_PROFILE_UPDATE_NAME, profile };
 }

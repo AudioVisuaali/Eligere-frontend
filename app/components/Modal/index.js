@@ -10,6 +10,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Button from 'components/Button';
 import BlockTitle from 'components/BlockTitle';
+import Portal from 'components/Portal';
 
 import messages from './messages';
 import Wrapper from './styles/Wrapper';
@@ -53,25 +54,27 @@ function Modal({
   };
 
   return (
-    <Wrapper fadingOut={closing}>
-      <Background onClick={handleClose} />
-      <ModalWrapper centered={centered} maxWidth={maxWidth}>
-        <Title>
-          <BlockTitle title={title} />
-        </Title>
-        <Content>{children}</Content>
-        <Actions>
-          <Button onClick={handleClose}>
-            {closeText || <FormattedMessage {...messages.cancel} />}
-          </Button>
-          {!hideAccept && (
-            <Button disabled={disableAccept} onClick={onAccept}>
-              {acceptText || <FormattedMessage {...messages.save} />}
+    <Portal>
+      <Wrapper fadingOut={closing}>
+        <Background onClick={handleClose} />
+        <ModalWrapper centered={centered} maxWidth={maxWidth}>
+          <Title>
+            <BlockTitle title={title} />
+          </Title>
+          <Content>{children}</Content>
+          <Actions>
+            <Button onClick={handleClose}>
+              {closeText || <FormattedMessage {...messages.cancel} />}
             </Button>
-          )}
-        </Actions>
-      </ModalWrapper>
-    </Wrapper>
+            {!hideAccept && (
+              <Button disabled={disableAccept} onClick={onAccept}>
+                {acceptText || <FormattedMessage {...messages.save} />}
+              </Button>
+            )}
+          </Actions>
+        </ModalWrapper>
+      </Wrapper>
+    </Portal>
   );
 }
 

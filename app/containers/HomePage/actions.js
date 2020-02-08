@@ -9,6 +9,7 @@ import {
   COMMUNITIES_SET,
   POLL_SET,
   POLL_MODIFY,
+  MOVIE_ADD,
   MOVIE_SET,
   MOVIE_MODIFY,
   TRAILER_ADD,
@@ -51,6 +52,13 @@ export function pollModify(poll) {
   return {
     type: POLL_MODIFY,
     poll,
+  };
+}
+
+export function movieAdd(movie) {
+  return {
+    type: MOVIE_ADD,
+    movie,
   };
 }
 

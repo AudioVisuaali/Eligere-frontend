@@ -62,7 +62,7 @@ const Modify = props => {
     }
 
     const { identifier } = props.match.params;
-    props.loadAndGotoCommunity(identifier);
+    props.loadAndGotoCommunity(identifier, false);
   }, []);
 
   useEffect(() => {
@@ -165,7 +165,8 @@ Modify.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   loadAndGotoCommunities: evt => dispatch(loadAndGotoCommunities(evt)),
-  loadAndGotoCommunity: (a, b) => dispatch(loadAndGotoCommunity(a, b)),
+  loadAndGotoCommunity: (identifier, showLoadingBar) =>
+    dispatch(loadAndGotoCommunity(identifier, showLoadingBar)),
   loadAndGotoPoll: evt => dispatch(loadAndGotoPoll(evt)),
   communitySet: evt => dispatch(communitySet(evt)),
 });
