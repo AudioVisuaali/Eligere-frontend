@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { generatePathPoll } from 'utils/paths';
 import history from 'utils/history';
-import { dateToString } from 'utils/time';
+import { getISODate } from 'utils/time';
 import Link from './styles/Link';
 import Container from './styles/Container';
 import Title from './styles/Title';
@@ -13,7 +13,9 @@ import Content from './styles/Content';
 import Times from './styles/Times';
 import Time from './styles/Time';
 import Actions from './styles/Actions';
-import Action from './styles/Action';
+
+const formatDate = string =>
+  string ? getISODate(string).replace('T', ' ') : null;
 
 const isOpen = (start, end) => {
   const nDate = new Date(); // Now
@@ -52,14 +54,7 @@ const isOpen = (start, end) => {
 const PollCard = props => {
   const { poll, onEdit, ...rest } = props;
   const [imageLoaded, setImageLoaded] = useState(false);
-  const {
-    title,
-    description,
-    createdAt,
-    userRequired,
-    opensAt,
-    closesAt,
-  } = poll;
+  const { title, description, createdAt, opensAt, closesAt } = poll;
 
   const generatedUrl = generatePathPoll(poll);
 
@@ -69,7 +64,7 @@ const PollCard = props => {
   };
 
   return (
-    <Container {...rest}>
+    <Container onClick={onEdit} {...rest}>
       <Link onClick={handleRedirect} href={generatedUrl}>
         <Thumbnail
           onLoad={setImageLoaded}
@@ -85,16 +80,15 @@ const PollCard = props => {
         <Actions>
           <Times>
             <Time>
-              <strong>Created:</strong> {'dateToString(createdAt)'}
+              <strong>Created:</strong> {formatDate(opensAt)}
             </Time>
             <Time>
-              <strong>Created:</strong> {'dateToString(createdAt)'}
+              <strong>Created:</strong> {formatDate(closesAt)}
             </Time>
             <Time>
               <strong>{isOpen(opensAt, closesAt) ? 'Open' : 'Closed'}</strong>
             </Time>
           </Times>
-          <Action onClick={onEdit}>Edit</Action>
         </Actions>
       </Content>
     </Container>

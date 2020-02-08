@@ -98,7 +98,7 @@ const DELETE_POLL = gql`
 const formatDate = dateStr => (dateStr ? new Date(dateStr).toString() : null);
 
 const formatCommunity = community =>
-  community ? { ...community, __typename: null } : null;
+  community ? { ...community, __typename: undefined } : null;
 
 const Modify = props => {
   const { poll, intl } = props;

@@ -278,6 +278,8 @@ const COMMUNITY_GET = gql`
         identifier
         title
         description
+        opensAt
+        closesAt
       }
     }
   }
