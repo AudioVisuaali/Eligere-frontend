@@ -8,6 +8,7 @@ const Description = styled.label`
   font-weight: 500;
   color: ${color};
   flex-grow: 1;
+  cursor: pointer;
 `;
 
 export default Description;

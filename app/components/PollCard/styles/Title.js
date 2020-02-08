@@ -9,6 +9,7 @@ const Title = styled.label`
   margin: 0 0 4px 0;
   font-weight: 500;
   color: ${color};
+  cursor: pointer;
 `;
 
 export default Title;

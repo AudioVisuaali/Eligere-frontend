@@ -17,7 +17,6 @@ export default defineMessages({
     id: `${scope}.formPollDescription`,
     defaultMessage: 'Description',
   },
-
   userIsRequiredToVote: {
     id: `${scope}.userIsRequiredToVote`,
     defaultMessage: 'Anonymous voting',
@@ -30,12 +29,10 @@ export default defineMessages({
     id: `${scope}.allowMovieSuggestions`,
     defaultMessage: 'Allow movie suggestions',
   },
-
   pollOpensAt: {
     id: `${scope}.pollOpensAt`,
     defaultMessage: 'Voting opens at',
   },
-
   pollClosesAt: {
     id: `${scope}.pollClosesAt`,
     defaultMessage: 'Voting closes at',
@@ -48,7 +45,6 @@ export default defineMessages({
     id: `${scope}.totalVotes`,
     defaultMessage: 'Total votes',
   },
-
   cancel: {
     id: `${scope}.cancel`,
     defaultMessage: 'Cancel',
@@ -58,7 +54,7 @@ export default defineMessages({
     defaultMessage: 'Create Poll',
   },
   saveChanges: {
-    id: `${scope}.cancel`,
+    id: `${scope}.saveChanges`,
     defaultMessage: 'Save changes',
   },
 });

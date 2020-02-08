@@ -9,8 +9,6 @@ import Title from './styles/Title';
 import Description from './styles/Description';
 import Thumbnail from './styles/Thumbnail';
 import Content from './styles/Content';
-import Actions from './styles/Actions';
-import Action from './styles/Action';
 
 const CommunityCard = props => {
   const { community, onEdit, ...rest } = props;
@@ -25,7 +23,7 @@ const CommunityCard = props => {
   };
 
   return (
-    <Container {...rest}>
+    <Container onClick={onEdit} {...rest}>
       <Link onClick={handleRedirect} href={generatedUrl}>
         <Thumbnail
           onLoad={setImageLoaded}
@@ -38,10 +36,6 @@ const CommunityCard = props => {
           {title}
         </Title>
         <Description>{description}</Description>
-        <Actions>
-          <div></div>
-          <Action onClick={onEdit}>Edit</Action>
-        </Actions>
       </Content>
     </Container>
   );

@@ -9,10 +9,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { compose } from 'redux';
-import { useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 
-import Label from 'components/Label';
+import apolloClient from 'apolloClient';
 import { pathLogin } from 'utils/paths';
 import history from 'utils/history';
 import messages from './messages';
@@ -32,54 +31,53 @@ const USER_CREATE = gql`
   }
 `;
 
-export const Register = ({ authenticating }) => {
+export const Register = () => {
+  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const [createUser, { data, error }] = useMutation(USER_CREATE);
-
-  const handlePasswordChange = e => setPassword(e.target.value);
-  const handleUsernameChange = e => setUsername(e.target.value);
-  const handleRegister = e => {
-    e.preventDefault();
-    createUser({ variables: { username, password } })
-      .then(data => {})
-      .catch(err => {});
-  };
 
   const goToRegister = e => {
     e.preventDefault();
     history.push(pathLogin);
   };
 
+  const handleRegister = e => {
+    e.preventDefault();
+    setLoading(true);
+    apolloClient
+      .mutate({ query: USER_CREATE, variables: { username, password } })
+      .then(res => {
+        console.log(res);
+      })
+      .catch()
+      .finally(() => setLoading(false));
+  };
+
   const isRegisterDisabled =
-    password.length < 6 || username.length < 6 || authenticating;
+    password.length < 6 || username.length < 6 || loading;
 
   return (
     <Container onSubmit={handleRegister}>
-      <Label>
-        <FormattedMessage {...messages.username} />
-      </Label>
       <TextField
+        title={<FormattedMessage {...messages.username} />}
         required
         type="username"
         autocomplete="username"
         placeholder="Username"
         value={username}
-        disabled={authenticating}
-        onChange={handleUsernameChange}
+        disabled={loading}
+        onChange={e => setUsername(e.target.value)}
       />
 
-      <Label>
-        <FormattedMessage {...messages.password} />
-      </Label>
       <TextField
+        title={<FormattedMessage {...messages.password} />}
         required
         type="password"
         autocomplete="password"
         placeholder="Password"
         value={password}
-        disabled={authenticating}
-        onChange={handlePasswordChange}
+        disabled={loading}
+        onChange={e => setPassword(e.target.value)}
       />
 
       <Button type="submit" disabled={isRegisterDisabled}>
@@ -95,7 +93,6 @@ export const Register = ({ authenticating }) => {
 
 Register.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  authenticating: PropTypes.bool,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -104,9 +101,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const withConnect = connect(
-  null,
-  mapDispatchToProps,
-);
+const withConnect = connect(null, mapDispatchToProps);
 
 export default compose(withConnect)(Register);

@@ -6,12 +6,12 @@
 
 import { defineMessages } from 'react-intl';
 
-export const scope = 'app.containers.Login';
+export const scope = 'app.containers.Register';
 
 export default defineMessages({
-  login: {
-    id: `${scope}.login`,
-    defaultMessage: 'Already have an account? Login here!',
+  register: {
+    id: `${scope}.register`,
+    defaultMessage: 'Register',
   },
   username: {
     id: `${scope}.username`,
@@ -21,8 +21,8 @@ export default defineMessages({
     id: `${scope}.password`,
     defaultMessage: 'Password',
   },
-  register: {
-    id: `${scope}.register`,
-    defaultMessage: 'Register',
+  login: {
+    id: `${scope}.login`,
+    defaultMessage: 'Already have an account? Login here!',
   },
 });

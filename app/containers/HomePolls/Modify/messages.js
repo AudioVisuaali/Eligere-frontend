@@ -18,7 +18,7 @@ export default defineMessages({
     defaultMessage: 'Cancel',
   },
   saveChanges: {
-    id: `${scope}.cancel`,
+    id: `${scope}.saveChanges`,
     defaultMessage: 'Save changes',
   },
   formPollMovies: {
