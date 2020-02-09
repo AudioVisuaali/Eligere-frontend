@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { compose } from 'redux';
 import { gql } from 'apollo-boost';
 
@@ -31,10 +31,13 @@ const USER_CREATE = gql`
   }
 `;
 
-export const Register = () => {
+export const Register = props => {
+  const { intl } = props;
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [passwordAgain, setPasswordAgain] = useState('');
+  const [name, setName] = useState('');
 
   const goToRegister = e => {
     e.preventDefault();
@@ -59,25 +62,43 @@ export const Register = () => {
   return (
     <Container onSubmit={handleRegister}>
       <TextField
-        title={<FormattedMessage {...messages.username} />}
+        title={intl.formatMessage(messages.username)}
         required
         type="username"
         autocomplete="username"
-        placeholder="Username"
         value={username}
         disabled={loading}
         onChange={e => setUsername(e.target.value)}
       />
 
       <TextField
-        title={<FormattedMessage {...messages.password} />}
+        title={intl.formatMessage(messages.name)}
+        required
+        type="text"
+        autocomplete="name"
+        value={name}
+        disabled={loading}
+        onChange={e => setName(e.target.value)}
+      />
+
+      <TextField
+        title={intl.formatMessage(messages.password)}
         required
         type="password"
         autocomplete="password"
-        placeholder="Password"
         value={password}
         disabled={loading}
         onChange={e => setPassword(e.target.value)}
+      />
+
+      <TextField
+        title={intl.formatMessage(messages.passwordAgain)}
+        required
+        type="password"
+        autocomplete="password"
+        value={passwordAgain}
+        disabled={loading}
+        onChange={e => setPasswordAgain(e.target.value)}
       />
 
       <Button type="submit" disabled={isRegisterDisabled}>
@@ -93,6 +114,7 @@ export const Register = () => {
 
 Register.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -103,4 +125,4 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(null, mapDispatchToProps);
 
-export default compose(withConnect)(Register);
+export default compose(withConnect, injectIntl)(Register);

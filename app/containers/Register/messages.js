@@ -21,6 +21,14 @@ export default defineMessages({
     id: `${scope}.password`,
     defaultMessage: 'Password',
   },
+  passwordAgain: {
+    id: `${scope}.passwordAgain`,
+    defaultMessage: 'Password again',
+  },
+  name: {
+    id: `${scope}.name`,
+    defaultMessage: 'Name',
+  },
   login: {
     id: `${scope}.login`,
     defaultMessage: 'Already have an account? Login here!',

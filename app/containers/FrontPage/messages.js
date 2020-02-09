@@ -11,7 +11,7 @@ export const scope = 'app.containers.HomePage';
 export default defineMessages({
   title: {
     id: `${scope}.title`,
-    defaultMessage: 'Movie voter',
+    defaultMessage: 'ELEGIRE',
   },
   description: {
     id: `${scope}.displayNameLabel`,
