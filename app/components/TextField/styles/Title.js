@@ -7,6 +7,10 @@ const Title = styled(Label)`
   font-size: 10px;
   top: 6px;
   left: 11px;
+  color: inherit;
+
+  will-change: color;
+  transition: color 200ms;
 `;
 
 export default Title;

@@ -1,8 +1,22 @@
 import styled from 'styled-components';
 
-const borderColor = props =>
-  props.theme.isDark ? props.theme.light[700] : props.theme.grey[700];
 const color = props => (props.theme.isDark ? '#fff' : props.theme.grey[700]);
+
+const borderColor = props => {
+  if (props.error) {
+    return props.theme.red[600];
+  }
+
+  return props.theme.isDark ? props.theme.light[700] : props.theme.grey[700];
+};
+
+const borderColorHover = props => {
+  if (props.error) {
+    return props.theme.red[400];
+  }
+
+  return color(props);
+};
 
 const Input = styled.input`
   background-color: transparent;
@@ -12,11 +26,12 @@ const Input = styled.input`
   border-radius: 4px;
   width: 100%;
 
-  transition: all 200ms;
+  will-change: border-color;
+  transition: border-color 200ms;
 
   &:hover,
   &:focus {
-    border: 1px solid ${color};
+    border: 1px solid ${borderColorHover};
   }
 `;
 

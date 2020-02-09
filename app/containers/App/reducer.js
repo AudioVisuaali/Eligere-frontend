@@ -27,8 +27,7 @@ const appReducer = (state = initialState, action) =>
     switch (action.type) {
       case USER_PROFILE_UPDATE_NAME:
         draft.user.displayName = action.displayName;
-        draft.user.firstName = action.firstName;
-        draft.user.surname = action.surname;
+        draft.user.name = action.name;
         break;
 
       case USER_LOGOUT:

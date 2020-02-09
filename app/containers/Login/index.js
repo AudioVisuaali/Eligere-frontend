@@ -31,8 +31,7 @@ const LOGIN_USER = gql`
       user {
         identifier
         username
-        firstName
-        surname
+        name
         displayName
         createdAt
       }
@@ -48,13 +47,6 @@ export const Login = props => {
   const handlePasswordChange = e => setPassword(e.target.value);
   const handleUsernameChange = e => setUsername(e.target.value);
 
-  const checkForRedirect = () => {
-    const { state: routerState } = props.location;
-    if (routerState && routerState.redirectTo) {
-      history.push(routerState.redirectTo);
-    }
-  };
-
   const handleLogIn = e => {
     e.preventDefault();
     setLoading(true);
@@ -64,8 +56,7 @@ export const Login = props => {
         const { token, user } = res.data.login;
         setItem(SESSION_TOKEN, token);
         const newUser = { ...user, polls: undefined };
-        props.handleLogin(newUser, user.polls, user.communities);
-        checkForRedirect();
+        props.handleLogin(newUser);
       })
       .catch()
       .finally(() => setLoading(false));
@@ -122,8 +113,7 @@ Login.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  handleLogin: (user, polls, communities) =>
-    dispatch(handleLoginAction(user, polls, communities)),
+  handleLogin: user => dispatch(handleLoginAction(user)),
 });
 
 const withConnect = connect(null, mapDispatchToProps);

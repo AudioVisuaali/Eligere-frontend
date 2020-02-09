@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { ThemeProvider } from 'styled-components';
 
+import red from 'styles/palettes/red';
 import dark from 'styles/palettes/dark';
 import grey from 'styles/palettes/grey';
 import light from 'styles/palettes/light';
@@ -26,6 +27,7 @@ export function ThemeWrapper(props) {
     light,
     darkRGBA,
     whiteRGBA,
+    red,
   };
   return <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;
 }
@@ -35,9 +37,8 @@ ThemeWrapper.propTypes = {
   isDark: PropTypes.bool,
 };
 
-const mapStateToProps = createSelector(
-  makeSelectThemeMode(),
-  isDark => ({ isDark }),
-);
+const mapStateToProps = createSelector(makeSelectThemeMode(), isDark => ({
+  isDark,
+}));
 
 export default connect(mapStateToProps)(ThemeWrapper);
