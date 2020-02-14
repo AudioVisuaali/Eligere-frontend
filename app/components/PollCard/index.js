@@ -102,7 +102,7 @@ PollCard.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string,
     createdAt: PropTypes.string,
-    userRequired: PropTypes.bool,
+    requireUserForSuggesting: PropTypes.bool,
     opensAt: PropTypes.string,
     closesAt: PropTypes.string,
   }),

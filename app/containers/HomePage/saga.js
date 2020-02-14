@@ -40,11 +40,10 @@ const POLL_GET = gql`
       identifier
       title
       description
-      userRequired
+      requireUserForSuggesting
       opensAt
       closesAt
       totalVotes
-      allowComments
       allowMovieSuggestions
       movies {
         identifier
@@ -159,7 +158,7 @@ const POLLS_GET = gql`
       title
       description
       createdAt
-      userRequired
+      requireUserForSuggesting
       opensAt
       closesAt
     }

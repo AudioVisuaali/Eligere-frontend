@@ -8,6 +8,7 @@ const Container = styled.span`
   padding: 9px;
   display: flex;
   position: relative;
+  align-items: center;
   text-decoration: none;
 
   color: ${p => (p.checked ? colorChecked : color)};

@@ -5,14 +5,15 @@ const Meta = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   margin-bottom: 15px;
+  margin-top: 20px;
 
   & > * {
     width: 50%;
-    margin-bottom: 15px;
-    padding-right: 15px;
+    margin-bottom: 20px;
+    padding-right: 10px;
 
     &:nth-child(2n) {
-      padding-right: 0;
+      padding-left: 10px;
     }
   }
 `;

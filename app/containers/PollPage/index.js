@@ -26,7 +26,7 @@ const POLL = gql`
       title
       description
       createdAt
-      userRequired
+      requireUserForSuggesting
       opensAt
       closesAt
       movies {

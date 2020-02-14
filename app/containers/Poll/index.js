@@ -11,6 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
+import Label from 'components/Label';
 import Checkbox from 'components/Checkbox';
 import TextArea from 'components/TextArea';
 import TextField from 'components/TextField';
@@ -32,13 +33,14 @@ const textAreaSize = {
 export const defaultPoll = {
   title: '',
   description: '',
-  userRequired: false,
-  allowComments: false,
-  allowMovieSuggestions: true,
   opensAt: '',
   closesAt: '',
-  totalVotes: 1,
   community: null,
+  allowMovieSuggestions: true,
+  requireUserForSuggesting: true,
+
+  totalVotes: 1,
+  voteDuplicationChecking: false,
 };
 
 const Poll = props => {
@@ -82,13 +84,13 @@ const Poll = props => {
   const {
     title,
     description,
-    userRequired,
-    allowComments,
-    allowMovieSuggestions,
     opensAt,
     closesAt,
     community,
+    allowMovieSuggestions,
+    requireUserForSuggesting,
     totalVotes,
+    voteDuplicationChecking,
   } = props.poll;
 
   return (
@@ -112,27 +114,6 @@ const Poll = props => {
           value={description}
           onChange={handleChange}
         />
-
-        <Checkboxes>
-          <Checkbox
-            name="userRequired"
-            label={intl.formatMessage(messages.userIsRequiredToVote)}
-            checked={userRequired}
-            onClick={handleChangeBoolean}
-          />
-          <Checkbox
-            name="allowComments"
-            label={intl.formatMessage(messages.allowFeedBack)}
-            checked={allowComments}
-            onClick={handleChangeBoolean}
-          />
-          <Checkbox
-            name="allowMovieSuggestions"
-            label={intl.formatMessage(messages.allowMovieSuggestions)}
-            checked={allowMovieSuggestions}
-            onClick={handleChangeBoolean}
-          />
-        </Checkboxes>
 
         <Meta>
           <TextField
@@ -173,6 +154,22 @@ const Poll = props => {
             onChange={handleChangeNumber}
           />
         </Meta>
+        <Label>Voting</Label>
+        <Label>Movie Recommendations</Label>
+        <Checkboxes>
+          <Checkbox
+            name="allowMovieSuggestions"
+            label={intl.formatMessage(messages.allowMovieSuggestions)}
+            checked={allowMovieSuggestions}
+            onClick={handleChangeBoolean}
+          />
+          <Checkbox
+            name="requireUserForSuggesting"
+            label={intl.formatMessage(messages.userIsRequiredToVote)}
+            checked={requireUserForSuggesting}
+            onClick={handleChangeBoolean}
+          />
+        </Checkboxes>
       </Section>
     </Container>
   );
@@ -187,8 +184,7 @@ Poll.propTypes = {
     closesAt: PropTypes.string,
     community: PropTypes.object,
     totalVotes: PropTypes.number.isRequired,
-    userRequired: PropTypes.bool,
-    allowComments: PropTypes.bool,
+    requireUserForSuggesting: PropTypes.bool,
     allowMovieSuggestions: PropTypes.bool,
   }),
   communities: PropTypes.arrayOf(

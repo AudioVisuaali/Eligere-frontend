@@ -55,8 +55,7 @@ const POLL_MODIFY = gql`
     $opensAt: String
     $closesAt: String
     $totalVotes: Int!
-    $userRequired: Boolean!
-    $allowComments: Boolean!
+    $requireUserForSuggesting: Boolean!
     $allowMovieSuggestions: Boolean!
     $community: CommunityCreate
   ) {
@@ -67,20 +66,17 @@ const POLL_MODIFY = gql`
       opensAt: $opensAt
       closesAt: $closesAt
       totalVotes: $totalVotes
-      userRequired: $userRequired
-      allowComments: $allowComments
+      requireUserForSuggesting: $requireUserForSuggesting
       allowMovieSuggestions: $allowMovieSuggestions
       community: $community
     ) {
       identifier
       title
       description
-      userRequired
+      requireUserForSuggesting
       opensAt
       closesAt
       totalVotes
-      userRequired
-      allowComments
       allowMovieSuggestions
       community {
         identifier
@@ -182,10 +178,10 @@ const Modify = props => {
   const isChange = () => {
     if (poll.title !== modifiedPoll.title) return true;
     if (poll.description !== modifiedPoll.description) return true;
-    if (poll.userRequired !== modifiedPoll.userRequired) return true;
+    if (poll.requireUserForSuggesting !== modifiedPoll.requireUserForSuggesting)
+      return true;
     if (poll.opensAt !== modifiedPoll.opensAt) return true;
     if (poll.closesAt !== modifiedPoll.closesAt) return true;
-    if (poll.allowComments !== modifiedPoll.allowComments) return true;
     if (poll.totalVotes !== modifiedPoll.totalVotes) return true;
     if (poll.allowMovieSuggestions !== modifiedPoll.allowMovieSuggestions)
       return true;

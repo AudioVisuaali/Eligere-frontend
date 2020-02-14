@@ -23,34 +23,31 @@ const POLL_CREATE = gql`
   mutation(
     $title: String!
     $description: String!
-    $userRequired: Boolean!
+    $requireUserForSuggesting: Boolean!
     $opensAt: String
     $closesAt: String
     $community: CommunityCreate!
     $allowMovieSuggestions: Boolean!
-    $allowComments: Boolean!
     $totalVotes: Int!
   ) {
     createPoll(
       title: $title
       description: $description
-      userRequired: $userRequired
+      requireUserForSuggesting: $requireUserForSuggesting
       opensAt: $opensAt
       closesAt: $closesAt
       community: $community
       allowMovieSuggestions: $allowMovieSuggestions
-      allowComments: $allowComments
       totalVotes: $totalVotes
     ) {
       identifier
       title
       description
-      userRequired
+      requireUserForSuggesting
       createdAt
       opensAt
       closesAt
       allowMovieSuggestions
-      allowComments
       totalVotes
       community {
         identifier

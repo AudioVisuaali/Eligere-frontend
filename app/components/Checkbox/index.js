@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Label from 'components/Label';
 import CheckSquareIconSVG from 'svgs/CheckSquareIcon';
 import StopSVG from 'svgs/Stop';
 
+import Label from './styles/Label';
 import Input from './styles/Input';
 import Container from './styles/Container';
 

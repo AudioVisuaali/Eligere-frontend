@@ -48,7 +48,7 @@ CommunityCard.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string,
     createdAt: PropTypes.string,
-    userRequired: PropTypes.string,
+    requireUserForSuggesting: PropTypes.string,
     opensAt: PropTypes.string,
     closesAt: PropTypes.string,
   }),

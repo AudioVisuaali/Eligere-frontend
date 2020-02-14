@@ -47,4 +47,8 @@ export default defineMessages({
     defaultMessage:
       "Deleting poll will delete all the movies alongside all thetrailers. This action can't be undone!",
   },
+  pollVoting: {
+    id: `${scope}.pollVoting`,
+    defaultMessage: 'Voting',
+  },
 });

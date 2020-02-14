@@ -4,7 +4,6 @@ const Input = styled.input`
   top: 0;
   left: 0;
   width: 100%;
-  cursor: inherit;
   height: 100%;
   margin: 0;
   opacity: 0;
@@ -12,6 +11,7 @@ const Input = styled.input`
   z-index: 1;
   position: absolute;
   cursor: pointer;
+  font-size: 12px;
 `;
 
 export default Input;
