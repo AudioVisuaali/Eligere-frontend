@@ -7,6 +7,7 @@
 import produce from 'immer';
 
 import { getISODate } from 'utils/time';
+import { LOGIN_SET_USER } from 'containers/App/constants';
 import {
   POLLS_SET,
   COMMUNITIES_SET,
@@ -120,6 +121,11 @@ const homePollProviderReducer = (state = initialState, action) =>
           ...state.community,
           ...action.community,
         };
+        break;
+
+      case LOGIN_SET_USER:
+        draft.communities = null;
+        draft.polls = null;
         break;
 
       case COMMUNITY_REMOVE:
