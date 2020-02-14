@@ -19,6 +19,8 @@ const TextField = forwardRef((props, ref) => {
     error,
     disabled,
     focusOnMount,
+    style,
+    inputStyle,
     ...rest
   } = props;
   const inputRef = useRef(null);
@@ -30,13 +32,8 @@ const TextField = forwardRef((props, ref) => {
   }, []);
 
   return (
-    <div style={{ marginBottom: 20 }}>
-      <Container
-        ref={ref}
-        error={error}
-        className={className}
-        disabled={disabled}
-      >
+    <div className={className} style={{ marginBottom: 20, ...style }}>
+      <Container ref={ref} error={error} disabled={disabled}>
         <Title>{title}</Title>
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <Input
@@ -44,6 +41,7 @@ const TextField = forwardRef((props, ref) => {
           error={error}
           disabled={disabled}
           hasTitle={title}
+          style={inputStyle}
           {...rest}
         />
         {children}
@@ -59,6 +57,8 @@ TextField.propTypes = {
   focusOnMount: PropTypes.bool,
   error: PropTypes.node,
   title: PropTypes.string,
+  style: PropTypes.object,
+  inputStyle: PropTypes.object,
 };
 
 export default TextField;

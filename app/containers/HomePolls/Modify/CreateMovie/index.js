@@ -145,6 +145,7 @@ const Create = props => {
       hideAccept
     >
       <TextField
+        style={{ marginBottom: null }}
         focusOnMount
         disabled={creating}
         title="Search movie"
