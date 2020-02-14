@@ -51,4 +51,8 @@ export default defineMessages({
     id: `${scope}.pollVoting`,
     defaultMessage: 'Voting',
   },
+  votingPage: {
+    id: `${scope}.votingPage`,
+    defaultMessage: 'Voting page',
+  },
 });

@@ -57,4 +57,20 @@ export default defineMessages({
     id: `${scope}.saveChanges`,
     defaultMessage: 'Save changes',
   },
+  duplicationCheck: {
+    id: `${scope}.duplicationCheck`,
+    defaultMessage: 'Duplication checking',
+  },
+  IP: {
+    id: `${scope}.IP`,
+    defaultMessage: 'IP duplication checking',
+  },
+  COOKIE: {
+    id: `${scope}.COOKIE`,
+    defaultMessage: 'Browser cookie duplication checking',
+  },
+  USER: {
+    id: `${scope}.USER`,
+    defaultMessage: 'User duplication checking',
+  },
 });

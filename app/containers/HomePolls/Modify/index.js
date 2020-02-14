@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
@@ -22,15 +22,17 @@ import {
   pathHomePoll,
   pathNotFound,
   pathHomePolls,
+  generatePathPoll,
 } from 'utils/paths';
 import Poll from 'containers/Poll';
-import BlockTitle from 'components/BlockTitle';
+import BlockTitle, { BlockAction } from 'components/BlockTitle';
 import UnsavedChanges from 'components/UnsavedChanges';
 import Breadcrumbs from 'components/Breadcrumbs';
 import Breadcrumb from 'components/Breadcrumb';
 import HouseSVG from 'svgs/House';
 import PollSVG from 'svgs/Poll';
 import PlusSVG from 'svgs/Plus';
+import ShareSquareSVG from 'svgs/ShareSquare';
 import {
   loadAndGotoMovie,
   loadAndGotoPoll,
@@ -58,6 +60,7 @@ const POLL_MODIFY = gql`
     $requireUserForSuggesting: Boolean!
     $allowMovieSuggestions: Boolean!
     $community: CommunityCreate
+    $voteDuplicationChecking: String!
   ) {
     updatePoll(
       identifier: $identifier
@@ -69,6 +72,7 @@ const POLL_MODIFY = gql`
       requireUserForSuggesting: $requireUserForSuggesting
       allowMovieSuggestions: $allowMovieSuggestions
       community: $community
+      voteDuplicationChecking: $voteDuplicationChecking
     ) {
       identifier
       title
@@ -78,6 +82,7 @@ const POLL_MODIFY = gql`
       closesAt
       totalVotes
       allowMovieSuggestions
+      voteDuplicationChecking
       community {
         identifier
       }
@@ -92,6 +97,13 @@ const DELETE_POLL = gql`
 `;
 
 const formatDate = dateStr => (dateStr ? new Date(dateStr).toString() : null);
+
+const openVotingPage = poll => (
+  <BlockAction href={generatePathPoll(poll)} target="_blank">
+    <ShareSquareSVG />
+    <FormattedMessage {...messages.votingPage} />
+  </BlockAction>
+);
 
 const formatCommunity = community =>
   community ? { ...community, __typename: undefined } : null;
@@ -182,6 +194,8 @@ const Modify = props => {
       return true;
     if (poll.opensAt !== modifiedPoll.opensAt) return true;
     if (poll.closesAt !== modifiedPoll.closesAt) return true;
+    if (poll.voteDuplicationChecking !== modifiedPoll.voteDuplicationChecking)
+      return true;
     if (poll.totalVotes !== modifiedPoll.totalVotes) return true;
     if (poll.allowMovieSuggestions !== modifiedPoll.allowMovieSuggestions)
       return true;
@@ -205,7 +219,10 @@ const Modify = props => {
       </Breadcrumbs>
 
       <Section>
-        <BlockTitle title={intl.formatMessage(messages.pollModify)} />
+        <BlockTitle
+          title={intl.formatMessage(messages.pollModify)}
+          action={openVotingPage(poll)}
+        />
         <Poll poll={modifiedPoll} onChange={setModifiedPoll} />
       </Section>
 

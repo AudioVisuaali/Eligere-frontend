@@ -32,7 +32,7 @@ const TextField = forwardRef((props, ref) => {
   }, []);
 
   return (
-    <div className={className} style={{ marginBottom: 20, ...style }}>
+    <div className={className} style={style}>
       <Container ref={ref} error={error} disabled={disabled}>
         <Title>{title}</Title>
         {error && <ErrorMessage>{error}</ErrorMessage>}

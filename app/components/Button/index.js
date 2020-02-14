@@ -17,32 +17,32 @@ const hoverBackgroundColor = p =>
 const disabledBackgroundColor = p =>
   p.theme.isDark ? p.theme.grey[700] : p.theme.light[600];
 
-const Button = styled.button`
-  padding: 6px 16px;
+export const buttonStyle = props => ({
+  padding: '6px 16px',
+  color: color(props),
+  fontWeight: 500,
+  border: '1px solid transparent',
+  borderRadius: 8,
+  backgroundColor: backgroundColor(props),
 
-  color: ${color};
-  font-weight: 500;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  background-color: ${backgroundColor};
+  transition: 'all 200ms',
 
-  transition: all 200ms;
+  '&:hover': {
+    textDecoration: 'none',
+    backgroundColor: hoverBackgroundColor(props),
+  },
 
-  &:hover {
-    background-color: ${hoverBackgroundColor};
-  }
+  '&:focus, :active': {
+    color: props.theme.isDark ? props.theme.light[400] : props.theme.light[100],
+  },
 
-  &:focus,
-  :active {
-    color: ${p => (p.theme.isDark ? p.theme.light[400] : p.theme.light[100])};
-  }
+  '&:disabled, :hover:disabled': {
+    color: props.theme.isDark ? props.theme.light[700] : props.theme.light[800],
+    cursor: 'not-allowed',
+    backgroundColor: disabledBackgroundColor(props),
+  },
+});
 
-  &:disabled,
-  :hover:disabled {
-    color: ${p => (p.theme.isDark ? p.theme.light[700] : p.theme.light[800])};
-    cursor: not-allowed;
-    background-color: ${disabledBackgroundColor};
-  }
-`;
+const Button = styled.button(buttonStyle);
 
 export default Button;

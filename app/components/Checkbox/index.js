@@ -9,10 +9,10 @@ import Input from './styles/Input';
 import Container from './styles/Container';
 
 const Checkbox = props => {
-  const { checked, label, onClick, ...rest } = props;
+  const { style, className, checked, label, onClick, ...rest } = props;
   const [id] = useState(Math.random);
   return (
-    <Container checked={checked}>
+    <Container style={style} className={className} checked={checked}>
       <Input
         id={id}
         type="checkbox"
@@ -30,6 +30,8 @@ Checkbox.propTypes = {
   checked: PropTypes.bool,
   onClick: PropTypes.func,
   label: PropTypes.string,
+  style: PropTypes.object,
+  className: PropTypes.string,
 };
 
 export default Checkbox;

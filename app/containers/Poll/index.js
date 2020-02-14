@@ -23,12 +23,16 @@ import messages from './messages';
 import Meta from './styles/Meta';
 import Container from './styles/Container';
 import Section from './styles/Section';
-import Checkboxes from './styles/Checkboxes';
+import Voting from './styles/Voting';
+
+import MovieRecommendations from './styles/MovieRecommendations';
 
 const textAreaSize = {
   minHeight: 90,
   maxHeight: 200,
 };
+
+const duplicationChecks = ['IP', 'COOKIE', 'USER'];
 
 export const defaultPoll = {
   title: '',
@@ -40,7 +44,7 @@ export const defaultPoll = {
   requireUserForSuggesting: true,
 
   totalVotes: 1,
-  voteDuplicationChecking: false,
+  voteDuplicationChecking: 'USER',
 };
 
 const Poll = props => {
@@ -144,6 +148,9 @@ const Poll = props => {
                 </Option>
               ))}
           </Select>
+        </Meta>
+        <Label>Voting</Label>
+        <Voting>
           <TextField
             name="totalVotes"
             type="number"
@@ -153,10 +160,21 @@ const Poll = props => {
             value={totalVotes}
             onChange={handleChangeNumber}
           />
-        </Meta>
-        <Label>Voting</Label>
+          <Select
+            name="voteDuplicationChecking"
+            title={intl.formatMessage(messages.duplicationCheck)}
+            value={voteDuplicationChecking || ''}
+            onChange={handleChange}
+          >
+            {duplicationChecks.map(check => (
+              <Option key={check} value={check}>
+                {intl.formatMessage(messages[check])}
+              </Option>
+            ))}
+          </Select>
+        </Voting>
         <Label>Movie Recommendations</Label>
-        <Checkboxes>
+        <MovieRecommendations>
           <Checkbox
             name="allowMovieSuggestions"
             label={intl.formatMessage(messages.allowMovieSuggestions)}
@@ -169,7 +187,7 @@ const Poll = props => {
             checked={requireUserForSuggesting}
             onClick={handleChangeBoolean}
           />
-        </Checkboxes>
+        </MovieRecommendations>
       </Section>
     </Container>
   );
@@ -186,6 +204,7 @@ Poll.propTypes = {
     totalVotes: PropTypes.number.isRequired,
     requireUserForSuggesting: PropTypes.bool,
     allowMovieSuggestions: PropTypes.bool,
+    voteDuplicationChecking: PropTypes.string,
   }),
   communities: PropTypes.arrayOf(
     PropTypes.shape({

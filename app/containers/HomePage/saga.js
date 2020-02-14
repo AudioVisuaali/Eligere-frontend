@@ -45,6 +45,7 @@ const POLL_GET = gql`
       closesAt
       totalVotes
       allowMovieSuggestions
+      voteDuplicationChecking
       movies {
         identifier
         title
