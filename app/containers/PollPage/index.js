@@ -15,6 +15,7 @@ import Movie from 'components/Movie';
 import Footer from 'components/Footer';
 
 import Container from './styles/Container';
+import Description from './styles/Description';
 import Header from './styles/Header';
 import Title from './styles/Title';
 import Movies from './styles/Movies';
@@ -29,6 +30,18 @@ const POLL = gql`
       requireUserForSuggesting
       opensAt
       closesAt
+      votes {
+        identifier
+        movie {
+          identifier
+        }
+        poll {
+          identifier
+        }
+        user {
+          identifier
+        }
+      }
       movies {
         identifier
         title
@@ -36,6 +49,18 @@ const POLL = gql`
         description
         released
         duration
+        votes {
+          identifier
+          movie {
+            identifier
+          }
+          poll {
+            identifier
+          }
+          user {
+            identifier
+          }
+        }
         genres {
           id
           value
@@ -81,7 +106,7 @@ const PollPage = props => {
 
   if (loading) return <p>Loading...</p>;
 
-  const { title, movies } = poll;
+  const { title, description, movies } = poll;
 
   return (
     <>
@@ -95,6 +120,7 @@ const PollPage = props => {
           <Box width="10px" />
           <Title>{title}</Title>
         </Header>
+        <Description>{description}</Description>
         <Results />
         <Movies>
           {movies.map(movie => (

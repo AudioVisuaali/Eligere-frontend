@@ -7,6 +7,10 @@ const IFrame = styled.iframe`
   border-radius: 6px;
   margin-right: 50px;
   background-color: rgba(0, 0, 0, 0.5);
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 export default IFrame;

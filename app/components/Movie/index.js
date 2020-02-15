@@ -29,6 +29,7 @@ import Actions from './styles/Actions';
 import Aside from './styles/Aside';
 import Rating from './styles/Rating';
 import Players from './styles/Players';
+import VotesLeft from './styles/VotesLeft';
 import SVGContainer from './styles/SVGContainer';
 import MovieWrapper from './styles/MovieWrapper';
 import PreviewWrapper from './styles/PreviewWrapper';
@@ -120,6 +121,7 @@ const Movie = props => {
                 </SVGContainer>
               </Button>
               <Button onClick={e => onVote(movie, e)}>Vote</Button>
+              <VotesLeft>Votes left 2 / 3 </VotesLeft>
             </Actions>
           </Aside>
         </Item>
