@@ -26,9 +26,10 @@ const POLL_CREATE = gql`
     $requireUserForSuggesting: Boolean!
     $opensAt: String
     $closesAt: String
-    $community: CommunityCreate!
+    $community: CommunityCreate
     $allowMovieSuggestions: Boolean!
     $totalVotes: Int!
+    $voteDuplicationChecking: String!
   ) {
     createPoll(
       title: $title
@@ -39,6 +40,7 @@ const POLL_CREATE = gql`
       community: $community
       allowMovieSuggestions: $allowMovieSuggestions
       totalVotes: $totalVotes
+      voteDuplicationChecking: $voteDuplicationChecking
     ) {
       identifier
       title
@@ -49,6 +51,7 @@ const POLL_CREATE = gql`
       closesAt
       allowMovieSuggestions
       totalVotes
+      voteDuplicationChecking
       community {
         identifier
         title
