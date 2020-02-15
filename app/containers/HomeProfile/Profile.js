@@ -19,15 +19,10 @@ import HalfWidth from './styles/HalfWidth';
 import Actions from './styles/Actions';
 
 const USER_PROFILE_UPDATE = gql`
-  mutation($displayName: String!, $firstName: String!, $surname: String!) {
-    updateProfile(
-      displayName: $displayName
-      firstName: $firstName
-      surname: $surname
-    ) {
+  mutation($displayName: String!, $name: String!) {
+    updateProfile(displayName: $displayName, name: $name) {
       displayName
-      firstName
-      surname
+      name
     }
   }
 `;
@@ -62,8 +57,7 @@ const Profile = props => {
   const isChanges = () => {
     if (loading) return true;
     if (props.user.displayName !== profile.displayName) return true;
-    if (props.user.firstName !== profile.firstName) return true;
-    if (props.user.surname !== profile.surname) return true;
+    if (props.user.name !== profile.name) return true;
 
     return false;
   };
@@ -73,31 +67,20 @@ const Profile = props => {
       <BlockTitle title={<FormattedMessage {...messages.profileTitle} />} />
 
       <Section>
-        <TextField
-          name="displayName"
-          title={<FormattedMessage {...messages.profileDisplayName} />}
-          formnovalidate
-          disabled={loading}
-          value={profile.displayName}
-          onChange={handleChange}
-        />
-      </Section>
-
-      <Section>
         <HalfWidth>
           <TextField
-            name="firstName"
-            title={<FormattedMessage {...messages.firstName} />}
+            name="displayName"
+            title={<FormattedMessage {...messages.profileDisplayName} />}
+            formnovalidate
             disabled={loading}
-            value={profile.firstName}
+            value={profile.displayName}
             onChange={handleChange}
           />
-
           <TextField
-            name="surname"
-            title={<FormattedMessage {...messages.surname} />}
+            name="name"
+            title={<FormattedMessage {...messages.name} />}
             disabled={loading}
-            value={profile.surname}
+            value={profile.name}
             onChange={handleChange}
           />
         </HalfWidth>
