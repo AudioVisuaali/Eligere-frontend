@@ -16,6 +16,7 @@ import { pathLogin } from 'utils/paths';
 import { setItem, SESSION_TOKEN } from 'utils/localStorage';
 import history from 'utils/history';
 import { handleLoginAction } from 'containers/App/actions';
+import LoadingIndicator from 'components/LoadingIndicator';
 import SecureLevel from './SecureLevel';
 import messages from './messages';
 import Container from './styles/Container';
@@ -268,7 +269,11 @@ export const Register = props => {
       />
 
       <Button disabled={registering} type="submit">
-        <FormattedMessage {...messages.register} />
+        {registering ? (
+          <LoadingIndicator size={60} />
+        ) : (
+          <FormattedMessage {...messages.register} />
+        )}
       </Button>
 
       <A href={pathLogin} onClick={goToRegister}>

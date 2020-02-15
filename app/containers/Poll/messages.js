@@ -21,13 +21,21 @@ export default defineMessages({
     id: `${scope}.userIsRequiredToVote`,
     defaultMessage: 'Anonymous voting',
   },
-  allowFeedBack: {
-    id: `${scope}.allowFeedBack`,
-    defaultMessage: 'Allow feedback',
+  userIsRequiredForSuggegsting: {
+    id: `${scope}.userIsRequiredForSuggegsting`,
+    defaultMessage: 'User is Required',
+  },
+  movieRecommendations: {
+    id: `${scope}.movieRecommendations`,
+    defaultMessage: 'Movie recommendations',
   },
   allowMovieSuggestions: {
     id: `${scope}.allowMovieSuggestions`,
-    defaultMessage: 'Allow movie suggestions',
+    defaultMessage: 'Allow',
+  },
+  voting: {
+    id: `${scope}.voting`,
+    defaultMessage: 'Voting',
   },
   pollOpensAt: {
     id: `${scope}.pollOpensAt`,

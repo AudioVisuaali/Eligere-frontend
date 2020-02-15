@@ -15,6 +15,7 @@ import { pathRegister } from 'utils/paths';
 import history from 'utils/history';
 import { SESSION_TOKEN, setItem } from 'utils/localStorage';
 import { handleLoginAction } from 'containers/App/actions';
+import LoadingIndicator from 'components/LoadingIndicator';
 
 import apolloClient from 'apolloClient';
 import messages from './messages';
@@ -40,7 +41,7 @@ const LOGIN_USER = gql`
 `;
 
 export const Login = props => {
-  const [loading, setLoading] = useState(false);
+  const [authenticating, setAuthenticating] = useState(false);
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
 
@@ -49,7 +50,7 @@ export const Login = props => {
 
   const handleLogIn = e => {
     e.preventDefault();
-    setLoading(true);
+    setAuthenticating(true);
     apolloClient
       .query({ query: LOGIN_USER, variables: { username, password } })
       .then(res => {
@@ -59,7 +60,7 @@ export const Login = props => {
         props.handleLogin(newUser);
       })
       .catch()
-      .finally(() => setLoading(false));
+      .finally(() => setAuthenticating(false));
   };
 
   const goToRegister = e => {
@@ -67,7 +68,8 @@ export const Login = props => {
     history.push(pathRegister);
   };
 
-  const isLoginAllowed = password.length < 4 || username.length < 4 || loading;
+  const isLoginAllowed =
+    password.length < 4 || username.length < 4 || authenticating;
 
   return (
     <Container onSubmit={handleLogIn}>
@@ -78,7 +80,7 @@ export const Login = props => {
         autocomplete="username"
         placeholder="Username"
         value={username}
-        disabled={loading}
+        disabled={authenticating}
         onChange={handleUsernameChange}
       />
 
@@ -89,12 +91,16 @@ export const Login = props => {
         autocomplete="current-password"
         placeholder="Password"
         value={password}
-        disabled={loading}
+        disabled={authenticating}
         onChange={handlePasswordChange}
       />
 
       <Button type="submit" disabled={isLoginAllowed}>
-        <FormattedMessage {...messages.login} />
+        {authenticating ? (
+          <LoadingIndicator size={60} />
+        ) : (
+          <FormattedMessage {...messages.login} />
+        )}
       </Button>
 
       <A href={pathRegister} onClick={goToRegister}>

@@ -93,6 +93,7 @@ const Create = props => {
       title={props.intl.formatMessage(messages.createPoll)}
       disableAccept={creating}
       onAccept={handleCreate}
+      acceptText={props.intl.formatMessage(messages.create)}
       onClose={handleCancel}
     >
       <Poll onChange={setPoll} poll={poll} />
@@ -101,7 +102,6 @@ const Create = props => {
 };
 
 Create.propTypes = {
-  // addPoll: PropTypes.func.isRequired,
   intl: PropTypes.object,
 };
 

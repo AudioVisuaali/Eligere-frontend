@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -149,7 +149,9 @@ const Poll = props => {
               ))}
           </Select>
         </Meta>
-        <Label>Voting</Label>
+        <Label>
+          <FormattedMessage {...messages.voting} />
+        </Label>
         <Voting>
           <TextField
             name="totalVotes"
@@ -173,7 +175,9 @@ const Poll = props => {
             ))}
           </Select>
         </Voting>
-        <Label>Movie Recommendations</Label>
+        <Label>
+          <FormattedMessage {...messages.movieRecommendations} />
+        </Label>
         <MovieRecommendations>
           <Checkbox
             name="allowMovieSuggestions"
@@ -183,7 +187,7 @@ const Poll = props => {
           />
           <Checkbox
             name="requireUserForSuggesting"
-            label={intl.formatMessage(messages.userIsRequiredToVote)}
+            label={intl.formatMessage(messages.userIsRequiredForSuggegsting)}
             checked={requireUserForSuggesting}
             onClick={handleChangeBoolean}
           />

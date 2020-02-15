@@ -13,4 +13,8 @@ export default defineMessages({
     id: `${scope}.createPoll`,
     defaultMessage: 'Create Poll',
   },
+  create: {
+    id: `${scope}.create`,
+    defaultMessage: 'Create Poll',
+  },
 });
