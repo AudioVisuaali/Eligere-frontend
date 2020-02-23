@@ -30,6 +30,8 @@ const POLL = gql`
       requireUserForSuggesting
       opensAt
       closesAt
+      totalVotes
+      myVotes
       votes {
         identifier
         movie {
@@ -49,6 +51,7 @@ const POLL = gql`
         description
         released
         duration
+        voted
         votes {
           identifier
           movie {
@@ -124,7 +127,12 @@ const PollPage = props => {
         <Results />
         <Movies>
           {movies.map(movie => (
-            <Movie key={movie.identifier} movie={movie} onVote={handleVote} />
+            <Movie
+              key={movie.identifier}
+              movie={movie}
+              onVote={handleVote}
+              poll={poll}
+            />
           ))}
         </Movies>
       </Container>

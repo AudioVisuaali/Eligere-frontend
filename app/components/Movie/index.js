@@ -9,6 +9,8 @@ import Scroller from 'components/Scroller';
 import IMDbSVG from 'svgs/IMDb';
 import MetaCriticSVG from 'svgs/Metacritic';
 import RottenTomatoesSVG from 'svgs/RottenTomatoes';
+import { gql } from 'apollo-boost';
+import apolloClient from 'apolloClient';
 
 import CircleSVG from 'svgs/Circle';
 import ChevronUpSVG from 'svgs/ChevronUp';
@@ -29,14 +31,60 @@ import Actions from './styles/Actions';
 import Aside from './styles/Aside';
 import Rating from './styles/Rating';
 import Players from './styles/Players';
-import VotesLeft from './styles/VotesLeft';
 import SVGContainer from './styles/SVGContainer';
 import MovieWrapper from './styles/MovieWrapper';
+import PreviewButton from './styles/PreviewButton';
 import PreviewWrapper from './styles/PreviewWrapper';
 
+const VOTE_ADD = gql`
+  mutation($movie: ID!, $poll: ID!) {
+    createVote(movie: $movie, poll: $poll) {
+      identifier
+      movie
+      poll
+      user
+    }
+  }
+`;
+
+const VOTE_REMOVE = gql`
+  mutation($identifier: ID!) {
+    deleteVote(identifier: $identifier)
+  }
+`;
+
 const Movie = props => {
-  const { onVote, movie } = props;
+  const { movie, poll } = props;
   const [isPreview, setIsPreview] = useState(false);
+
+  const handleVote = () => {
+    apolloClient.mutate({
+      mutation: VOTE_ADD,
+      variables: { movie: movie.identifier, poll: poll.identifier },
+    });
+  };
+
+  const handleUnVote = () => {
+    apolloClient.mutate({
+      mutation: VOTE_REMOVE,
+      variables: { movie: movie.identifier, poll: poll.identifier },
+    });
+  };
+
+  const VoteAction = () => {
+    const votesLeft = poll.totalVotes - poll.myVotes.length;
+
+    const voteAction = movie.voted ? handleUnVote : handleVote;
+
+    const text = movie.voted
+      ? `Votes left ${votesLeft} / ${poll.totalVotes}`
+      : 'Unvote';
+    return (
+      <Button disabled={!votesLeft} onClick={voteAction}>
+        {text}
+      </Button>
+    );
+  };
 
   const handlePreview = () => {
     setIsPreview(!isPreview);
@@ -74,9 +122,6 @@ const Movie = props => {
     );
   };
 
-  const getReleased = () =>
-    new Date(parseInt(movie.released, 10)).getFullYear();
-
   const getGenres = () => {
     const { genres } = movie;
     if (!genres.length) {
@@ -105,7 +150,7 @@ const Movie = props => {
             <Metadata>
               <Head>{movie.title}</Head>
               <Information>
-                <Year>{getReleased()}</Year>
+                <Year>{movie.released}</Year>
                 <CircleSVG />
                 <Genres>{getGenres()}</Genres>
                 <CircleSVG />
@@ -114,14 +159,16 @@ const Movie = props => {
               {ratings()}
             </Metadata>
             <Actions>
-              <Button disabled={!movie.trailers.length} onClick={handlePreview}>
+              <PreviewButton
+                disabled={!movie.trailers.length}
+                onClick={handlePreview}
+              >
                 Preview
                 <SVGContainer rotated={isPreview}>
                   <ChevronUpSVG />
                 </SVGContainer>
-              </Button>
-              <Button onClick={e => onVote(movie, e)}>Vote</Button>
-              <VotesLeft>Votes left 2 / 3 </VotesLeft>
+              </PreviewButton>
+              <VoteAction />
             </Actions>
           </Aside>
         </Item>
@@ -146,6 +193,8 @@ const Movie = props => {
 
 Movie.propTypes = {
   movie: PropTypes.shape({
+    voted: PropTypes.bool.isRequired,
+    identifier: PropTypes.string.isRequired,
     thumbnail: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     genres: PropTypes.arrayOf(
@@ -164,7 +213,11 @@ Movie.propTypes = {
       googleUsers: PropTypes.number,
     }),
   }),
-  onVote: PropTypes.func,
+  poll: PropTypes.shape({
+    totalVotes: PropTypes.number.isRequired,
+    myVotes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    identifier: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Movie;

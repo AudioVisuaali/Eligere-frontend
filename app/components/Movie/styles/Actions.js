@@ -1,9 +1,12 @@
 import styled from 'styled-components';
 
-const Actions = styled.div`
-  & button {
-    margin-right: 10px;
-  }
-`;
+const Actions = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+
+  button: {
+    marginRight: 10,
+  },
+});
 
 export default Actions;
